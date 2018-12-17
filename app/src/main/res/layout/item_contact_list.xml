@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="contact"
+            type="com.dugu.addressbook.viewmodel.ContactItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_font_while"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme_font_while"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/charIndex"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@{contact.firstPingYin}"
+                android:textColor="@color/theme_background_transparent_deep_gray"
+                android:textSize="15sp" />
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/contact_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/vector_drawable_contact_default_icon"
+               />
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="9dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/contacts_name_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="@{contact.nameOrPhone}"
+                    android:textColor="@color/addressbook_bg_black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/contacts_organization_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="@{contact.organizationOrJob}"
+                    android:textColor="@color/theme_background_transparent_deep_gray"
+                    android:textSize="13sp"
+                    android:visibility="@{contact.needHideOrganizationAndJob() ? View.GONE : View.VISIBLE}" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/sim_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/vector_drawable_icon_sim" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="90dp"
+            android:background="@color/theme_background_transparent_gray" />
+
+    </LinearLayout>
+
+</layout>

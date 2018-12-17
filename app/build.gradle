@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // greenDao配置
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.dugu.addressbook"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled true
+    }
+
+    // 配置GreenDao基本参数
+    greendao {
+        schemaVersion 1    //当前数据库版本
+        daoPackage 'com.dugu.addressbook.db'  //生成的文件包名
+        targetGenDir 'src/main/java'  //路径
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.belerweb:pinyin4j:2.5.0'
+    implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+
+    //本地数据库操作工具类
+    implementation 'org.greenrobot:greendao:3.2.2'
+    //本地数据库加密
+    implementation 'net.zetetic:android-database-sqlcipher:4.0.0'
+
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="linkMan"
+            type="com.dugu.addressbook.viewmodel.ContactItemViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_font_while"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/layoutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="8dp" >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/vector_drawable_search_icon"
+                android:background="@drawable/bg_white_rectangle"
+                android:drawablePadding="4dp"
+                android:hint="搜索"
+                android:paddingLeft="6dp"
+                android:paddingRight="40dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/deleteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:padding="4dp"
+                android:src="@drawable/vector_drawable_delete_icon"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <!--<EditText-->
+            <!--android:id="@+id/textcheng"-->
+            <!--android:text="@={linkMan.name}"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginEnd="24dp"/>-->
+
+        <!--<com.dugu.addressbook.assembly.SideBar-->
+            <!--android:id="@+id/sideBar"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="match_parent" />-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/contacts_recycle_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="visible" />
+
+                <com.dugu.addressbook.assembly.SideBar
+                    android:id="@+id/sidebar"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|center" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/dialog"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="@drawable/vector_drawable_seekbar_index"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="30sp"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

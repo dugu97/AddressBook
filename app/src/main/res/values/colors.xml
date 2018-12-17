@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="theme_font_while">#FFFFFF</color>
+
+    <color name="theme_background_transparent">#00000000</color>
+    <color name="theme_background_transparent_light_gray">#66efe5e5</color>
+    <color name="theme_background_transparent_gray">#82decaca</color>
+    <color name="theme_background_transparent_deep_gray">#e0B1B3B1</color>
+
+    <!--通讯录背景颜色-->
+    <color name="addressbook_bg_black">#ff1e1e1e</color>
+</resources>

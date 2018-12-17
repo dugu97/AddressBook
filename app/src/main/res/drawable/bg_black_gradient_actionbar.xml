@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/addressbook_bg_black" />
+    <gradient
+        android:endColor="@color/addressbook_bg_black"
+        android:startColor="@color/addressbook_bg_black"
+        android:type="linear" />
+
+
+</shape>
