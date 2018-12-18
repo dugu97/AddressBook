@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="theme_font_while">#FFFFFF</color>
+    <color name="theme_font_green">#00bb9c</color>
 
     <color name="theme_background_transparent">#00000000</color>
     <color name="theme_background_transparent_light_gray">#66efe5e5</color>

@@ -21,29 +21,29 @@ public class SideBar extends View {
 			"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 	private int choose = -1;// 选中
 	private Paint paint = new Paint();
- 
+
 	private TextView mTextDialog;
 	private float singleHeight;
 
 	private int mHeight;// 获取对应高度
 	private int mWidth; // 获取对应宽度
- 
+
 	public void setTextView(TextView mTextDialog) {
 		this.mTextDialog = mTextDialog;
 	}
- 
+
 	public SideBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
- 
+
 	public SideBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
- 
+
 	public SideBar(Context context) {
 		super(context);
 	}
- 
+
 	/**
 	 * 重写这个方法
 	 */
@@ -52,7 +52,7 @@ public class SideBar extends View {
 		// 获取焦点改变背景颜色.
 		mHeight = getHeight();// 获取对应高度
 		mWidth = getWidth(); // 获取对应宽度
- 
+
 		// 获取每一个字母的高度
 		singleHeight = (mHeight * 0.95f) / b.length;
 		singleHeight = (mHeight * 0.95f - singleHeight / 2) / b.length;
@@ -73,9 +73,9 @@ public class SideBar extends View {
 			canvas.drawText(b[i], xPos, yPos, paint);
 			paint.reset();// 重置画笔
 		}
- 
+
 	}
- 
+
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
 		final int action = event.getAction();
@@ -83,12 +83,15 @@ public class SideBar extends View {
 		final int oldChoose = choose;
 		final OnTouchingLetterChangedListener listener = onTouchingLetterChangedListener;
 		final int c = (int) (y / getHeight() * b.length);// 点击y坐标所占总高度的比例*b数组的长度就等于点击b中的个数.
- 
+
 		switch (action) {
 		case MotionEvent.ACTION_UP:
 			setBackgroundDrawable(new ColorDrawable(0x00000000));
 			choose = -1;//
 			invalidate();
+			if (listener != null) {
+				listener.onTouchingLetterChanged(b[c]);
+			}
 			if (mTextDialog != null) {
 				mTextDialog.setVisibility(View.INVISIBLE);
 			}
@@ -98,42 +101,39 @@ public class SideBar extends View {
 //			setBackgroundResource(R.drawable.sidebar_background);
 			if (oldChoose != c) {
 				if (c >= 0 && c < b.length) {
-					if (listener != null) {
-						listener.onTouchingLetterChanged(b[c]);
-					}
 					if (mTextDialog != null) {
 						mTextDialog.setText(b[c]);
 						mTextDialog.setVisibility(View.VISIBLE);
 						mTextDialog.setBackground(getContext().getResources().getDrawable(R.drawable.vector_drawable_seekbar_index));
 					}
- 
+
 					choose = c;
 					invalidate();
 				}
 			}
- 
+
 			break;
 		}
 		return true;
 	}
- 
+
 	/**
 	 * 向外公开的方法
-	 * 
+	 *
 	 * @param onTouchingLetterChangedListener
 	 */
 	public void setOnTouchingLetterChangedListener(OnTouchingLetterChangedListener onTouchingLetterChangedListener) {
 		this.onTouchingLetterChangedListener = onTouchingLetterChangedListener;
 	}
- 
+
 	/**
 	 * 接口
-	 * 
+	 *
 	 * @author coder
-	 * 
+	 *
 	 */
 	public interface OnTouchingLetterChangedListener {
 		public void onTouchingLetterChanged(String s);
 	}
- 
+
 }

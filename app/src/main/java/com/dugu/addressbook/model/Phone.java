@@ -9,13 +9,16 @@ public class Phone {
     @Id(autoincrement = true)
     private Long phone_id;
 
+    private Long contact_id;
+
     private String phone;
 
     private String phone_name;
 
-    @Generated(hash = 830360257)
-    public Phone(Long phone_id, String phone, String phone_name) {
+    @Generated(hash = 1055720255)
+    public Phone(Long phone_id, Long contact_id, String phone, String phone_name) {
         this.phone_id = phone_id;
+        this.contact_id = contact_id;
         this.phone = phone;
         this.phone_name = phone_name;
     }
@@ -46,5 +49,13 @@ public class Phone {
 
     public void setPhone_name(String phone_name) {
         this.phone_name = phone_name;
+    }
+
+    public Long getContact_id() {
+        return this.contact_id;
+    }
+
+    public void setContact_id(Long contact_id) {
+        this.contact_id = contact_id;
     }
 }

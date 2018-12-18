@@ -23,11 +23,11 @@ public class Contact {
     private String organization;
     private String job;
 
-    // Phone类的phone_id作为外键，与Contact的主键相连。
-    @ToMany(referencedJoinProperty = "phone_id")
+    // Phone类的contact_id作为外键，与Contact的主键相连。
+    @ToMany(referencedJoinProperty = "contact_id")
     private List<Phone> phoneList;
 
-    @ToMany(referencedJoinProperty = "email_id")
+    @ToMany(referencedJoinProperty = "contact_id")
     private List<Email> emailList;
 
     private String ring;

@@ -28,8 +28,9 @@ public class EmailDao extends AbstractDao<Email, Long> {
      */
     public static class Properties {
         public final static Property Email_id = new Property(0, Long.class, "email_id", true, "_id");
-        public final static Property Email = new Property(1, String.class, "email", false, "EMAIL");
-        public final static Property Email_name = new Property(2, String.class, "email_name", false, "EMAIL_NAME");
+        public final static Property Contact_id = new Property(1, Long.class, "contact_id", false, "CONTACT_ID");
+        public final static Property Email = new Property(2, String.class, "email", false, "EMAIL");
+        public final static Property Email_name = new Property(3, String.class, "email_name", false, "EMAIL_NAME");
     }
 
     private Query<Email> contact_EmailListQuery;
@@ -47,8 +48,9 @@ public class EmailDao extends AbstractDao<Email, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"EMAIL\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: email_id
-                "\"EMAIL\" TEXT," + // 1: email
-                "\"EMAIL_NAME\" TEXT);"); // 2: email_name
+                "\"CONTACT_ID\" INTEGER," + // 1: contact_id
+                "\"EMAIL\" TEXT," + // 2: email
+                "\"EMAIL_NAME\" TEXT);"); // 3: email_name
     }
 
     /** Drops the underlying database table. */
@@ -66,14 +68,19 @@ public class EmailDao extends AbstractDao<Email, Long> {
             stmt.bindLong(1, email_id);
         }
  
+        Long contact_id = entity.getContact_id();
+        if (contact_id != null) {
+            stmt.bindLong(2, contact_id);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(2, email);
+            stmt.bindString(3, email);
         }
  
         String email_name = entity.getEmail_name();
         if (email_name != null) {
-            stmt.bindString(3, email_name);
+            stmt.bindString(4, email_name);
         }
     }
 
@@ -86,14 +93,19 @@ public class EmailDao extends AbstractDao<Email, Long> {
             stmt.bindLong(1, email_id);
         }
  
+        Long contact_id = entity.getContact_id();
+        if (contact_id != null) {
+            stmt.bindLong(2, contact_id);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(2, email);
+            stmt.bindString(3, email);
         }
  
         String email_name = entity.getEmail_name();
         if (email_name != null) {
-            stmt.bindString(3, email_name);
+            stmt.bindString(4, email_name);
         }
     }
 
@@ -106,8 +118,9 @@ public class EmailDao extends AbstractDao<Email, Long> {
     public Email readEntity(Cursor cursor, int offset) {
         Email entity = new Email( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // email_id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // email
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // email_name
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // contact_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // email
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // email_name
         );
         return entity;
     }
@@ -115,8 +128,9 @@ public class EmailDao extends AbstractDao<Email, Long> {
     @Override
     public void readEntity(Cursor cursor, Email entity, int offset) {
         entity.setEmail_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setEmail(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setEmail_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setContact_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setEmail(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setEmail_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override
@@ -145,16 +159,16 @@ public class EmailDao extends AbstractDao<Email, Long> {
     }
     
     /** Internal query to resolve the "emailList" to-many relationship of Contact. */
-    public List<Email> _queryContact_EmailList(Long email_id) {
+    public List<Email> _queryContact_EmailList(Long contact_id) {
         synchronized (this) {
             if (contact_EmailListQuery == null) {
                 QueryBuilder<Email> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Email_id.eq(null));
+                queryBuilder.where(Properties.Contact_id.eq(null));
                 contact_EmailListQuery = queryBuilder.build();
             }
         }
         Query<Email> query = contact_EmailListQuery.forCurrentThread();
-        query.setParameter(0, email_id);
+        query.setParameter(0, contact_id);
         return query.list();
     }
 

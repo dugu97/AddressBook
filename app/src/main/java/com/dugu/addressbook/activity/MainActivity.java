@@ -29,6 +29,8 @@ public class MainActivity extends SingleFragmentActivity{
     protected void initViews() {
 //        getABActionBar().setVisibility(View.GONE);
         getABActionBar().setRightButtonVisibility(View.VISIBLE);
+        getABActionBar().getFallbackView().setVisibility(View.GONE);
+        getABActionBar().setTitleText("通讯录");
     }
 
     @Override

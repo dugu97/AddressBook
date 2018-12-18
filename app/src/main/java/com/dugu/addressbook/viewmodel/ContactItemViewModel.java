@@ -35,6 +35,17 @@ public class ContactItemViewModel extends BindingItem {
         randomColor = AppUtil.getRandomColor();
     }
 
+    // 用于二级页面的ViewModel生成（contact_id < 0）
+    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String phone, String organization, String job, String firstPingYin) {
+        this.contact_id = contact_id;
+        this.icon = icon;
+        this.name = name;
+        this.phone = phone;
+        this.organization = organization;
+        this.job = job;
+        this.firstPingYin = firstPingYin;
+    }
+
     public String getNameOrPhone() {
         if (!AppUtil.isNullString(name))
             return name;
@@ -55,17 +66,17 @@ public class ContactItemViewModel extends BindingItem {
             return "";
     }
 
-    public boolean needHideOrganizationAndJob(){
+    public boolean needHideOrganizationAndJob() {
         if (AppUtil.isNullString(organization) && AppUtil.isNullString(job))
             return true;
         return false;
     }
 
-    public void setRandomColor(){
+    public void setRandomColor() {
         this.randomColor = randomColor;
     }
 
-    public int getRandomColor(){
+    public int getRandomColor() {
         return randomColor;
     }
 

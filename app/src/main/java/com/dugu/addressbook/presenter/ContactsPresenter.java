@@ -1,5 +1,7 @@
 package com.dugu.addressbook.presenter;
 
+import android.util.Log;
+
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.contract.LinkmanContract;
 import com.dugu.addressbook.model.Contact;
@@ -52,6 +54,8 @@ public class ContactsPresenter implements LinkmanContract.Presenter {
             if (phoneList.size() != 0)
                 phone = phoneList.get(0).getPhone();
 
+            Log.d("123", phone);
+
             item = new ContactItemViewModel(contact.getContact_id(),
                     contact.getIcon(),
                     contact.getName(),
@@ -61,6 +65,13 @@ public class ContactsPresenter implements LinkmanContract.Presenter {
 
             result.add(item);
         }
+
+
+        //添加列表顶固定选项
+        item = new ContactItemViewModel((long) -9, null, "群组", null, null, null, "#");
+        result.add(item);
+        item = new ContactItemViewModel((long) -5, null, "名片夹", null, null, null, "#");
+        result.add(item);
 
         return result;
     }

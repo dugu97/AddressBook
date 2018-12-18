@@ -8,6 +8,7 @@ import com.dugu.addressbook.db.DBHelper;
 import com.dugu.addressbook.db.DaoMaster;
 import com.dugu.addressbook.db.DaoSession;
 import com.dugu.addressbook.model.Contact;
+import com.dugu.addressbook.model.Phone;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -46,16 +47,49 @@ public class AddressBookApplication extends Application {
             @Override
             public void run() {
                 List<Contact> contacts = new ArrayList<>();
-                contacts.add(new Contact(null, null, "a", "nickname",
+
+                Contact a = new Contact((long) 1, null, "a", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null);
+                contacts.add(a);
+
+                contacts.add(new Contact(null, null, "aa", "nickname",
                         "organization",  "job", "ring", "remark",
                         "address", "postCode",  null, null));
                 contacts.add(new Contact(null, null, "b", "nickname",
                         "organization",  "job", "ring", "remark",
                         "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "bb", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
                 contacts.add(new Contact(null, null, "c", "nickname",
                         "organization",  "job", "ring", "remark",
                         "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "cc", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "ffff", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "rrrr", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "hhhhh", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "tttt", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
+                contacts.add(new Contact(null, null, "ggggg", "nickname",
+                        "organization",  "job", "ring", "remark",
+                        "address", "postCode",  null, null));
                 getDaoSession().getContactDao().insertInTx(contacts);
+
+                List<Phone> phoneList = new ArrayList<>();
+                phoneList.add(new Phone(null, (long) 1,"13728472475","手机"));
+                phoneList.add(new Phone(null, (long) 1,"15622586568","手机"));
+                getDaoSession().getPhoneDao().insertInTx(phoneList);
+
             }
         });
     }

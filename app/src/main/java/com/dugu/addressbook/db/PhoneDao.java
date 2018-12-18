@@ -28,8 +28,9 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
      */
     public static class Properties {
         public final static Property Phone_id = new Property(0, Long.class, "phone_id", true, "_id");
-        public final static Property Phone = new Property(1, String.class, "phone", false, "PHONE");
-        public final static Property Phone_name = new Property(2, String.class, "phone_name", false, "PHONE_NAME");
+        public final static Property Contact_id = new Property(1, Long.class, "contact_id", false, "CONTACT_ID");
+        public final static Property Phone = new Property(2, String.class, "phone", false, "PHONE");
+        public final static Property Phone_name = new Property(3, String.class, "phone_name", false, "PHONE_NAME");
     }
 
     private Query<Phone> contact_PhoneListQuery;
@@ -47,8 +48,9 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PHONE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: phone_id
-                "\"PHONE\" TEXT," + // 1: phone
-                "\"PHONE_NAME\" TEXT);"); // 2: phone_name
+                "\"CONTACT_ID\" INTEGER," + // 1: contact_id
+                "\"PHONE\" TEXT," + // 2: phone
+                "\"PHONE_NAME\" TEXT);"); // 3: phone_name
     }
 
     /** Drops the underlying database table. */
@@ -66,14 +68,19 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
             stmt.bindLong(1, phone_id);
         }
  
+        Long contact_id = entity.getContact_id();
+        if (contact_id != null) {
+            stmt.bindLong(2, contact_id);
+        }
+ 
         String phone = entity.getPhone();
         if (phone != null) {
-            stmt.bindString(2, phone);
+            stmt.bindString(3, phone);
         }
  
         String phone_name = entity.getPhone_name();
         if (phone_name != null) {
-            stmt.bindString(3, phone_name);
+            stmt.bindString(4, phone_name);
         }
     }
 
@@ -86,14 +93,19 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
             stmt.bindLong(1, phone_id);
         }
  
+        Long contact_id = entity.getContact_id();
+        if (contact_id != null) {
+            stmt.bindLong(2, contact_id);
+        }
+ 
         String phone = entity.getPhone();
         if (phone != null) {
-            stmt.bindString(2, phone);
+            stmt.bindString(3, phone);
         }
  
         String phone_name = entity.getPhone_name();
         if (phone_name != null) {
-            stmt.bindString(3, phone_name);
+            stmt.bindString(4, phone_name);
         }
     }
 
@@ -106,8 +118,9 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
     public Phone readEntity(Cursor cursor, int offset) {
         Phone entity = new Phone( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // phone_id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // phone
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // phone_name
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // contact_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // phone
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // phone_name
         );
         return entity;
     }
@@ -115,8 +128,9 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
     @Override
     public void readEntity(Cursor cursor, Phone entity, int offset) {
         entity.setPhone_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setPhone(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setPhone_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setContact_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setPhone(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setPhone_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override
@@ -145,16 +159,16 @@ public class PhoneDao extends AbstractDao<Phone, Long> {
     }
     
     /** Internal query to resolve the "phoneList" to-many relationship of Contact. */
-    public List<Phone> _queryContact_PhoneList(Long phone_id) {
+    public List<Phone> _queryContact_PhoneList(Long contact_id) {
         synchronized (this) {
             if (contact_PhoneListQuery == null) {
                 QueryBuilder<Phone> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Phone_id.eq(null));
+                queryBuilder.where(Properties.Contact_id.eq(null));
                 contact_PhoneListQuery = queryBuilder.build();
             }
         }
         Query<Phone> query = contact_PhoneListQuery.forCurrentThread();
-        query.setParameter(0, phone_id);
+        query.setParameter(0, contact_id);
         return query.list();
     }
 
