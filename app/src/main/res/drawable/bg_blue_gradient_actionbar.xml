@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/addressbook_actionbar_start_blue" />
+    <gradient
+        android:endColor="@color/addressbook_actionbar_start_blue"
+        android:startColor="@color/addressbook_actionbar_end_blue"
+        android:type="linear" />
+
+
+</shape>

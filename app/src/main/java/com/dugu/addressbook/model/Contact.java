@@ -17,6 +17,9 @@ import java.util.List;
 public class Contact {
     @Id(autoincrement = true)
     private Long contact_id;
+
+    private Long group_id;
+
     private byte[] icon;   //头像
     private String name;
     private String nickname;
@@ -43,12 +46,12 @@ public class Contact {
     @Generated(hash = 2046468181)
     private transient ContactDao myDao;
 
-    @Generated(hash = 1642675288)
-    public Contact(Long contact_id, byte[] icon, String name, String nickname,
-            String organization, String job, String ring, String remark,
-            String address, String postCode, Long birthday,
-            byte[] businessardData) {
+    @Generated(hash = 448561389)
+    public Contact(Long contact_id, Long group_id, byte[] icon, String name, String nickname,
+            String organization, String job, String ring, String remark, String address,
+            String postCode, Long birthday, byte[] businessardData) {
         this.contact_id = contact_id;
+        this.group_id = group_id;
         this.icon = icon;
         this.name = name;
         this.nickname = nickname;
@@ -228,5 +231,11 @@ public class Contact {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getContactDao() : null;
+    }
+    public Long getGroup_id() {
+        return this.group_id;
+    }
+    public void setGroup_id(Long group_id) {
+        this.group_id = group_id;
     }
 }

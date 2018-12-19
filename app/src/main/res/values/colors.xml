@@ -6,6 +6,8 @@
 
     <color name="theme_font_while">#FFFFFF</color>
     <color name="theme_font_green">#00bb9c</color>
+    <color name="theme_font_deep_gray">#A4A4A4</color>
+
 
     <color name="theme_background_transparent">#00000000</color>
     <color name="theme_background_transparent_light_gray">#66efe5e5</color>
@@ -14,4 +16,12 @@
 
     <!--通讯录背景颜色-->
     <color name="addressbook_bg_black">#ff1e1e1e</color>
+
+    <!--通讯录actionbar颜色-->
+    <color name="addressbook_actionbar_start_blue">#00ACC2</color>
+    <color name="addressbook_actionbar_end_blue">#1EA0B0</color>
+
+    <!--通讯录EditText背景颜色-->
+    <color name="addressbook_edittext_bg_gray">#EFEFEF</color>
+
 </resources>

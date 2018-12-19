@@ -57,14 +57,14 @@ public class SideBar extends View {
 		singleHeight = (mHeight * 0.95f) / b.length;
 		singleHeight = (mHeight * 0.95f - singleHeight / 2) / b.length;
 		for (int i = 0; i < b.length; i++) {
-			paint.setColor(Color.rgb(23, 122, 216));
+			paint.setColor(Color.parseColor("#D9D9D9"));
 			// paint.setColor(Color.WHITE);
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
 			paint.setTextSize(25);
 			// 选中的状态
 			if (i == choose) {
-				paint.setColor(Color.parseColor("#c60000"));
+				paint.setColor(Color.parseColor("#1EA0B0"));
 				paint.setFakeBoldText(true);
 			}
 			// x坐标等于中间-字符串宽度的一半.
@@ -89,9 +89,6 @@ public class SideBar extends View {
 			setBackgroundDrawable(new ColorDrawable(0x00000000));
 			choose = -1;//
 			invalidate();
-			if (listener != null) {
-				listener.onTouchingLetterChanged(b[c]);
-			}
 			if (mTextDialog != null) {
 				mTextDialog.setVisibility(View.INVISIBLE);
 			}
@@ -99,6 +96,9 @@ public class SideBar extends View {
 		// 除开松开事件的任何触摸事件
 		default:
 //			setBackgroundResource(R.drawable.sidebar_background);
+			if (listener != null) {
+				listener.onTouchingLetterChanged(b[c]);
+			}
 			if (oldChoose != c) {
 				if (c >= 0 && c < b.length) {
 					if (mTextDialog != null) {

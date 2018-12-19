@@ -1,31 +1,41 @@
 package com.dugu.addressbook.viewmodel;
 
 import com.dugu.addressbook.BR;
+import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.HanZiToPinYinUtil;
 
+import java.util.List;
+
 public class ContactItemViewModel extends BindingItem {
 
     private Long contact_id;
+    private Long group_id;
     private byte[] icon;   //头像
     private String name;
-    private String phone;
+    private List<String> phoneList;
     private String organization;
     private String job;
     private String firstPingYin;
 
-    //头像颜色随机
+    //默认头像颜色随机
     private int randomColor;
 
-    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String phone, String organization, String job) {
+    public ContactItemViewModel(Long contact_id, Long group_id, byte[] icon, String name, List<String> phoneList, String organization, String job) {
         this.contact_id = contact_id;
+        this.group_id = group_id;
         this.icon = icon;
         this.name = name;
-        this.phone = phone;
+        this.phoneList = phoneList;
         this.organization = organization;
         this.job = job;
 
+        //拼接phone
+        String phone = "";
+        for (int i = 0; i < phoneList.size(); i++) {
+            phone = phone + phoneList.get(i);
+        }
         String temp = name + organization + job + phone;
         if (!AppUtil.isNullString(temp))
             this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
@@ -36,23 +46,28 @@ public class ContactItemViewModel extends BindingItem {
     }
 
     // 用于二级页面的ViewModel生成（contact_id < 0）
-    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String phone, String organization, String job, String firstPingYin) {
+    public ContactItemViewModel(Long contact_id, String name, String firstPingYin) {
         this.contact_id = contact_id;
-        this.icon = icon;
         this.name = name;
-        this.phone = phone;
-        this.organization = organization;
-        this.job = job;
         this.firstPingYin = firstPingYin;
     }
 
     public String getNameOrPhone() {
         if (!AppUtil.isNullString(name))
             return name;
-        else if (!AppUtil.isNullString(phone))
-            return phone;
+        else if (!phoneList.isEmpty())
+            return phoneList.get(0);
         else
             return "（无姓名）";
+    }
+
+    public boolean needHideSIMIcon(){
+        //二级页面的ViewModel group_id 为null
+        if (group_id == null)
+            return true;
+        if (group_id != Constants.GROUP_SIM)
+            return false;
+        return true;
     }
 
     public String getOrganizationOrJob() {
@@ -96,12 +111,12 @@ public class ContactItemViewModel extends BindingItem {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public List<String> getPhone() {
+        return phoneList;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone(List<String> phoneList) {
+        this.phoneList = phoneList;
     }
 
     public byte[] getIcon() {

@@ -24,7 +24,7 @@ public class GroupDao extends AbstractDao<Group, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Group_id = new Property(0, Long.class, "group_id", true, "_id");
         public final static Property Group_name = new Property(1, String.class, "group_name", false, "GROUP_NAME");
     }
 
@@ -44,7 +44,7 @@ public class GroupDao extends AbstractDao<Group, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GROUP\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: group_id
                 "\"GROUP_NAME\" TEXT);"); // 1: group_name
     }
 
@@ -58,9 +58,9 @@ public class GroupDao extends AbstractDao<Group, Long> {
     protected final void bindValues(DatabaseStatement stmt, Group entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long group_id = entity.getGroup_id();
+        if (group_id != null) {
+            stmt.bindLong(1, group_id);
         }
  
         String group_name = entity.getGroup_name();
@@ -73,9 +73,9 @@ public class GroupDao extends AbstractDao<Group, Long> {
     protected final void bindValues(SQLiteStatement stmt, Group entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long group_id = entity.getGroup_id();
+        if (group_id != null) {
+            stmt.bindLong(1, group_id);
         }
  
         String group_name = entity.getGroup_name();
@@ -98,7 +98,7 @@ public class GroupDao extends AbstractDao<Group, Long> {
     @Override
     public Group readEntity(Cursor cursor, int offset) {
         Group entity = new Group( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // group_id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // group_name
         );
         return entity;
@@ -106,20 +106,20 @@ public class GroupDao extends AbstractDao<Group, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Group entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setGroup_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setGroup_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
     protected final Long updateKeyAfterInsert(Group entity, long rowId) {
-        entity.setId(rowId);
+        entity.setGroup_id(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(Group entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getGroup_id();
         } else {
             return null;
         }
@@ -127,7 +127,7 @@ public class GroupDao extends AbstractDao<Group, Long> {
 
     @Override
     public boolean hasKey(Group entity) {
-        return entity.getId() != null;
+        return entity.getGroup_id() != null;
     }
 
     @Override

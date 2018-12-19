@@ -55,16 +55,15 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         }
 
         if (obj.getContact_id() < 0) {
-            binding.simIcon.setVisibility(View.GONE);
             binding.rightIcon.setVisibility(View.VISIBLE);
 
             // 非正式联系人的灰底
             if (obj.getName().equals("群组")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_group_main_icon);
-                binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#bfbfbf"));
+                binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#CDCDCD"));
             }else if (obj.getName().equals("名片夹")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_card_contact);
-                binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#bfbfbf"));
+                binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#CDCDCD"));
             }
         }
 

@@ -1,6 +1,7 @@
 package com.dugu.addressbook.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,20 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactSortedListAdapter;
 import com.dugu.addressbook.adapter.ContactSortedListCallback;
 import com.dugu.addressbook.assembly.SideBar;
-import com.dugu.addressbook.contract.LinkmanContract;
+import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.viewmodel.ContactItemViewModel;
 
-public class MainFragment extends BaseFragment implements LinkmanContract.Ui {
+public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
-    private LinkmanContract.Presenter presenter;
-    private ContactItemViewModel linkManViewModel;
+    private ContactsContract.Presenter presenter;
     private ContactSortedListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -64,20 +66,17 @@ public class MainFragment extends BaseFragment implements LinkmanContract.Ui {
         SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
         adapter.setSortedList(sortedList);
         binding.contactsRecycleView.setAdapter(adapter);
-
-        binding.contactsRecycleView.setHasFixedSize(true);
-        binding.contactsRecycleView.setNestedScrollingEnabled(false);
     }
 
 
     @Override
     protected void initData() {
-//        presenter.start();
+        //启动presenter
+        presenter.start();
 
-        //配置联系人数据
-        adapter.setData(presenter.getAllContact());
-
-        //配置弹出框
+        //配置联系人总数
+        contactCount = adapter.getItemCount();
+        binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
     }
 
     @Override
@@ -108,10 +107,20 @@ public class MainFragment extends BaseFragment implements LinkmanContract.Ui {
             }
         });
 
+        binding.newContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),NewOrEditContactActivity.class);
+                startActivity(intent);
+            }
+        });
+
         binding.deleteText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.etSearch.setText("");
+                Log.d("123", AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list().size() + "");
+                Log.d("123", AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list().size() + "");
             }
         });
 
@@ -171,11 +180,12 @@ public class MainFragment extends BaseFragment implements LinkmanContract.Ui {
 
     @Override
     public void showResult() {
-        Log.d("123", "加载了" + contactCount + "个联系人");
+        //配置联系人数据,并刷新
+        adapter.setData(presenter.getAllContact());
     }
 
     @Override
-    public void setPresenter(LinkmanContract.Presenter presenter) {
+    public void setPresenter(ContactsContract.Presenter presenter) {
         this.presenter = presenter;
     }
 

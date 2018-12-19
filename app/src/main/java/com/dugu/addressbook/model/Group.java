@@ -1,23 +1,24 @@
 package com.dugu.addressbook.model;
 
+import com.dugu.addressbook.db.ContactDao;
+import com.dugu.addressbook.db.DaoSession;
+import com.dugu.addressbook.db.GroupDao;
+
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
-import com.dugu.addressbook.db.DaoSession;
-import com.dugu.addressbook.db.ContactDao;
-import com.dugu.addressbook.db.GroupDao;
 
 @Entity
 public class Group {
     @Id(autoincrement = true)
-    private Long id;
+    private Long group_id;
 
-    // Contact类的contact_id作为外键，与Group的主键相连。
-    @ToMany(referencedJoinProperty = "contact_id")
+    // Contact类的group_id作为外键，与Group的主键相连。
+    @ToMany(referencedJoinProperty = "group_id")
     private List<Contact> contactList;
 
     private String group_name;
@@ -30,9 +31,9 @@ public class Group {
     @Generated(hash = 1591306109)
     private transient GroupDao myDao;
 
-    @Generated(hash = 1672698201)
-    public Group(Long id, String group_name) {
-        this.id = id;
+    @Generated(hash = 141093849)
+    public Group(Long group_id, String group_name) {
+        this.group_id = group_id;
         this.group_name = group_name;
     }
 
@@ -40,13 +41,6 @@ public class Group {
     public Group() {
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getGroup_name() {
         return this.group_name;
@@ -60,7 +54,7 @@ public class Group {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 135018632)
+    @Generated(hash = 25216323)
     public List<Contact> getContactList() {
         if (contactList == null) {
             final DaoSession daoSession = this.daoSession;
@@ -68,7 +62,7 @@ public class Group {
                 throw new DaoException("Entity is detached from DAO context");
             }
             ContactDao targetDao = daoSession.getContactDao();
-            List<Contact> contactListNew = targetDao._queryGroup_ContactList(id);
+            List<Contact> contactListNew = targetDao._queryGroup_ContactList(group_id);
             synchronized (this) {
                 if (contactList == null) {
                     contactList = contactListNew;
@@ -125,5 +119,13 @@ public class Group {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGroupDao() : null;
+    }
+
+    public Long getGroup_id() {
+        return this.group_id;
+    }
+
+    public void setGroup_id(Long group_id) {
+        this.group_id = group_id;
     }
 }

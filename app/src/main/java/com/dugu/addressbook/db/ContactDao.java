@@ -28,17 +28,18 @@ public class ContactDao extends AbstractDao<Contact, Long> {
      */
     public static class Properties {
         public final static Property Contact_id = new Property(0, Long.class, "contact_id", true, "_id");
-        public final static Property Icon = new Property(1, byte[].class, "icon", false, "ICON");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Nickname = new Property(3, String.class, "nickname", false, "NICKNAME");
-        public final static Property Organization = new Property(4, String.class, "organization", false, "ORGANIZATION");
-        public final static Property Job = new Property(5, String.class, "job", false, "JOB");
-        public final static Property Ring = new Property(6, String.class, "ring", false, "RING");
-        public final static Property Remark = new Property(7, String.class, "remark", false, "REMARK");
-        public final static Property Address = new Property(8, String.class, "address", false, "ADDRESS");
-        public final static Property PostCode = new Property(9, String.class, "postCode", false, "POST_CODE");
-        public final static Property Birthday = new Property(10, Long.class, "birthday", false, "BIRTHDAY");
-        public final static Property BusinessardData = new Property(11, byte[].class, "businessardData", false, "BUSINESSARD_DATA");
+        public final static Property Group_id = new Property(1, Long.class, "group_id", false, "GROUP_ID");
+        public final static Property Icon = new Property(2, byte[].class, "icon", false, "ICON");
+        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
+        public final static Property Nickname = new Property(4, String.class, "nickname", false, "NICKNAME");
+        public final static Property Organization = new Property(5, String.class, "organization", false, "ORGANIZATION");
+        public final static Property Job = new Property(6, String.class, "job", false, "JOB");
+        public final static Property Ring = new Property(7, String.class, "ring", false, "RING");
+        public final static Property Remark = new Property(8, String.class, "remark", false, "REMARK");
+        public final static Property Address = new Property(9, String.class, "address", false, "ADDRESS");
+        public final static Property PostCode = new Property(10, String.class, "postCode", false, "POST_CODE");
+        public final static Property Birthday = new Property(11, Long.class, "birthday", false, "BIRTHDAY");
+        public final static Property BusinessardData = new Property(12, byte[].class, "businessardData", false, "BUSINESSARD_DATA");
     }
 
     private DaoSession daoSession;
@@ -59,17 +60,18 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CONTACT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: contact_id
-                "\"ICON\" BLOB," + // 1: icon
-                "\"NAME\" TEXT," + // 2: name
-                "\"NICKNAME\" TEXT," + // 3: nickname
-                "\"ORGANIZATION\" TEXT," + // 4: organization
-                "\"JOB\" TEXT," + // 5: job
-                "\"RING\" TEXT," + // 6: ring
-                "\"REMARK\" TEXT," + // 7: remark
-                "\"ADDRESS\" TEXT," + // 8: address
-                "\"POST_CODE\" TEXT," + // 9: postCode
-                "\"BIRTHDAY\" INTEGER," + // 10: birthday
-                "\"BUSINESSARD_DATA\" BLOB);"); // 11: businessardData
+                "\"GROUP_ID\" INTEGER," + // 1: group_id
+                "\"ICON\" BLOB," + // 2: icon
+                "\"NAME\" TEXT," + // 3: name
+                "\"NICKNAME\" TEXT," + // 4: nickname
+                "\"ORGANIZATION\" TEXT," + // 5: organization
+                "\"JOB\" TEXT," + // 6: job
+                "\"RING\" TEXT," + // 7: ring
+                "\"REMARK\" TEXT," + // 8: remark
+                "\"ADDRESS\" TEXT," + // 9: address
+                "\"POST_CODE\" TEXT," + // 10: postCode
+                "\"BIRTHDAY\" INTEGER," + // 11: birthday
+                "\"BUSINESSARD_DATA\" BLOB);"); // 12: businessardData
     }
 
     /** Drops the underlying database table. */
@@ -87,59 +89,64 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindLong(1, contact_id);
         }
  
+        Long group_id = entity.getGroup_id();
+        if (group_id != null) {
+            stmt.bindLong(2, group_id);
+        }
+ 
         byte[] icon = entity.getIcon();
         if (icon != null) {
-            stmt.bindBlob(2, icon);
+            stmt.bindBlob(3, icon);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(3, name);
+            stmt.bindString(4, name);
         }
  
         String nickname = entity.getNickname();
         if (nickname != null) {
-            stmt.bindString(4, nickname);
+            stmt.bindString(5, nickname);
         }
  
         String organization = entity.getOrganization();
         if (organization != null) {
-            stmt.bindString(5, organization);
+            stmt.bindString(6, organization);
         }
  
         String job = entity.getJob();
         if (job != null) {
-            stmt.bindString(6, job);
+            stmt.bindString(7, job);
         }
  
         String ring = entity.getRing();
         if (ring != null) {
-            stmt.bindString(7, ring);
+            stmt.bindString(8, ring);
         }
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(9, remark);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(9, address);
+            stmt.bindString(10, address);
         }
  
         String postCode = entity.getPostCode();
         if (postCode != null) {
-            stmt.bindString(10, postCode);
+            stmt.bindString(11, postCode);
         }
  
         Long birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindLong(11, birthday);
+            stmt.bindLong(12, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
         if (businessardData != null) {
-            stmt.bindBlob(12, businessardData);
+            stmt.bindBlob(13, businessardData);
         }
     }
 
@@ -152,59 +159,64 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindLong(1, contact_id);
         }
  
+        Long group_id = entity.getGroup_id();
+        if (group_id != null) {
+            stmt.bindLong(2, group_id);
+        }
+ 
         byte[] icon = entity.getIcon();
         if (icon != null) {
-            stmt.bindBlob(2, icon);
+            stmt.bindBlob(3, icon);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(3, name);
+            stmt.bindString(4, name);
         }
  
         String nickname = entity.getNickname();
         if (nickname != null) {
-            stmt.bindString(4, nickname);
+            stmt.bindString(5, nickname);
         }
  
         String organization = entity.getOrganization();
         if (organization != null) {
-            stmt.bindString(5, organization);
+            stmt.bindString(6, organization);
         }
  
         String job = entity.getJob();
         if (job != null) {
-            stmt.bindString(6, job);
+            stmt.bindString(7, job);
         }
  
         String ring = entity.getRing();
         if (ring != null) {
-            stmt.bindString(7, ring);
+            stmt.bindString(8, ring);
         }
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(9, remark);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(9, address);
+            stmt.bindString(10, address);
         }
  
         String postCode = entity.getPostCode();
         if (postCode != null) {
-            stmt.bindString(10, postCode);
+            stmt.bindString(11, postCode);
         }
  
         Long birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindLong(11, birthday);
+            stmt.bindLong(12, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
         if (businessardData != null) {
-            stmt.bindBlob(12, businessardData);
+            stmt.bindBlob(13, businessardData);
         }
     }
 
@@ -223,17 +235,18 @@ public class ContactDao extends AbstractDao<Contact, Long> {
     public Contact readEntity(Cursor cursor, int offset) {
         Contact entity = new Contact( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // contact_id
-            cursor.isNull(offset + 1) ? null : cursor.getBlob(offset + 1), // icon
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // nickname
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // organization
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // job
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ring
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // remark
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // address
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // postCode
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // birthday
-            cursor.isNull(offset + 11) ? null : cursor.getBlob(offset + 11) // businessardData
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // group_id
+            cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2), // icon
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // nickname
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // organization
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // job
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ring
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // remark
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // address
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // postCode
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // birthday
+            cursor.isNull(offset + 12) ? null : cursor.getBlob(offset + 12) // businessardData
         );
         return entity;
     }
@@ -241,17 +254,18 @@ public class ContactDao extends AbstractDao<Contact, Long> {
     @Override
     public void readEntity(Cursor cursor, Contact entity, int offset) {
         entity.setContact_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIcon(cursor.isNull(offset + 1) ? null : cursor.getBlob(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setNickname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setOrganization(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setJob(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setRing(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setRemark(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setAddress(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setPostCode(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setBirthday(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
-        entity.setBusinessardData(cursor.isNull(offset + 11) ? null : cursor.getBlob(offset + 11));
+        entity.setGroup_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setIcon(cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2));
+        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setNickname(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setOrganization(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setJob(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setRing(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setRemark(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setAddress(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setPostCode(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setBirthday(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setBusinessardData(cursor.isNull(offset + 12) ? null : cursor.getBlob(offset + 12));
      }
     
     @Override
@@ -280,16 +294,16 @@ public class ContactDao extends AbstractDao<Contact, Long> {
     }
     
     /** Internal query to resolve the "contactList" to-many relationship of Group. */
-    public List<Contact> _queryGroup_ContactList(Long contact_id) {
+    public List<Contact> _queryGroup_ContactList(Long group_id) {
         synchronized (this) {
             if (group_ContactListQuery == null) {
                 QueryBuilder<Contact> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Contact_id.eq(null));
+                queryBuilder.where(Properties.Group_id.eq(null));
                 group_ContactListQuery = queryBuilder.build();
             }
         }
         Query<Contact> query = group_ContactListQuery.forCurrentThread();
-        query.setParameter(0, contact_id);
+        query.setParameter(0, group_id);
         return query.list();
     }
 

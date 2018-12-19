@@ -13,13 +13,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_font_while"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/theme_font_while">
 
         <LinearLayout
             android:id="@+id/contacr_item"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/rectangle_btn_selector"
             android:orientation="horizontal">
 
@@ -46,10 +48,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -58,7 +58,7 @@
                     android:id="@+id/contacts_name_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="@{contact.nameOrPhone}"
                     android:textColor="@color/addressbook_bg_black"
@@ -68,10 +68,10 @@
                     android:id="@+id/contacts_organization_job"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="@{contact.organizationOrJob}"
-                    android:textColor="@color/theme_background_transparent_deep_gray"
+                    android:textColor="@color/theme_font_deep_gray"
                     android:textSize="13sp"
                     android:visibility="@{contact.needHideOrganizationAndJob() ? View.GONE : View.VISIBLE}" />
 
@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="5dp"
+                android:visibility="@{contact.needHideSIMIcon() ? View.GONE : View.VISIBLE}"
                 android:src="@drawable/vector_drawable_icon_sim" />
 
 

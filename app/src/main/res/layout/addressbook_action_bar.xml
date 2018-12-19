@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <RelativeLayout
         android:id="@+id/action_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/bg_black_gradient_actionbar"
+        android:background="@drawable/bg_blue_gradient_actionbar"
         android:gravity="center_vertical">
 
         <FrameLayout
@@ -15,8 +14,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:background="@color/theme_background_transparent"
-            android:paddingLeft="@dimen/layout_margin"
-            android:paddingRight="@dimen/layout_margin">
+            android:paddingLeft="@dimen/layout_margin">
 
             <ImageView
                 android:id="@+id/action_bar_fallback"
@@ -30,6 +28,7 @@
             android:id="@+id/action_bar_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingStart="20dp"
             android:layout_toRightOf="@id/action_bar_fallback_parent"
             android:gravity="center_vertical"
             android:text="首页"
