@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dugu.addressbook.activity.BaseActivity;
-import com.dugu.addressbook.assembly.ABActionBar;
+import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.listener.OnKeyDownListener;
 
 /**
@@ -44,8 +44,8 @@ public abstract class BaseFragment extends Fragment implements OnKeyDownListener
     protected abstract View initFragment(LayoutInflater inflater, ViewGroup container,
                                          Bundle savedInstanceState);
 
-    protected ABActionBar getABActionBar() {
-        return mActivity == null ? null : mActivity.getABActionBar();
+    protected ABToolBar getABActionBar() {
+        return mActivity == null ? null : mActivity.getToolBar();
     }
 
     protected void makeToast(String text) {

@@ -32,6 +32,6 @@ public abstract class SingleFragmentActivity extends BaseActivity {
 
     @Override
     protected int setDuguActionBarId() {
-        return R.id.action_bar_addressbook ;
+        return R.id.ABToolbar;
     }
 }

@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppToolbar_TextStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/theme_font_while</item>
+    </style>
+
+    <style name="AppBottomNavi_TextStyle">
+        <item name="android:textSize">8sp</item>
+        <item name="android:textColor">@color/theme_font_deep_gray</item>
+    </style>
+
 </resources>
