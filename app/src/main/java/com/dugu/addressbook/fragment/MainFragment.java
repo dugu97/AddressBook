@@ -2,6 +2,7 @@ package com.dugu.addressbook.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -10,17 +11,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactSortedListAdapter;
 import com.dugu.addressbook.adapter.ContactSortedListCallback;
+import com.dugu.addressbook.adapter.recycleview.HidingScrollListener;
 import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
@@ -73,10 +79,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     protected void initData() {
         //启动presenter
         presenter.start();
-
-        //配置联系人总数
-        contactCount = adapter.getItemCount();
-        binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
     }
 
     @Override
@@ -95,6 +97,8 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
                 makeToast(position + "");
+                Intent intent = new Intent(getContext(), ContactDetailActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -110,8 +114,34 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         binding.newContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),NewOrEditContactActivity.class);
+                Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        binding.contactsRecycleView.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                Resources resources = getActivity().getResources();
+                DisplayMetrics dm = resources.getDisplayMetrics();
+                float density = dm.density;
+                int width = dm.widthPixels;
+                int height = dm.heightPixels;
+                binding.SearchContainer.animate()
+                        .translationY(-height)
+                        .setDuration(800)
+                        .setInterpolator(new AccelerateInterpolator(2))
+                        .start();
+
+            }
+
+            @Override
+            public void onShow() {
+                binding.SearchContainer.animate()
+                        .translationY(0)
+                        .setInterpolator(new DecelerateInterpolator(2)
+                        ).setDuration(800)
+                        .start();
             }
         });
 
@@ -166,13 +196,13 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         }
     }
 
-    private void showAlertDialog(ContactItemViewModel obj){
+    private void showAlertDialog(ContactItemViewModel obj) {
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()).setTitle(obj.getNameOrPhone())
                 .setItems(Constants.MAINFRAGOPERATION_PROJECT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        makeToast("选择了第"+which+"个");
+                        makeToast("选择了第" + which + "个");
                     }
                 }).create();
         alertDialog.show();
@@ -182,6 +212,10 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     public void showResult() {
         //配置联系人数据,并刷新
         adapter.setData(presenter.getAllContact());
+
+        //配置联系人总数
+        contactCount = adapter.getItemCount();
+        binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
     }
 
     @Override

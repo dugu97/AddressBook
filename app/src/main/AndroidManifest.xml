@@ -28,9 +28,10 @@
 
         <activity
             android:name=".activity.NewOrEditContactActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"/>
 
-        </activity>
+        <activity android:name=".activity.ContactDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

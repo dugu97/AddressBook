@@ -1,9 +1,11 @@
 package com.dugu.addressbook.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import com.dugu.addressbook.Constants;
 
@@ -40,6 +42,16 @@ public class AppUtil {
             index = random.nextInt(Constants.COLOR_PROJECT.length);
         colorFlat = index;
         return Constants.COLOR_PROJECT[index];
+    }
+
+    public static int dp2px(@NonNull Context context, int dp) {
+
+//        Log.d(TAG, "dp2px:densityDpi   " + context.getResources().getDisplayMetrics().densityDpi);
+//        Log.d(TAG, "dp2px:xdpi    " + context.getResources().getDisplayMetrics().xdpi);
+//        Log.d(TAG, "dp2px: ydpi  " + context.getResources().getDisplayMetrics().ydpi);
+//        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density);
+//        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density * dp);
+        return (int) (context.getResources().getDisplayMetrics().density * dp);
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
