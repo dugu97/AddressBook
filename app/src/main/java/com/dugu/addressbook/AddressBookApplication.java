@@ -76,42 +76,57 @@ public class AddressBookApplication extends Application {
                 Log.d("123", groupList.size() + "成功");
                 getDaoSession().getGroupDao().insertInTx(groupList);
 
-
+                Contact a;
                 List<Contact> contacts = new ArrayList<>();
-                Contact a = new Contact((long) 1, (long) 4,null, "a", "nickname",
-                        "organization",  "job", "ring", "remark",
-                        "address", "postCode",  null, null);
+
+
+                //列表适配组
+                a = new Contact(null,null, "群组", null,
+                        null,  null, "#",false, null, null,
+                        null, null,  null, null);
+                contacts.add(a);
+                a = new Contact(null, null, "名片夹", null,
+                        null,  null, "#", false,null, null,
+                        null, null,  null, null);
                 contacts.add(a);
 
-                contacts.add(new Contact(null,(long) 4, null, "aa", "nickname",
-                        "organization",  "job", "ring", "remark",
+
+
+
+                a = new Contact(null,null, "a", "nickname",
+                        null,  null, "A", false,null, null,
+                        null, null,  null, null);
+                contacts.add(a);
+
+                contacts.add(new Contact(null, null, "aa", "nickname",
+                        "organization",  "job", "A", false,"ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null,(long) 5, null, "b", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "b", "nickname",
+                        "organization",  "job", "B",false, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "bb", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "bb", "nickname",
+                        "organization",  "job", "B",false, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "c", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "c", "nickname",
+                        "organization",  "job", "C", false,"ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 5,null, "cc", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "cc", "nickname",
+                        "organization",  "job", "C",false, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "ffff", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "ffff", "nickname",
+                        "organization",  "job", "F",false, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "rrrr", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "rrrr", "nickname",
+                        "organization",  "job", "R",false, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "hhhhh", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "hhhhh", "nickname",
+                        "organization",  "job", "H",true, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "tttt", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "tttt", "nickname",
+                        "organization",  "job", "T",true, "ring", "remark",
                         "address", "postCode",  null, null));
-                contacts.add(new Contact(null, (long) 4,null, "ggggg", "nickname",
-                        "organization",  "job", "ring", "remark",
+                contacts.add(new Contact(null, null, "ggggg", "nickname",
+                        "organization",  "job", "G",true, "ring", "remark",
                         "address", "postCode",  null, null));
                 getDaoSession().getContactDao().insertInTx(contacts);
 

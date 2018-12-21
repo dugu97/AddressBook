@@ -58,9 +58,10 @@ public class ContactsPresenter implements ContactsContract.Presenter {
                 }
 
             item = new ContactItemViewModel(contact.getContact_id(),
-                    contact.getGroup_id(),
                     contact.getIcon(),
                     contact.getName(),
+                    contact.getFirstPingYin(),
+                    contact.getIsSIM(),
                     phoneList,
                     contact.getOrganization(),
                     contact.getJob());
@@ -70,10 +71,31 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
 
         //添加列表顶固定选项
-        item = new ContactItemViewModel((long) -9, "群组", "#");
-        result.add(item);
-        item = new ContactItemViewModel((long) -5, "名片夹", "#");
-        result.add(item);
+//        item = new ContactItemViewModel((long) -9,
+//                (long) 4,
+//                null,
+//                "群组",
+//                "#",
+//                null,
+//                null,
+//                null);
+//        result.add(item);
+//
+//        item = new ContactItemViewModel((long) -5,
+//                (long) 4,
+//                null,
+//                "名片夹",
+//                "#",
+//                new ArrayList<String>(),
+//                null,
+//                null);
+//        result.add(item);
+
+//        //添加列表顶固定选项
+//        item = new ContactItemViewModel((long) -9, "群组", "#");
+//        result.add(item);
+//        item = new ContactItemViewModel((long) -5, "名片夹", "#");
+//        result.add(item);
 
         return result;
     }

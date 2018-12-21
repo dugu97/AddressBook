@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/addressbook_actionbar_start_blue</item>
-        <item name="colorPrimaryDark">@color/addressbook_actionbar_end_blue</item>
+        <item name="colorPrimaryDark">@color/addressbook_actionbar_start_blue</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -22,4 +22,7 @@
         <item name="android:textColor">@color/theme_font_deep_gray</item>
     </style>
 
+    <style name="AppTabLayoutItem_TextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

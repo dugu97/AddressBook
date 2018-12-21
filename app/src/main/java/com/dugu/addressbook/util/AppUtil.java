@@ -13,12 +13,8 @@ import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 public class AppUtil {
-
-    private static Random random = new Random();
-    private static int colorFlat = -1;
 
     //    格式化long类型的时间
     public static String formatTimeInMillis(long timeInMillis) {
@@ -36,11 +32,8 @@ public class AppUtil {
         return false;
     }
 
-    public static int getRandomColor() {
-        int index = random.nextInt(Constants.COLOR_PROJECT.length);
-        while (index == colorFlat)
-            index = random.nextInt(Constants.COLOR_PROJECT.length);
-        colorFlat = index;
+    public static int getRandomColor(Long seed) {
+        int index = (int) (seed % Constants.COLOR_PROJECT.length);
         return Constants.COLOR_PROJECT[index];
     }
 

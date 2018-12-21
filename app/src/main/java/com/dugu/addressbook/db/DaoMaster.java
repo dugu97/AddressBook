@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         EmailDao.createTable(db, ifNotExists);
         GroupDao.createTable(db, ifNotExists);
         PhoneDao.createTable(db, ifNotExists);
+        GroupLinkContactDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -33,6 +34,7 @@ public class DaoMaster extends AbstractDaoMaster {
         EmailDao.dropTable(db, ifExists);
         GroupDao.dropTable(db, ifExists);
         PhoneDao.dropTable(db, ifExists);
+        GroupLinkContactDao.dropTable(db, ifExists);
     }
 
     /**
@@ -55,6 +57,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(EmailDao.class);
         registerDaoClass(GroupDao.class);
         registerDaoClass(PhoneDao.class);
+        registerDaoClass(GroupLinkContactDao.class);
     }
 
     public DaoSession newSession() {

@@ -126,15 +126,15 @@ public class SideBar extends View {
 		// 除开松开事件的任何触摸事件
 		default:
 //			setBackgroundResource(R.drawable.sidebar_background);
-			if (listener != null) {
-				listener.onTouchingLetterChanged(b[c]);
-			}
 			if (oldChoose != c) {
 				if (c >= 0 && c < b.length) {
 					if (mTextDialog != null) {
 						mTextDialog.setText(b[c]);
 						mTextDialog.setVisibility(View.VISIBLE);
 						mTextDialog.setBackground(getContext().getResources().getDrawable(R.drawable.vector_drawable_seekbar_index));
+						if (listener != null) {
+							listener.onTouchingLetterChanged(b[c]);
+						}
 					}
 
 					choose = c;

@@ -18,13 +18,13 @@ public class Contact {
     @Id(autoincrement = true)
     private Long contact_id;
 
-    private Long group_id;
-
     private byte[] icon;   //头像
     private String name;
     private String nickname;
     private String organization;
     private String job;
+    private String firstPingYin;
+    private boolean isSIM;
 
     // Phone类的contact_id作为外键，与Contact的主键相连。
     @ToMany(referencedJoinProperty = "contact_id")
@@ -46,17 +46,18 @@ public class Contact {
     @Generated(hash = 2046468181)
     private transient ContactDao myDao;
 
-    @Generated(hash = 448561389)
-    public Contact(Long contact_id, Long group_id, byte[] icon, String name, String nickname,
-            String organization, String job, String ring, String remark, String address,
+    @Generated(hash = 1970241687)
+    public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
+            String job, String firstPingYin, boolean isSIM, String ring, String remark, String address,
             String postCode, Long birthday, byte[] businessardData) {
         this.contact_id = contact_id;
-        this.group_id = group_id;
         this.icon = icon;
         this.name = name;
         this.nickname = nickname;
         this.organization = organization;
         this.job = job;
+        this.firstPingYin = firstPingYin;
+        this.isSIM = isSIM;
         this.ring = ring;
         this.remark = remark;
         this.address = address;
@@ -232,10 +233,16 @@ public class Contact {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getContactDao() : null;
     }
-    public Long getGroup_id() {
-        return this.group_id;
+    public String getFirstPingYin() {
+        return this.firstPingYin;
     }
-    public void setGroup_id(Long group_id) {
-        this.group_id = group_id;
+    public void setFirstPingYin(String firstPingYin) {
+        this.firstPingYin = firstPingYin;
+    }
+    public boolean getIsSIM() {
+        return this.isSIM;
+    }
+    public void setIsSIM(boolean isSIM) {
+        this.isSIM = isSIM;
     }
 }

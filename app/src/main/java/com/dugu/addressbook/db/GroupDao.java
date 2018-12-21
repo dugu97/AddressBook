@@ -28,8 +28,6 @@ public class GroupDao extends AbstractDao<Group, Long> {
         public final static Property Group_name = new Property(1, String.class, "group_name", false, "GROUP_NAME");
     }
 
-    private DaoSession daoSession;
-
 
     public GroupDao(DaoConfig config) {
         super(config);
@@ -37,7 +35,6 @@ public class GroupDao extends AbstractDao<Group, Long> {
     
     public GroupDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -82,12 +79,6 @@ public class GroupDao extends AbstractDao<Group, Long> {
         if (group_name != null) {
             stmt.bindString(2, group_name);
         }
-    }
-
-    @Override
-    protected final void attachEntity(Group entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     @Override

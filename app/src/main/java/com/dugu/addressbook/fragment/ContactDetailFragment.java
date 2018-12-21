@@ -28,7 +28,7 @@ public class ContactDetailFragment extends BaseFragment{
 
     @Override
     protected void initViews(View rootView) {
-
+        binding.toolbarLayout.setTitleEnabled(false);
     }
 
     @Override

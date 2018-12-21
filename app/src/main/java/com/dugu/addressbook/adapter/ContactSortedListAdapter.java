@@ -33,6 +33,20 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
     protected void handleViewHolder(SimpleViewHolder<ItemContactListBinding> holder, ItemContactListBinding binding, final ContactItemViewModel obj, final int position) {
         super.handleViewHolder(holder, binding, obj, position);
 
+        binding.contacrItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onClick(obj, position);
+            }
+        });
+        binding.contacrItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onLongClickListener.onClick(obj, position);
+                return true;
+            }
+        });
+
         //设置联系人头像
         if (obj.getIcon() != null && obj.getIcon().length > 0) {
             RequestOptions options = new RequestOptions();
@@ -47,16 +61,15 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         if (oldChar.equals("")) {
             oldChar = obj.getFirstPingYin();
             indexMap.put(oldChar, position);
-        } else if (obj.getFirstPingYin().equals(oldChar))
+        } else if (indexMap.containsKey(obj.getFirstPingYin()) && position != indexMap.get(obj.getFirstPingYin()))
             binding.charIndex.setVisibility(View.INVISIBLE);
         else {
             oldChar = obj.getFirstPingYin();
             indexMap.put(oldChar, position);
         }
 
-        if (obj.getContact_id() < 0) {
+        if (obj.getFirstPingYin().equals("#")) {
             binding.rightIcon.setVisibility(View.VISIBLE);
-
             // 非正式联系人的灰底
             if (obj.getName().equals("群组")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_group_main_icon);
@@ -66,20 +79,6 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
                 binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#CDCDCD"));
             }
         }
-
-        binding.contacrItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClick(obj, position);
-            }
-        });
-        binding.contacrItem.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onLongClickListener.onClick(obj, position);
-                return true;
-            }
-        });
     }
 
     public HashMap<String, Integer> getIndexMap() {

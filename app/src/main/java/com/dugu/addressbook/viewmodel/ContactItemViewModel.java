@@ -1,55 +1,47 @@
 package com.dugu.addressbook.viewmodel;
 
 import com.dugu.addressbook.BR;
-import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.util.AppUtil;
-import com.dugu.addressbook.util.HanZiToPinYinUtil;
 
 import java.util.List;
 
 public class ContactItemViewModel extends BindingItem {
 
     private Long contact_id;
-    private Long group_id;
     private byte[] icon;   //头像
     private String name;
     private List<String> phoneList;
     private String organization;
     private String job;
     private String firstPingYin;
+    private boolean isSIM;
 
     //默认头像颜色随机
     private int randomColor;
 
-    public ContactItemViewModel(Long contact_id, Long group_id, byte[] icon, String name, List<String> phoneList, String organization, String job) {
+    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String firstPingYin, boolean isSIM, List<String> phoneList, String organization, String job) {
         this.contact_id = contact_id;
-        this.group_id = group_id;
         this.icon = icon;
         this.name = name;
+        this.firstPingYin = firstPingYin;
+        this.isSIM = isSIM;
         this.phoneList = phoneList;
         this.organization = organization;
         this.job = job;
 
-        //拼接phone
-        String phone = "";
-        for (int i = 0; i < phoneList.size(); i++) {
-            phone = phone + phoneList.get(i);
-        }
-        String temp = name + organization + job + phone;
-        if (!AppUtil.isNullString(temp))
-            this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
-        if (!this.firstPingYin.matches("[a-zA-Z]"))
-            this.firstPingYin = "#";
+//        //拼接phone
+//        String phone = "";
+//        for (int i = 0; i < phoneList.size(); i++) {
+//            phone = phone + phoneList.get(i);
+//        }
+//        String temp = name + organization + job + phone;
+//        if (!AppUtil.isNullString(temp))
+//            this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
+//        if (!this.firstPingYin.matches("[a-zA-Z]"))
+//            this.firstPingYin = "#";
 
-        randomColor = AppUtil.getRandomColor();
-    }
-
-    // 用于二级页面的ViewModel生成（contact_id < 0）
-    public ContactItemViewModel(Long contact_id, String name, String firstPingYin) {
-        this.contact_id = contact_id;
-        this.name = name;
-        this.firstPingYin = firstPingYin;
+        randomColor = AppUtil.getRandomColor(contact_id);
     }
 
     public String getNameOrPhone() {
@@ -61,13 +53,8 @@ public class ContactItemViewModel extends BindingItem {
             return "（无姓名）";
     }
 
-    public boolean needHideSIMIcon(){
-        //二级页面的ViewModel group_id 为null
-        if (group_id == null)
-            return true;
-        if (group_id != Constants.GROUP_SIM)
-            return false;
-        return true;
+    public boolean needHideSIMIcon() {
+        return !isSIM;
     }
 
     public String getOrganizationOrJob() {
@@ -141,6 +128,10 @@ public class ContactItemViewModel extends BindingItem {
 
     public void setJob(String job) {
         this.job = job;
+    }
+
+    public List<String> getPhoneList() {
+        return phoneList;
     }
 
     @Override
