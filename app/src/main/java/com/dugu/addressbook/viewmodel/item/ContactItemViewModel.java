@@ -1,8 +1,9 @@
-package com.dugu.addressbook.viewmodel;
+package com.dugu.addressbook.viewmodel.item;
 
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.util.AppUtil;
+import com.dugu.addressbook.viewmodel.BindingItem;
 
 import java.util.List;
 
@@ -141,6 +142,6 @@ public class ContactItemViewModel extends BindingItem {
 
     @Override
     public int getViewVariableId() {
-        return BR.contact;
+        return BR.ContactItemViewModel;
     }
 }

@@ -64,7 +64,6 @@ public class AddressBookApplication extends Application {
             @Override
             public void run() {
 
-                Log.d("123","执行到");
                 //初始化Group表  手机联系人id为3  sim联系人为4
                 /*
                     巨坑，数组越界没报错
@@ -73,27 +72,13 @@ public class AddressBookApplication extends Application {
                 for (int i = 0; i < Constants.GROUP_PROJECT.length ; i++) {
                     groupList.add(new Group((long) i, Constants.GROUP_PROJECT[i]));
                 }
-                Log.d("123", groupList.size() + "成功");
+                Log.d("123", groupList.size() + "个初始群组，初始成功");
                 getDaoSession().getGroupDao().insertInTx(groupList);
 
                 Contact a;
                 List<Contact> contacts = new ArrayList<>();
 
-
-                //列表适配组
-                a = new Contact(null,null, "群组", null,
-                        null,  null, "#",false, null, null,
-                        null, null,  null, null);
-                contacts.add(a);
-                a = new Contact(null, null, "名片夹", null,
-                        null,  null, "#", false,null, null,
-                        null, null,  null, null);
-                contacts.add(a);
-
-
-
-
-                a = new Contact(null,null, "a", "nickname",
+                a = new Contact((long) 1,null, "a", "nickname",
                         null,  null, "A", false,null, null,
                         null, null,  null, null);
                 contacts.add(a);

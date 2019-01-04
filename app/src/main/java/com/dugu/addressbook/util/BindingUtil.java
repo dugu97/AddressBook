@@ -13,10 +13,8 @@ public class BindingUtil {
     @BindingAdapter({"image_data"})
     public static void loadImage(ImageView view, byte[] data) {
         if (data != null && data.length > 0) {
-            RequestOptions options = new RequestOptions();
-            options.diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(AddressBookApplication.getAppContext()).load(data)
-                    .apply(options).into(view);
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(view);
         } else {
             view.setImageResource(R.drawable.vector_drawable_contact_default_icon);
         }

@@ -36,7 +36,7 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         public final static Property Remark = new Property(9, String.class, "remark", false, "REMARK");
         public final static Property Address = new Property(10, String.class, "address", false, "ADDRESS");
         public final static Property PostCode = new Property(11, String.class, "postCode", false, "POST_CODE");
-        public final static Property Birthday = new Property(12, Long.class, "birthday", false, "BIRTHDAY");
+        public final static Property Birthday = new Property(12, String.class, "birthday", false, "BIRTHDAY");
         public final static Property BusinessardData = new Property(13, byte[].class, "businessardData", false, "BUSINESSARD_DATA");
     }
 
@@ -68,7 +68,7 @@ public class ContactDao extends AbstractDao<Contact, Long> {
                 "\"REMARK\" TEXT," + // 9: remark
                 "\"ADDRESS\" TEXT," + // 10: address
                 "\"POST_CODE\" TEXT," + // 11: postCode
-                "\"BIRTHDAY\" INTEGER," + // 12: birthday
+                "\"BIRTHDAY\" TEXT," + // 12: birthday
                 "\"BUSINESSARD_DATA\" BLOB);"); // 13: businessardData
     }
 
@@ -138,9 +138,9 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindString(12, postCode);
         }
  
-        Long birthday = entity.getBirthday();
+        String birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindLong(13, birthday);
+            stmt.bindString(13, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
@@ -209,9 +209,9 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindString(12, postCode);
         }
  
-        Long birthday = entity.getBirthday();
+        String birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindLong(13, birthday);
+            stmt.bindString(13, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
@@ -246,7 +246,7 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // remark
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // address
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // postCode
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // birthday
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // birthday
             cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13) // businessardData
         );
         return entity;
@@ -266,7 +266,7 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         entity.setRemark(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setAddress(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setPostCode(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setBirthday(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setBirthday(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setBusinessardData(cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13));
      }
     

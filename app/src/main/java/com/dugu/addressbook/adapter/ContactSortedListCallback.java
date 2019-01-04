@@ -3,7 +3,7 @@ package com.dugu.addressbook.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
 
-import com.dugu.addressbook.viewmodel.ContactItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 public class ContactSortedListCallback extends SortedListAdapterCallback<ContactItemViewModel> {
 
@@ -16,6 +16,8 @@ public class ContactSortedListCallback extends SortedListAdapterCallback<Contact
      */
     @Override
     public int compare(ContactItemViewModel o1, ContactItemViewModel o2) {
+        if (o1.getFirstPingYin().equals(o2.getFirstPingYin()))
+            return o1.getContact_id().compareTo(o2.getContact_id());
         return o1.getFirstPingYin().compareTo(o2.getFirstPingYin());
     }
 
@@ -27,6 +29,8 @@ public class ContactSortedListCallback extends SortedListAdapterCallback<Contact
         return item1.getContact_id() == item2.getContact_id();
     }
 
+
+    //TODO 判断两个对象是否是内容相同的Item
     /**
      * 用来判断两个对象是否是内容相同的Item。
      */

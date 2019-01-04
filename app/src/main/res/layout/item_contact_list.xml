@@ -6,8 +6,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="contact"
-            type="com.dugu.addressbook.viewmodel.ContactItemViewModel" />
+            name="ContactItemViewModel"
+            type="com.dugu.addressbook.viewmodel.item.ContactItemViewModel" />
     </data>
 
     <LinearLayout
@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/contacr_item"
+            android:id="@+id/contact_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_btn_selector"
@@ -31,7 +31,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="@{contact.firstPingYin}"
+                android:text="@{ContactItemViewModel.firstPingYin}"
                 android:textColor="@color/theme_background_transparent_deep_gray"
                 android:textSize="15sp" />
 
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="@{contact.nameOrPhone}"
+                    android:text="@{ContactItemViewModel.nameOrPhone}"
                     android:textColor="@color/addressbook_bg_black"
                     android:textSize="16sp" />
 
@@ -69,10 +69,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="@{contact.organizationOrJob}"
+                    android:text="@{ContactItemViewModel.organizationOrJob}"
                     android:textColor="@color/theme_font_deep_gray"
                     android:textSize="13sp"
-                    android:visibility="@{contact.needHideOrganizationAndJob() ? View.GONE : View.VISIBLE}" />
+                    android:visibility="@{ContactItemViewModel.needHideOrganizationAndJob() ? View.GONE : View.VISIBLE}" />
 
             </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/vector_drawable_icon_sim"
-                android:visibility="@{contact.needHideSIMIcon() ? View.GONE : View.VISIBLE}" />
+                android:visibility="@{ContactItemViewModel.needHideSIMIcon() ? View.GONE : View.VISIBLE}" />
 
 
             <ImageView

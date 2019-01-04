@@ -4,7 +4,8 @@ import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Phone;
-import com.dugu.addressbook.viewmodel.ContactItemViewModel;
+import com.dugu.addressbook.viewmodel.ContactsViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ContactsPresenter implements ContactsContract.Presenter {
 
     private final ContactsContract.Ui mUi;
-    private List<Contact> list;
+    private ContactsViewModel contactsViewModel;
 
     public ContactsPresenter(ContactsContract.Ui mUi) {
         this.mUi = mUi;
@@ -25,27 +26,28 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
             @Override
             public void run() {
-                list = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list();
+                List<Contact> list = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list();
 
-                //加载完成显示UI
+                contactsViewModel = new ContactsViewModel(formatData(list));
+
+                //数据加载完成 显示UI
                 mUi.showResult();
             }
         });
     }
 
-    @Override
-    public List<ContactItemViewModel> getAllContact() {
-        return formatData(list);
+    public void updateContact(){
+        //TODO 更新item
     }
 
     private List<ContactItemViewModel> formatData(List<Contact> list) {
 
         List<ContactItemViewModel> result = new ArrayList<>();
 
+        ContactItemViewModel item;
+
         if (list == null)
             return result;
-
-        ContactItemViewModel item;
 
         for (Contact contact :
                 list) {
@@ -69,34 +71,11 @@ public class ContactsPresenter implements ContactsContract.Presenter {
             result.add(item);
         }
 
-
-        //添加列表顶固定选项
-//        item = new ContactItemViewModel((long) -9,
-//                (long) 4,
-//                null,
-//                "群组",
-//                "#",
-//                null,
-//                null,
-//                null);
-//        result.add(item);
-//
-//        item = new ContactItemViewModel((long) -5,
-//                (long) 4,
-//                null,
-//                "名片夹",
-//                "#",
-//                new ArrayList<String>(),
-//                null,
-//                null);
-//        result.add(item);
-
-//        //添加列表顶固定选项
-//        item = new ContactItemViewModel((long) -9, "群组", "#");
-//        result.add(item);
-//        item = new ContactItemViewModel((long) -5, "名片夹", "#");
-//        result.add(item);
-
         return result;
+    }
+
+    @Override
+    public ContactsViewModel getContactsViewModel(){
+        return contactsViewModel;
     }
 }

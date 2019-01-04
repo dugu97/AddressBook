@@ -10,13 +10,16 @@ import android.view.Window;
 
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.fragment.ContactDetailFragment;
+import com.dugu.addressbook.presenter.ContactDetailPresenter;
 
 public class ContactDetailActivity extends BaseActivityNoBar {
+
+    private ContactDetailPresenter presenter;
 
     protected Fragment createFragment(Bundle bundle) {
         ContactDetailFragment fragment = ContactDetailFragment.newInstance(bundle);
         //创建Presenter
-//        presenter = new NewOrEditContactPresenter(fragment);
+        presenter = new ContactDetailPresenter(fragment);
         return fragment;
     }
 

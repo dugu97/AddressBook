@@ -4,9 +4,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="contact"
-            type="com.dugu.addressbook.viewmodel.ContactDetailItemViewModel" />
+            name="ContactDetailViewModel"
+            type="com.dugu.addressbook.viewmodel.ContactDetailViewModel" />
 
     </data>
 
@@ -43,8 +45,7 @@
                         android:id="@+id/contact_big_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/abcdlkwof" />
+                        android:scaleType="centerCrop" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -59,7 +60,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="名字"
+                            android:text="@{ContactDetailViewModel.nameOrPhone}"
                             android:textColor="@color/theme_font_while"
                             android:textSize="25sp" />
 
@@ -68,8 +69,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="公司"
-                            android:textColor="@color/theme_font_deep_gray"
+                            android:text="@{ContactDetailViewModel.organization}"
+                            android:visibility="@{ContactDetailViewModel.needHideOrganization() ? View.GONE : View.VISIBLE}"
+                            android:textColor="@color/addressbook_edittext_bg_gray"
                             android:textSize="16sp" />
 
                         <TextView
@@ -77,8 +79,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="职位"
-                            android:textColor="@color/theme_font_deep_gray"
+                            android:text="@{ContactDetailViewModel.job}"
+                            android:visibility="@{ContactDetailViewModel.needHideJob() ? View.GONE : View.VISIBLE}"
+                            android:textColor="@color/addressbook_edittext_bg_gray"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -90,7 +93,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/vector_drawable_left_arrow"
                     app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light">
 
 
@@ -99,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|left"
-                        android:text="123"
+                        android:text="@{ContactDetailViewModel.nameOrPhone}"
                         android:textAppearance="@style/AppToolbar_TextStyle" />
 
                 </android.support.v7.widget.Toolbar>
@@ -126,20 +128,14 @@
                         android:layout_height="match_parent"
                         android:text="信息详情" />
 
-
-                    <android.support.design.widget.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="通话记录" />
-
                 </android.support.design.widget.TabLayout>
             </FrameLayout>
 
         </android.support.design.widget.AppBarLayout>
 
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/contact_detail_meg_recycleview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

@@ -6,13 +6,18 @@ import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.dugu.addressbook.Constants;
 
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AppUtil {
 
@@ -32,8 +37,15 @@ public class AppUtil {
         return false;
     }
 
+    public static boolean isNullList(List list) {
+        if (list == null || list.size() == 0)
+            return true;
+        return false;
+    }
+
     public static int getRandomColor(Long seed) {
-        int index = (int) (seed % Constants.COLOR_PROJECT.length);
+        Long temp = Math.abs(seed);
+        int index = (int) (temp % Constants.COLOR_PROJECT.length);
         return Constants.COLOR_PROJECT[index];
     }
 
@@ -45,6 +57,14 @@ public class AppUtil {
 //        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density);
 //        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density * dp);
         return (int) (context.getResources().getDisplayMetrics().density * dp);
+    }
+
+    public static void loadImageWithGlide(Context context, ImageView imageView, byte[] data) {
+        if (data != null && data.length > 0)
+            Glide.with(context)
+                    .load(data)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(imageView);
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {

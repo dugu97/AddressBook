@@ -37,7 +37,7 @@ public class Contact {
     private String remark;
     private String address;
     private String postCode;
-    private Long birthday;
+    private String birthday;
     private byte[] businessardData;  //二进制名片图片
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -46,10 +46,13 @@ public class Contact {
     @Generated(hash = 2046468181)
     private transient ContactDao myDao;
 
-    @Generated(hash = 1970241687)
+    @Generated(hash = 672515148)
+    public Contact() {
+    }
+    @Generated(hash = 1041176891)
     public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
             String job, String firstPingYin, boolean isSIM, String ring, String remark, String address,
-            String postCode, Long birthday, byte[] businessardData) {
+            String postCode, String birthday, byte[] businessardData) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
@@ -64,9 +67,6 @@ public class Contact {
         this.postCode = postCode;
         this.birthday = birthday;
         this.businessardData = businessardData;
-    }
-    @Generated(hash = 672515148)
-    public Contact() {
     }
     public Long getContact_id() {
         return this.contact_id;
@@ -127,12 +127,6 @@ public class Contact {
     }
     public void setPostCode(String postCode) {
         this.postCode = postCode;
-    }
-    public Long getBirthday() {
-        return this.birthday;
-    }
-    public void setBirthday(Long birthday) {
-        this.birthday = birthday;
     }
     public byte[] getBusinessardData() {
         return this.businessardData;
@@ -244,5 +238,11 @@ public class Contact {
     }
     public void setIsSIM(boolean isSIM) {
         this.isSIM = isSIM;
+    }
+    public String getBirthday() {
+        return this.birthday;
+    }
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }

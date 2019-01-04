@@ -1,8 +1,6 @@
 package com.dugu.addressbook.contract;
 
-import com.dugu.addressbook.viewmodel.ContactItemViewModel;
-
-import java.util.List;
+import com.dugu.addressbook.viewmodel.ContactsViewModel;
 
 public interface ContactsContract {
     interface Ui extends BaseView<Presenter>{
@@ -10,6 +8,6 @@ public interface ContactsContract {
     }
 
     interface Presenter extends BasePresenter{
-        List<ContactItemViewModel> getAllContact();
+        ContactsViewModel getContactsViewModel();
     }
 }

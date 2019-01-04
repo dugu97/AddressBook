@@ -31,13 +31,18 @@ import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
-import com.dugu.addressbook.viewmodel.ContactItemViewModel;
+import com.dugu.addressbook.viewmodel.ContactsViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
+
+import java.util.List;
 
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     private ContactsContract.Presenter presenter;
     private ContactSortedListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+
+    private ContactsViewModel contactsViewModel;
 
     private int contactCount;
 
@@ -61,8 +66,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     protected void initViews(View rootView) {
         //配置sidebar
         binding.sidebar.setTextView(binding.dialog);
-
-        Log.d("123", getContext().toString());
 
         //配置RecycleView
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -96,9 +99,18 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         adapter.setOnClickListener(new OnItemElementClickListener<ContactItemViewModel>() {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
+
                 makeToast(position + "");
-                Intent intent = new Intent(getContext(), ContactDetailActivity.class);
-                startActivity(intent);
+
+                if (obj.getContact_id() >= Constants.LIST_UTIL_INDEX) {
+                    Intent intent = new Intent(getContext(), ContactDetailActivity.class);
+                    intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact_id());
+                    intent.putExtra(Constants.MAINACTIVITY_CONTACT_NAME, obj.getNameOrPhone());
+                    intent.putExtra(Constants.MAINACTIVITY_ICON, obj.getIcon());
+                    intent.putExtra(Constants.MAINACTIVITY_JOB, obj.getJob());
+                    intent.putExtra(Constants.MAINACTIVITY_ORGANIZATION, obj.getOrganization());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -116,6 +128,13 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        binding.scanCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -210,12 +229,42 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     public void showResult() {
+        //绑定viewModel对象
+        binding.setContactsViewModel(presenter.getContactsViewModel());
+
         //配置联系人数据,并刷新
-        adapter.setData(presenter.getAllContact());
+        List<ContactItemViewModel> list = binding.getContactsViewModel().getContacts();
 
         //配置联系人总数
-        contactCount = adapter.getItemCount();
+        contactCount = list.size();
         binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
+
+        //添加工具栏
+        list = addUtilItem(list);
+
+        adapter.setData(list);
+    }
+
+    private List<ContactItemViewModel> addUtilItem(List<ContactItemViewModel> list){
+        //添加工具栏
+        list.add(new ContactItemViewModel(new Long(-9),
+                null,
+                "群组",
+                "#",
+                false,
+                null,
+                null,
+                null));
+
+        list.add(new ContactItemViewModel(new Long(-5),
+                null,
+                "名片夹",
+                "#",
+                false,
+                null,
+                null,
+                null));
+        return list;
     }
 
     @Override
