@@ -80,39 +80,39 @@ public class AddressBookApplication extends Application {
 
                 a = new Contact((long) 1,null, "a", "nickname",
                         null,  null, "A", false,null, null,
-                        null, null,  null, null);
+                        null,  null, null);
                 contacts.add(a);
 
                 contacts.add(new Contact(null, null, "aa", "nickname",
                         "organization",  "job", "A", false,"ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "b", "nickname",
                         "organization",  "job", "B",false, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "bb", "nickname",
                         "organization",  "job", "B",false, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "c", "nickname",
                         "organization",  "job", "C", false,"ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "cc", "nickname",
                         "organization",  "job", "C",false, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "ffff", "nickname",
                         "organization",  "job", "F",false, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "rrrr", "nickname",
                         "organization",  "job", "R",false, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "hhhhh", "nickname",
                         "organization",  "job", "H",true, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "tttt", "nickname",
                         "organization",  "job", "T",true, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",   null, null));
                 contacts.add(new Contact(null, null, "ggggg", "nickname",
                         "organization",  "job", "G",true, "ring", "remark",
-                        "address", "postCode",  null, null));
+                        "address",  null, null));
                 getDaoSession().getContactDao().insertInTx(contacts);
 
                 List<Phone> phoneList = new ArrayList<>();

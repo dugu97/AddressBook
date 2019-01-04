@@ -68,6 +68,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_edittext_gray_rectangle"
                     android:drawableStart="@color/theme_font_deep_gray"
+                    android:textCursorDrawable="@drawable/edittext_curcor_style"
                     android:drawablePadding="30dp"
                     android:singleLine="true"
                     android:textSize="14sp" />
@@ -110,8 +111,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center"
                             android:src="@drawable/vector_drawable_add_icon"/>
 
@@ -138,9 +139,10 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center"
+                            android:scaleType="centerInside"
                             android:src="@drawable/vector_drawable_qr_code_scanning"/>
 
                         <TextView
@@ -166,8 +168,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/vector_drawable_more_icon"/>
 

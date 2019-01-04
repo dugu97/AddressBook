@@ -36,7 +36,6 @@ public class Contact {
     private String ring;
     private String remark;
     private String address;
-    private String postCode;
     private String birthday;
     private byte[] businessardData;  //二进制名片图片
     /** Used to resolve relations */
@@ -49,10 +48,10 @@ public class Contact {
     @Generated(hash = 672515148)
     public Contact() {
     }
-    @Generated(hash = 1041176891)
+    @Generated(hash = 944752352)
     public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
             String job, String firstPingYin, boolean isSIM, String ring, String remark, String address,
-            String postCode, String birthday, byte[] businessardData) {
+            String birthday, byte[] businessardData) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
@@ -64,7 +63,6 @@ public class Contact {
         this.ring = ring;
         this.remark = remark;
         this.address = address;
-        this.postCode = postCode;
         this.birthday = birthday;
         this.businessardData = businessardData;
     }
@@ -121,12 +119,6 @@ public class Contact {
     }
     public void setAddress(String address) {
         this.address = address;
-    }
-    public String getPostCode() {
-        return this.postCode;
-    }
-    public void setPostCode(String postCode) {
-        this.postCode = postCode;
     }
     public byte[] getBusinessardData() {
         return this.businessardData;
