@@ -39,7 +39,7 @@ public class ContactDetailMegSortedListAdapter extends SortedListAdapter<Contact
                 return true;
             }
         });
-        binding.rightIcon.setOnClickListener(new View.OnClickListener() {
+        binding.rightLayoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onRightBtnClickListener.onClick(obj,position);

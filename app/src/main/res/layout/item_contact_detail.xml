@@ -69,9 +69,8 @@
                 <ImageView
                     android:id="@+id/right_icon"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:scaleType="centerInside"
                     android:src="@drawable/vector_drawable_right_arrow" />
 
             </FrameLayout>

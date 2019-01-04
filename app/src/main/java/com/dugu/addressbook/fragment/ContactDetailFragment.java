@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,7 @@ import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 
-public class ContactDetailFragment extends BaseFragment implements ContactDetailContract.Ui {
+public class ContactDetailFragment extends BaseFragmentNoBar implements ContactDetailContract.Ui {
 
 
     private FragContactDetailBinding binding;
@@ -99,7 +98,6 @@ public class ContactDetailFragment extends BaseFragment implements ContactDetail
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.qr_code:
-                        Log.d("123", "code");
                         makeToast("点击了");
                         break;
                 }
@@ -111,7 +109,6 @@ public class ContactDetailFragment extends BaseFragment implements ContactDetail
             @Override
             public void onClick(ContactDetailItemViewModel obj, int position) {
                 makeToast("点击了" + position);
-                Log.d("123", "item" + position);
             }
         });
 
@@ -120,7 +117,6 @@ public class ContactDetailFragment extends BaseFragment implements ContactDetail
             public void onClick(ContactDetailItemViewModel obj, int position) {
                 if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
                     makeToast("right");
-                    Log.d("123", "right" + position);
                 }
             }
         });
