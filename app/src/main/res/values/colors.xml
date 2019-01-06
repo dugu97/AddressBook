@@ -24,4 +24,6 @@
     <!--通讯录EditText背景颜色-->
     <color name="addressbook_edittext_bg_gray">#EFEFEF</color>
 
+    <!--按钮点击按住的颜色-->
+    <color name="addressbook_btn_pressed_bg_gray">#20a4a4a4</color>
 </resources>

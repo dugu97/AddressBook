@@ -25,7 +25,7 @@
                 android:id="@+id/choose_contact_mode"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/theme_background_transparent_light_gray"
+                android:background="@drawable/btn_rectangle_choose_mode_selector"
                 android:visibility="@{NewOrEditContactViewModel.needHideNewModeTitle() ? View.GONE : View.VISIBLE}">
 
                 <LinearLayout
@@ -75,6 +75,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_edittext_white_rectangle"
                         android:hint="姓名"
+                        android:text="@={NewOrEditContactViewModel.name}"
                         android:textColor="@color/addressbook_bg_black"
                         android:textCursorDrawable="@drawable/edittext_curcor_style"
                         android:textSize="16sp" />
@@ -92,6 +93,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_edittext_white_rectangle"
                         android:hint="工作单位"
+                        android:text="@={NewOrEditContactViewModel.organization}"
                         android:textColor="@color/addressbook_bg_black"
                         android:textCursorDrawable="@drawable/edittext_curcor_style"
                         android:textSize="16sp" />
@@ -108,6 +110,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_edittext_white_rectangle"
                         android:hint="职位"
+                        android:text="@={NewOrEditContactViewModel.job}"
                         android:textColor="@color/addressbook_bg_black"
                         android:textCursorDrawable="@drawable/edittext_curcor_style"
                         android:textSize="16sp" />
@@ -123,26 +126,192 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/contact_input_list"
-                android:background="@color/theme_font_while"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/theme_font_while">
 
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
-                android:id="@+id/add_other_meg"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:id="@+id/add_birthday"
                 android:layout_width="match_parent"
-                android:background="@drawable/btn_circle_rectangle_selector"
-                android:layout_height="40dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_rectangle_selector"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="46dp"
+                        android:src="@drawable/vector_drawable_birthday_icon" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="left|center_vertical"
+                        android:text="生日"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/birthday_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="left|center_vertical"
+                        android:text="@={NewOrEditContactViewModel.birthday}"
+                        android:textColor="@color/addressbook_actionbar_start_blue"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/theme_background_transparent_gray" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_group_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_rectangle_selector"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:id="@+id/item_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="46dp"
+                        android:src="@drawable/vector_drawable_group_icon" />
+
+
+                    <TextView
+                        android:id="@+id/item_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="left|center_vertical"
+                        android:text="加入群组"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/theme_background_transparent_gray" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_ring_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_rectangle_selector"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="46dp"
+                        android:src="@drawable/vector_drawable_ring_icon" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="left|center_vertical"
+                        android:text="铃声"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/theme_background_transparent_gray" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_other_meg"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_circle_rectangle_selector">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="添加其它项"/>
+                    android:text="添加其它项" />
 
             </LinearLayout>
 

@@ -5,6 +5,6 @@
 
     <corners android:radius="20dp" />
 
-    <solid android:color="@color/theme_background_transparent_light_gray"/>
+    <solid android:color="@color/addressbook_btn_pressed_bg_gray"/>
 
 </shape>

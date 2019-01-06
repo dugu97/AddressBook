@@ -1,6 +1,8 @@
 package com.dugu.addressbook.adapter;
 
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
@@ -12,7 +14,6 @@ import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
 
 public class ContactInputMegSortedListAdapter extends SortedListAdapter<ContactInputItemViewModel, ItemContactInputBinding> {
 
-    private OnItemElementClickListener<ContactInputItemViewModel> onClickListener;
     private OnItemElementClickListener<ContactInputItemViewModel> onTitleClickListener;
     private OnItemElementClickListener<ContactInputItemViewModel> onAddMoreInputBtnClickListener;
 
@@ -21,15 +22,21 @@ public class ContactInputMegSortedListAdapter extends SortedListAdapter<ContactI
     }
 
     @Override
+    public void onBindViewHolder(SimpleViewHolder<ItemContactInputBinding> holder, int position) {
+        super.onBindViewHolder(holder, position);
+        EditText editText = holder.getBinding().itemInput;
+        if (editText.getTag() != null) {
+            editText.removeTextChangedListener((TextWatcher) editText.getTag());
+        }
+        EditContentWatcher contentWatcher = new EditContentWatcher(holder.getBinding().getContactInputItemViewModel());
+        editText.addTextChangedListener(contentWatcher);
+        editText.setTag(contentWatcher);
+        editText.setText(holder.getBinding().getContactInputItemViewModel().getContent());
+    }
+
+    @Override
     protected void handleViewHolder(SimpleViewHolder<ItemContactInputBinding> holder, ItemContactInputBinding binding, final ContactInputItemViewModel obj, final int position) {
         super.handleViewHolder(holder, binding, obj, position);
-
-        binding.itemContactInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClick(obj, position);
-            }
-        });
 
         binding.itemTitleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,13 +51,6 @@ public class ContactInputMegSortedListAdapter extends SortedListAdapter<ContactI
                 onAddMoreInputBtnClickListener.onClick(obj, position);
             }
         });
-
-
-        if (obj.getSortKey() == Constants.SORTKEY_BIRTHDAY || obj.getSortKey() == Constants.SORTKEY_GROUP || obj.getSortKey() == Constants.SORTKEY_RING){
-            binding.itemInput.setCursorVisible(false);
-            binding.itemInput.setFocusable(false);
-            binding.itemInput.setFocusableInTouchMode(false);
-        }
 
         int leftIcon = getSortKeyIcon(obj.getSortKey());
         if (leftIcon != -1)
@@ -73,15 +73,6 @@ public class ContactInputMegSortedListAdapter extends SortedListAdapter<ContactI
             case Constants.SORTKEY_ADDRESS:
                 src = R.drawable.vector_drawable_address_icon;
                 break;
-            case Constants.SORTKEY_BIRTHDAY:
-                src = R.drawable.vector_drawable_birthday_icon;
-                break;
-            case Constants.SORTKEY_GROUP:
-                src = R.drawable.vector_drawable_group_icon;
-                break;
-            case Constants.SORTKEY_RING:
-                src = R.drawable.vector_drawable_ring_icon;
-                break;
             case Constants.SORTKEY_REMARK:
                 src = R.drawable.vector_drawable_remark_icon;
                 break;
@@ -90,15 +81,6 @@ public class ContactInputMegSortedListAdapter extends SortedListAdapter<ContactI
                 break;
         }
         return src;
-    }
-
-
-    public OnItemElementClickListener<ContactInputItemViewModel> getOnClickListener() {
-        return onClickListener;
-    }
-
-    public void setOnClickListener(OnItemElementClickListener<ContactInputItemViewModel> onClickListener) {
-        this.onClickListener = onClickListener;
     }
 
     public OnItemElementClickListener<ContactInputItemViewModel> getOnTitleClickListener() {

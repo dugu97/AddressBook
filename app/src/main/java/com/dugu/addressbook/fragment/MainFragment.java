@@ -215,7 +215,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     private void showAlertDialog(final ContactItemViewModel obj) {
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()).setTitle(obj.getNameOrPhone())
-                .setItems(Constants.MAINFRAGOPERATION_PROJECT, new DialogInterface.OnClickListener() {
+                .setItems(Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         makeToast("选择了第" + which + "个");

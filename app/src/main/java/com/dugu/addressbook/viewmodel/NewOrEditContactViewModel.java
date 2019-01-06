@@ -19,6 +19,8 @@ public class NewOrEditContactViewModel extends BindingItem {
     private String organization;
     private String job;
 
+    private String birthday;
+
     private List<ContactInputItemViewModel> inputList;  //只有手机联系人需要用到
 
     public NewOrEditContactViewModel(int mode, Long contact_id, byte[] icon, String name, String organization, String job, List<ContactInputItemViewModel> inputList) {
@@ -55,8 +57,8 @@ public class NewOrEditContactViewModel extends BindingItem {
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, 1, "手机", ""));
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, 2, "私人", ""));
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_REMARK, 3, "备注", ""));
-        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_GROUP, 4, "加入群组", ""));
-
+        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_NICKNAME, 4, "昵称", ""));
+        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_ADDRESS, 5, "地址", ""));
     }
 
     public List<ContactInputItemViewModel> getInputList() {
@@ -73,6 +75,14 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public Long getContact_id() {

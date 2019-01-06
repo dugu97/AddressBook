@@ -1,8 +1,10 @@
 package com.dugu.addressbook.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -10,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.adapter.ContactInputMegSortedListAdapter;
@@ -18,7 +23,10 @@ import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.contract.NewOrEditContactContract;
 import com.dugu.addressbook.databinding.FragEditAndNewContactBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
+
+import java.util.Date;
 
 public class NewOrEditContactFragment extends BaseFragment implements NewOrEditContactContract.Ui {
 
@@ -53,7 +61,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         if (mode == -1)
             return;
 
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT  || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT){
+        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
 
             getABActionBar().setCenterTitleText("新建联系人");
 
@@ -66,12 +74,13 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             adapter.setSortedList(sortedList);
             binding.contactInputList.setAdapter(adapter);
 
-            if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT ){
+            if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
                 presenter.createViewModel(mode, null);
                 adapter.setData(presenter.getNewOrEditContactViewModel().getInputList());
+                binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
             }
 
-            if (mode ==  Constants.CONTACT_MODE_EDIT_PHONE_CONTACT){
+            if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
                 long contact_id = intent.getLongExtra(Constants.ALLACTIVITY_CONTACT_ID, -1);
                 if (contact_id != -1)
                     presenter.createViewModel(mode, contact_id);
@@ -96,25 +105,46 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
             @Override
             public void onRightButtonClickCallBack() {
-                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT  || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT){
+                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
                     makeToast("确定");
                 }
             }
         });
 
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT  || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT){
-            adapter.setOnClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
-                @Override
-                public void onClick(ContactInputItemViewModel obj, int position) {
-                    makeToast(position + "");
-                }
-            });
+        binding.chooseContactMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog
+                        .Builder(getActivity())
+                        .setItems(Constants.MODE_CHOOSE_PROJECT, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                makeToast(Constants.MODE_CHOOSE_PROJECT[which]);
+                            }
+                        }).create();
+                alertDialog.show();
+            }
+        });
 
+        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
             adapter.setOnTitleClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
                 @Override
-                public void onClick(ContactInputItemViewModel obj, int position) {
-                    if (obj.getSortKey() == Constants.SORTKEY_PHONE || obj.getSortKey() == Constants.SORTKEY_EMAIL){
-
+                public void onClick(final ContactInputItemViewModel obj, int position) {
+                    if (obj.getSortKey() == Constants.SORTKEY_PHONE || obj.getSortKey() == Constants.SORTKEY_EMAIL) {
+                        makeToast("title");
+                        AlertDialog alertDialog = new AlertDialog
+                                .Builder(getActivity())
+                                .setItems(Constants.PHONE_LABEL_PROJECT, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String temp = Constants.PHONE_LABEL_PROJECT[which];
+                                        ContactInputItemViewModel viewModel = new ContactInputItemViewModel(obj.getSortKey(), obj.getSerialNumber(), temp, obj.getContent());
+                                        adapter.addData(viewModel);
+                                        binding.getNewOrEditContactViewModel().getInputList().remove(obj);
+                                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
+                                    }
+                                }).create();
+                        alertDialog.show();
                     }
                 }
             });
@@ -123,15 +153,73 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 @Override
                 public void onClick(ContactInputItemViewModel obj, int position) {
                     Log.d("123", adapter.getItemCount() + "个");
-                    if (obj.getSortKey() == Constants.SORTKEY_PHONE ){
-                        adapter.addData(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, adapter.getItemCount() + 1, "手机", null));
-                    }else if (obj.getSortKey() == Constants.SORTKEY_EMAIL){
-                        adapter.addData(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, adapter.getItemCount() + 1, "私人", null));
+                    ContactInputItemViewModel viewModel;
+                    if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
+                        viewModel = new ContactInputItemViewModel(Constants.SORTKEY_PHONE, adapter.getItemCount() + 1, "手机", null);
+                        adapter.addData(viewModel);
+                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
+                    } else if (obj.getSortKey() == Constants.SORTKEY_EMAIL) {
+                        viewModel = new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, adapter.getItemCount() + 1, "私人", null);
+                        adapter.addData(viewModel);
+                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
                     }
+                }
+            });
+
+            binding.addBirthday.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TimePickerView pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+                        @Override
+                        public void onTimeSelect(Date date, View v) {
+                            binding.birthdayContent.setText(AppUtil.formatTimeInMillis(date.getTime()));
+                        }
+                    }).setCancelColor(0xff00ACC2).setCancelText("取消").setSubmitColor(0xff00ACC2).setSubmitText("确定").build();
+                    pvTime.show();
+                }
+            });
+
+//            binding.addRingLayout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    String myUriStr = null;
+//                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+//                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+//                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "设置来电铃声");
+//                    if (myUriStr != null) {
+//                        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(myUriStr));//将已经勾选过的铃声传递给系统铃声界面进行显示
+//                    }
+//                    startActivityForResult(intent, 0);
+//
+//                }
+//            });
+
+            binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (ContactInputItemViewModel viewModel : binding.getNewOrEditContactViewModel().getInputList()) {
+                        Log.d("123", viewModel.toString());
+                    }
+//                    makeToast(binding.getNewOrEditContactViewModel().getJob())
+
                 }
             });
         }
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        try {
+//            Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI); //获取用户选择的铃声数据
+//            String title = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_TITLE);
+////        myUriStr = pickedUri.toString();
+//            Log.d("123", pickedUri.toString());
+//            Log.d("123", title + " 123");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void setPresenter(NewOrEditContactContract.Presenter presenter) {

@@ -54,10 +54,7 @@ public class ContactInputItemViewModel extends BindingItem {
     }
 
     public String getContent() {
-        if (sortKey == Constants.SORTKEY_BIRTHDAY)
-            return "日期";
-        else
-            return content;
+        return content;
     }
 
     public void setContent(String content) {
@@ -87,5 +84,10 @@ public class ContactInputItemViewModel extends BindingItem {
     @Override
     public int getViewVariableId() {
         return BR.ContactInputItemViewModel;
+    }
+
+    @Override
+    public String toString() {
+        return sortKey+ " " + serialNumber + " " + title + " " + content;
     }
 }

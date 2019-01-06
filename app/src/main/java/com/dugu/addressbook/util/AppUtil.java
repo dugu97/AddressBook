@@ -1,18 +1,25 @@
 package com.dugu.addressbook.util;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.dugu.addressbook.Constants;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +33,8 @@ public class AppUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timeInMillis);
         Date date = cal.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年 MM月 dd日");
         String fmt = dateFormat.format(date);
         return fmt;
     }
@@ -95,5 +103,64 @@ public class AppUtil {
         bm.copyPixelsToBuffer(buf);
 
         return buf.array();
+    }
+
+    public static void setRing(Context context, int type, String path, String title) {
+
+        Uri oldRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE); //系统当前  通知铃声
+
+        File sdfile = new File(path);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DATA, sdfile.getAbsolutePath());
+        values.put(MediaStore.MediaColumns.TITLE, title);
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
+        values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+//        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);
+//        values.put(MediaStore.Audio.Media.IS_ALARM, true);
+        values.put(MediaStore.Audio.Media.IS_MUSIC, true);
+
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(sdfile.getAbsolutePath());
+        Uri newUri = null;
+        String deleteId = "";
+        try {
+            Cursor cursor = context.getContentResolver().query(uri, null, MediaStore.MediaColumns.DATA + "=?", new String[] { path },null);
+            if (cursor.moveToFirst()) {
+                deleteId = cursor.getString(cursor.getColumnIndex("_id"));
+            }
+//            LogTool.e("AGameRing", "deleteId:" + deleteId);
+
+            context.getContentResolver().delete(uri,
+                    MediaStore.MediaColumns.DATA + "=\"" + sdfile.getAbsolutePath() + "\"", null);
+            newUri = context.getContentResolver().insert(uri, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (newUri != null) {
+
+            String ringStoneId = "";
+            if (null != oldRingtoneUri) {
+                ringStoneId = oldRingtoneUri.getLastPathSegment();
+            }
+
+            Uri setRingStoneUri;
+
+            if (type == RingtoneManager.TYPE_RINGTONE || ringStoneId.equals(deleteId)) {
+                setRingStoneUri = newUri;
+
+            } else {
+                setRingStoneUri = oldRingtoneUri;
+            }
+
+
+
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, setRingStoneUri);
+
+            switch (type) {
+                case RingtoneManager.TYPE_RINGTONE:
+                    Toast.makeText(context.getApplicationContext(), "设置来电铃声成功！", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
     }
 }
