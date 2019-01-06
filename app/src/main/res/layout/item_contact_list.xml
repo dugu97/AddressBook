@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -20,7 +21,7 @@
             android:id="@+id/contact_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_btn_selector"
+            android:background="@drawable/btn_rectangle_selector"
             android:orientation="horizontal"
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
@@ -93,7 +94,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/vector_drawable_right_arrow"
-                android:visibility="gone" />
+                android:visibility="@{ContactItemViewModel.needHideRightIcon() ? View.GONE : View.VISIBLE}" />
 
         </LinearLayout>
 

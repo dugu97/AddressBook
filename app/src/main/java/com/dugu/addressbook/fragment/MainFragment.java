@@ -105,10 +105,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                 if (obj.getContact_id() >= Constants.LIST_UTIL_INDEX) {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
                     intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact_id());
-                    intent.putExtra(Constants.MAINACTIVITY_CONTACT_NAME, obj.getNameOrPhone());
-                    intent.putExtra(Constants.MAINACTIVITY_ICON, obj.getIcon());
-                    intent.putExtra(Constants.MAINACTIVITY_JOB, obj.getJob());
-                    intent.putExtra(Constants.MAINACTIVITY_ORGANIZATION, obj.getOrganization());
                     startActivity(intent);
                 }
             }
@@ -127,6 +123,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
+                intent.putExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, Constants.CONTACT_MODE_NEW_PHONE_CONTACT);
                 startActivity(intent);
             }
         });
@@ -215,7 +212,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         }
     }
 
-    private void showAlertDialog(ContactItemViewModel obj) {
+    private void showAlertDialog(final ContactItemViewModel obj) {
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()).setTitle(obj.getNameOrPhone())
                 .setItems(Constants.MAINFRAGOPERATION_PROJECT, new DialogInterface.OnClickListener() {
@@ -239,33 +236,16 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         contactCount = list.size();
         binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
 
-        //添加工具栏
-        list = addUtilItem(list);
-
         adapter.setData(list);
     }
 
-    private List<ContactItemViewModel> addUtilItem(List<ContactItemViewModel> list){
-        //添加工具栏
-        list.add(new ContactItemViewModel(new Long(-9),
-                null,
-                "群组",
-                "#",
-                false,
-                null,
-                null,
-                null));
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        list.add(new ContactItemViewModel(new Long(-5),
-                null,
-                "名片夹",
-                "#",
-                false,
-                null,
-                null,
-                null));
-        return list;
+        //TODO 其它activity返回后要刷新联系人数据
     }
+
 
     @Override
     public void setPresenter(ContactsContract.Presenter presenter) {

@@ -31,6 +31,7 @@ public class ContactItemViewModel extends BindingItem {
         this.organization = organization;
         this.job = job;
 
+
 //        //拼接phone
 //        String phone = "";
 //        for (int i = 0; i < phoneList.size(); i++) {
@@ -56,6 +57,13 @@ public class ContactItemViewModel extends BindingItem {
 
     public boolean needHideSIMIcon() {
         return !isSIM;
+    }
+
+    public boolean needHideRightIcon() {
+        //contact_id < 0 为工具栏
+        if (contact_id < 0)
+            return false;
+        return true;
     }
 
     public String getOrganizationOrJob() {

@@ -8,7 +8,7 @@ public interface NewOrEditContactContract {
     }
 
     interface Presenter extends BasePresenter{
-        NewOrEditContactViewModel getContact();
-        void createContact(NewOrEditContactViewModel contact);
+        NewOrEditContactViewModel getNewOrEditContactViewModel();
+        void createViewModel(int mode, Long contact_id);
     }
 }

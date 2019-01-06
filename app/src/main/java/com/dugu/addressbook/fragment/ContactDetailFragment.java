@@ -18,7 +18,6 @@ import com.dugu.addressbook.adapter.ContactDetailMegSortedListCallback;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
-import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 
 public class ContactDetailFragment extends BaseFragmentNoBar implements ContactDetailContract.Ui {
@@ -51,22 +50,9 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
         Intent intent = getActivity().getIntent();
         Long contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
-        byte[] iconData = intent.getByteArrayExtra(Constants.MAINACTIVITY_ICON);
-//        String nameOrPhone = intent.getStringExtra(Constants.MAINACTIVITY_CONTACT_NAME);
-//        String orgazation = intent.getStringExtra(Constants.MAINACTIVITY_ORGANIZATION);
-//        String job = intent.getStringExtra(Constants.MAINACTIVITY_JOB);
 
         presenter.createContactDetailViewModel(contact_id);
 
-        if (iconData != null && iconData.length != 0) {
-            AppUtil.loadImageWithGlide(getContext(), binding.contactBigIcon, iconData);
-        }else {
-            binding.contactBigIcon.setBackgroundColor(AppUtil.getRandomColor(contact_id));
-        }
-//        binding.contactName.setText(nameOrPhone);
-//        binding.contactsOrganization.setText(orgazation);
-//        binding.contactsJob.setText(job);
-//        binding.toolbarTitle.setText(nameOrPhone);
 
         //配置RecycleView
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -117,6 +103,8 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             public void onClick(ContactDetailItemViewModel obj, int position) {
                 if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
                     makeToast("right");
+//                    adapter.removeData(obj);
+                    adapter.addData(new ContactDetailItemViewModel(Constants.SORTKEY_PHONE, "add" + position, "add"));
                 }
             }
         });

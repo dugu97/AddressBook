@@ -45,7 +45,9 @@
                         android:id="@+id/contact_big_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        app:image_data="@{ContactDetailViewModel.icon}"
+                        app:seed="@{ContactDetailViewModel.contact_id}"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

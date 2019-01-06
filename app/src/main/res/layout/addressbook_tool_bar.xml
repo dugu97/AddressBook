@@ -21,7 +21,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="标题"
                 android:textAppearance="@style/AppToolbar_TextStyle" />
 
         </android.support.v7.widget.Toolbar>

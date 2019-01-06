@@ -1,123 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
-            name="newOrEditContact"
-            type="com.dugu.addressbook.viewmodel.NewOrEditContactViewModel"/>
+            name="NewOrEditContactViewModel"
+            type="com.dugu.addressbook.viewmodel.NewOrEditContactViewModel" />
 
     </data>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/theme_font_while">
 
         <LinearLayout
-            android:id="@+id/choose_contact_mode"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/theme_background_transparent_light_gray">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/choose_contact_mode"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_height="30dp"
+                android:background="@color/theme_background_transparent_light_gray"
+                android:visibility="@{NewOrEditContactViewModel.needHideNewModeTitle() ? View.GONE : View.VISIBLE}">
 
-                <TextView
-                    android:id="@+id/contact_mode_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="手机联系人"
-                    android:textSize="13sp"/>
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/vector_drawable_down_triangle"/>
+                    <TextView
+                        android:id="@+id/contact_mode_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="手机联系人"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/vector_drawable_down_triangle" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/theme_font_while">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_margin="10dp"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/vector_drawable_contact_circle_default_icon" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/theme_font_while">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/vector_drawable_contact_circle_default_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/contact_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edittext_white_rectangle"
+                        android:hint="姓名"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/theme_background_transparent_gray" />
+
+
+                    <EditText
+                        android:id="@+id/contact_organization"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edittext_white_rectangle"
+                        android:hint="工作单位"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/theme_background_transparent_gray" />
+
+                    <EditText
+                        android:id="@+id/contact_job"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edittext_white_rectangle"
+                        android:hint="职位"
+                        android:textColor="@color/addressbook_bg_black"
+                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/theme_background_transparent_gray" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contact_input_list"
+                android:background="@color/theme_font_while"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/add_other_meg"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:background="@drawable/btn_circle_rectangle_selector"
+                android:layout_height="40dp">
 
-                <EditText
-                    android:id="@+id/contact_name"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="姓名"
-                    android:textSize="16sp"
-                    android:textCursorDrawable="@drawable/edittext_curcor_style"
-                    android:textColor="@color/addressbook_bg_black"
-                    android:background="@drawable/bg_edittext_white_rectangle"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/theme_background_transparent_gray"/>
-
-
-                <EditText
-                    android:id="@+id/contact_organization"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="工作单位"
-                    android:textSize="16sp"
-                    android:textCursorDrawable="@drawable/edittext_curcor_style"
-                    android:textColor="@color/addressbook_bg_black"
-                    android:background="@drawable/bg_edittext_white_rectangle"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/theme_background_transparent_gray"/>
-
-                <EditText
-                    android:id="@+id/contact_job"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="职位"
-                    android:textSize="16sp"
-                    android:textCursorDrawable="@drawable/edittext_curcor_style"
-                    android:textColor="@color/addressbook_bg_black"
-                    android:background="@drawable/bg_edittext_white_rectangle"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/theme_background_transparent_gray"/>
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="添加其它项"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </layout>

@@ -49,7 +49,7 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         });
 
         //设置联系人头像
-        if (obj.getIcon() != null && obj.getIcon().length > 0) {
+        if (obj.getContact_id() > 0 && obj.getIcon() != null && obj.getIcon().length > 0) {
             RequestOptions options = new RequestOptions();
             options.diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(AddressBookApplication.getAppContext()).load(obj.getIcon())
@@ -69,8 +69,8 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
             indexMap.put(oldChar, position);
         }
 
+        //设置工具栏item 的图标
         if (obj.getContact_id() < Constants.LIST_UTIL_INDEX) {
-            binding.rightIcon.setVisibility(View.VISIBLE);
             // 非正式联系人的灰底
             if (obj.getName().equals("群组")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_group_main_icon);

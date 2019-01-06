@@ -13,7 +13,7 @@
     </style>
 
     <style name="AppToolbar_TextStyle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/theme_font_while</item>
     </style>
 

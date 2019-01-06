@@ -42,7 +42,7 @@ public class ContactDetailMegSortedListAdapter extends SortedListAdapter<Contact
         binding.rightLayoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onRightBtnClickListener.onClick(obj,position);
+                onRightBtnClickListener.onClick(obj, position);
             }
         });
 
@@ -53,16 +53,22 @@ public class ContactDetailMegSortedListAdapter extends SortedListAdapter<Contact
         else if (obj.getSortKey() != oldSortKey)
             oldSortKey = obj.getSortKey();
 
+        //弥补上述index算法不足(用于add情况)
+        if (position == 0)
+            binding.itemDetailIcon.setVisibility(View.VISIBLE);
+
         int leftIcon = getSortKeyIcon(obj.getSortKey());
         if (leftIcon != -1)
             binding.itemDetailIcon.setImageResource(leftIcon);
 
         int rightIcon = getRightIcon(obj.getSortKey());
-        if (rightIcon == -1){
+        if (rightIcon == -1) {
             binding.rightIcon.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             binding.rightIcon.setImageResource(rightIcon);
+            binding.rightIcon.setVisibility(View.VISIBLE);
         }
+
     }
 
     private int getSortKeyIcon(int sortKey) {

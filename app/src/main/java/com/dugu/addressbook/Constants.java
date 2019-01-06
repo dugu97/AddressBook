@@ -16,7 +16,13 @@ public class Constants {
     //主界面工具Item的边界 (工具栏的contact_id为负数)
     public static final int LIST_UTIL_INDEX = 0;
 
-    //联系人信息详情Item排序字段
+    //新建和编辑联系人的模式选择
+    public static final int CONTACT_MODE_NEW_PHONE_CONTACT = 1;
+    public static final int CONTACT_MODE_EDIT_PHONE_CONTACT = 2;
+    public static final int CONTACT_MODE_NEW_SMS_CONTACT = 3;
+    public static final int CONTACT_MODE_EDIT_SMS_CONTACT = 4;
+
+    //联系人信息Item排序字段
     public static final int SORTKEY_PHONE = 1;
     public static final int SORTKEY_EMAIL = 2;
     public static final int SORTKEY_NICKNAME = 3;
@@ -28,9 +34,9 @@ public class Constants {
 
     //Activity通讯字段
     public static final String MAINACTIVITY_CONTACT_ID = "contact_id";
-    public static final String MAINACTIVITY_CONTACT_NAME = "nameOrPhone";
-    public static final String MAINACTIVITY_ORGANIZATION = "organization";
-    public static final String MAINACTIVITY_JOB = "job";
-    public static final String MAINACTIVITY_ICON = "icon";
+
+    //所有Activity都可使用的通讯字段
+    public static final String ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT = "new_or_edit_contact_mode";  //用于新建或者编辑联系人的模式选择
+    public static final String ALLACTIVITY_CONTACT_ID = "all_activity_contact_id";  //用于新建或者编辑联系人的模式选择(与上一个字段搭配使用)
 
 }

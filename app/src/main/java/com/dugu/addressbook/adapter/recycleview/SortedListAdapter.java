@@ -72,8 +72,14 @@ public class SortedListAdapter<T extends BindingItem, TD extends ViewDataBinding
         sortedList.endBatchedUpdates();
     }
 
+    public void addData(T item){
+        sortedList.add(item);
+        notifyDataSetChanged();
+    }
+
     public void removeData(T item){
         sortedList.remove(item);
+        notifyDataSetChanged();
     }
 
     public void clear(){

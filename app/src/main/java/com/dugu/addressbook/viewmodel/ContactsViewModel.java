@@ -12,6 +12,30 @@ public class ContactsViewModel extends BindingItem{
 
     public ContactsViewModel(List<ContactItemViewModel> contacts) {
         this.contacts = contacts;
+
+        //添加工具栏
+        addUtilItem();
+    }
+
+    private void addUtilItem(){
+        //添加工具栏
+        contacts.add(new ContactItemViewModel(new Long(-9),
+                null,
+                "群组",
+                "#",
+                false,
+                null,
+                null,
+                null));
+
+        contacts.add(new ContactItemViewModel(new Long(-5),
+                null,
+                "名片夹",
+                "#",
+                false,
+                null,
+                null,
+                null));
     }
 
     public List<ContactItemViewModel> getContacts() {

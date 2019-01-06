@@ -118,6 +118,8 @@ public class AddressBookApplication extends Application {
                 List<Phone> phoneList = new ArrayList<>();
                 phoneList.add(new Phone(null, (long) 1,"13728472475","手机"));
                 phoneList.add(new Phone(null, (long) 1,"15622586568","手机"));
+                phoneList.add(new Phone(null, (long) 1,"15622586577","手机"));
+                phoneList.add(new Phone(null, (long) 1,"15622586544","手机"));
                 getDaoSession().getPhoneDao().insertInTx(phoneList);
 
             }
