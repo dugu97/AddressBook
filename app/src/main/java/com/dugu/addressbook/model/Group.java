@@ -1,16 +1,8 @@
 package com.dugu.addressbook.model;
 
-import com.dugu.addressbook.db.ContactDao;
-import com.dugu.addressbook.db.DaoSession;
-import com.dugu.addressbook.db.GroupDao;
-
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToMany;
-
-import java.util.List;
 
 @Entity
 public class Group {

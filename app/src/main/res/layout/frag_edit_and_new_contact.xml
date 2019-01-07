@@ -223,12 +223,14 @@
 
 
                     <TextView
+                        android:id="@+id/group_content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:gravity="left|center_vertical"
+                        android:maxLines="1"
                         android:textColor="@color/addressbook_bg_black"
                         android:textSize="14sp"/>
 

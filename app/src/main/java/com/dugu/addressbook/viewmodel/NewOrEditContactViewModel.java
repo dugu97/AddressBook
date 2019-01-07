@@ -3,6 +3,7 @@ package com.dugu.addressbook.viewmodel;
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
 
 import java.util.ArrayList;
@@ -20,20 +21,23 @@ public class NewOrEditContactViewModel extends BindingItem {
     private String job;
 
     private String birthday;
+    private List<Group> groupList;
 
     private List<ContactInputItemViewModel> inputList;  //只有手机联系人需要用到
 
-    public NewOrEditContactViewModel(int mode, Long contact_id, byte[] icon, String name, String organization, String job, List<ContactInputItemViewModel> inputList) {
+    public NewOrEditContactViewModel(int mode, Long contact_id, byte[] icon, String name, String organization, String job, List<ContactInputItemViewModel> inputList, List<Group> groupList) {
         this.mode = mode;
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
         this.organization = organization;
         this.job = job;
+        this.groupList = groupList;
 
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
-            setNewPhoneContactDefaultInputList();
+            setNewPhoneContactDefaultInputListAndGroupList();
         }
+
     }
 
     public boolean needHideNewModeTitle() {
@@ -51,7 +55,7 @@ public class NewOrEditContactViewModel extends BindingItem {
             return "";
     }
 
-    public void setNewPhoneContactDefaultInputList() {
+    public void setNewPhoneContactDefaultInputListAndGroupList() {
         //新建手机联系人基本输入信息
         inputList = new ArrayList<>();
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, 1, "手机", ""));
@@ -59,6 +63,10 @@ public class NewOrEditContactViewModel extends BindingItem {
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_REMARK, 3, "备注", ""));
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_NICKNAME, 4, "昵称", ""));
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_ADDRESS, 5, "地址", ""));
+
+        //新建手机联系人初始群组
+        groupList = new ArrayList<>();
+        groupList.add(new Group((long) Constants.GROUP_PHONE, Constants.GROUP_PROJECT[Constants.GROUP_PHONE]));
     }
 
     public List<ContactInputItemViewModel> getInputList() {
@@ -67,6 +75,26 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     public void setInputList(List<ContactInputItemViewModel> inputList) {
         this.inputList = inputList;
+    }
+
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public String getGroupNamesWithData(){
+        String groups = "";
+        //剔除不显示的群组
+        for (int i = 1; i < groupList.size(); i++) {
+            if (i == 1)
+                groups = groupList.get(i).getGroup_name();
+            else
+                groups = groups + ", " + groupList.get(i).getGroup_name();
+        }
+        return groups;
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
     }
 
     public int getMode() {

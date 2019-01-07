@@ -10,6 +10,5 @@ public interface GroupChooseContract {
 
     interface Presenter extends BasePresenter{
         GroupChooseViewModel getGroupChooseViewModel();
-        void createViewModel();
     }
 }

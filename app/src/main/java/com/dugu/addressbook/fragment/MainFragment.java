@@ -64,6 +64,9 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initViews(View rootView) {
+        //启动presenter
+        presenter.start();
+
         //配置sidebar
         binding.sidebar.setTextView(binding.dialog);
 
@@ -80,8 +83,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initData() {
-        //启动presenter
-        presenter.start();
     }
 
     @Override

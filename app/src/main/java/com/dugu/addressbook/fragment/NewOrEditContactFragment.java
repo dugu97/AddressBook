@@ -17,20 +17,24 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.GroupChooseActivity;
 import com.dugu.addressbook.adapter.ContactInputMegSortedListAdapter;
 import com.dugu.addressbook.adapter.ContactInputMegSortedListCallback;
 import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.contract.NewOrEditContactContract;
 import com.dugu.addressbook.databinding.FragEditAndNewContactBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class NewOrEditContactFragment extends BaseFragment implements NewOrEditContactContract.Ui {
 
-    FragEditAndNewContactBinding binding;
+    private FragEditAndNewContactBinding binding;
     private NewOrEditContactContract.Presenter presenter;
 
     private int mode; //四种显示模式
@@ -53,6 +57,9 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
     @Override
     protected void initViews(View rootView) {
+        //启动presenter
+        presenter.start();
+
 
         Intent intent = getActivity().getIntent();
         mode = intent.getIntExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, -1);
@@ -194,6 +201,27 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 //                }
 //            });
 
+            binding.addGroupLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), GroupChooseActivity.class);
+                    //适配已选择的group
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + " all");
+                    for (Group g : binding.getNewOrEditContactViewModel().getGroupList()) {
+                        if (g.getGroup_id() != Constants.GROUP_PHONE
+                                && g.getGroup_id() != Constants.GROUP_SIM
+                                && g.getGroup_id() != Constants.GROUP_CARD) {
+                            arrayList.add(g.getGroup_id() + "");
+                        }
+                    }
+                    Log.d("123", arrayList.size() + " send");
+
+                    intent.putStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS, arrayList);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_GROUP);
+                }
+            });
+
             binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -207,7 +235,35 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         }
     }
 
-//    @Override
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_CODE_OK)
+            if (requestCode == Constants.REQUEST_CODE_CHOOSE_GROUP) {
+                ArrayList<String> group = data.getStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS);
+                if (group == null)
+                    return;
+                List<Group> groupList = binding.getNewOrEditContactViewModel().getGroupList();
+                List<Group> result = new ArrayList<>();
+                for (int i = 0; i < groupList.size(); i++) {
+                    if (groupList.get(i).getGroup_id() == Constants.GROUP_PHONE
+                            || groupList.get(i).getGroup_id() == Constants.GROUP_SIM
+                            || groupList.get(i).getGroup_id() == Constants.GROUP_CARD)
+                        result.add(groupList.get(i));
+                }
+                for (int i = 0; i < group.size(); i++) {
+                    String s = group.get(i);
+                    String[] d = s.split(" ");
+                    result.add(new Group(Long.parseLong(d[0]), d[1]));
+                }
+                binding.getNewOrEditContactViewModel().setGroupList(result);
+                binding.groupContent.setText(binding.getNewOrEditContactViewModel().getGroupNamesWithData());
+                Log.d("123", binding.getNewOrEditContactViewModel().getGroupNamesWithData());
+                Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + "");
+            }
+    }
+
+    //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //        try {

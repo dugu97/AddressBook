@@ -8,52 +8,48 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.dugu.addressbook.viewmodel.BindingItem;
+
 import java.util.List;
 
-public class SimpleAdapter<T> extends RecyclerView.Adapter<SimpleViewHolder> {
 
-    /**
-     * 数据集
-     */
-    protected List<T> mDatas;
+/**
+ * recucleview的不同item绑定adapter (基于List)
+ */
 
-    /**
-     * item布局id
-     */
-    protected int itemLayoutId;
+public class CommonViewAdapter<T extends BindingItem, TD extends ViewDataBinding> extends RecyclerView.Adapter<SimpleViewHolder<TD>> {
 
-    /**
-     * 对象BRid
-     */
-    protected int itemBrId;
+    protected List<T> mItems;
 
     protected AdapterView.OnItemClickListener onItemClickListener;
 
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
 
-    public SimpleAdapter(int itemLayoutId, int itemBrId) {
-        this.itemLayoutId = itemLayoutId;
-        this.itemBrId = itemBrId;
+    public CommonViewAdapter() {
     }
 
-    public void setmDatas(List<T> mDatas) {
-        this.mDatas = mDatas;
+    public List<T> getmItems() {
+        return mItems;
+    }
+
+    public void setmItems(List<T> mItems) {
+        this.mItems = mItems;
         notifyDataSetChanged();
     }
 
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ViewDataBinding binding = DataBindingUtil.inflate(inflater, itemLayoutId, parent, false);
+        TD binding = DataBindingUtil.inflate(inflater, viewType, parent, false);
         SimpleViewHolder viewHolder = new SimpleViewHolder(binding.getRoot());
         viewHolder.setBinding(binding);
-        handleViewHolder(viewHolder);
         return viewHolder;
     }
 
+
     @Override
-    public void onBindViewHolder(final SimpleViewHolder holder, final int position) {
-        holder.getBinding().setVariable(itemBrId, mDatas.get(position));
+    public void onBindViewHolder(final SimpleViewHolder<TD> holder, final int position) {
+        holder.getBinding().setVariable(mItems.get(position).getViewVariableId(), mItems.get(position));
         holder.getBinding().getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,12 +67,13 @@ public class SimpleAdapter<T> extends RecyclerView.Adapter<SimpleViewHolder> {
                 return false;
             }
         });
+        handleViewHolder(holder, holder.getBinding(), mItems.get(position), position);
         holder.getBinding().executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return mDatas == null ? 0 : mDatas.size();
+        return mItems == null ? 0 : mItems.size();
     }
 
     public AdapterView.OnItemClickListener getOnItemClickListener() {
@@ -95,12 +92,31 @@ public class SimpleAdapter<T> extends RecyclerView.Adapter<SimpleViewHolder> {
         this.onItemLongClickListener = onItemLongClickListener;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position).getViewType();
+    }
+
     /**
      * 处理item界面元素
      *
-     * @param viewHolder
+     * @param binding
+     * @param t
+     * @param position
      */
-    protected void handleViewHolder(SimpleViewHolder viewHolder) {
+    protected void handleViewHolder(TD binding, T obj, int position) {
 
+    }
+
+    /**
+     * 处理item界面元素
+     *
+     * @param holder
+     * @param binding
+     * @param obj
+     * @param position
+     */
+    protected void handleViewHolder(SimpleViewHolder<TD> holder, TD binding, T obj, int position) {
+        handleViewHolder(holder.getBinding(), mItems.get(position), position);
     }
 }

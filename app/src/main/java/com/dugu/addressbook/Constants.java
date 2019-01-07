@@ -19,7 +19,9 @@ public class Constants {
 
     //初始化群组 group_id（数组序号） 及其 名称;
     public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "SIM", "名片夹"};
+    public static final int GROUP_PHONE = 3;
     public static final int GROUP_SIM = 4;
+    public static final int GROUP_CARD = 5;
 
     //主界面工具Item的边界 (工具栏的contact_id为负数)
     public static final int LIST_UTIL_INDEX = 0;
@@ -29,6 +31,13 @@ public class Constants {
     public static final int CONTACT_MODE_EDIT_PHONE_CONTACT = 2;
     public static final int CONTACT_MODE_NEW_SMS_CONTACT = 3;
     public static final int CONTACT_MODE_EDIT_SMS_CONTACT = 4;
+
+    //Activity之间的请求码
+    public static final int REQUEST_CODE_CHOOSE_GROUP = 1;
+
+    //Activity之间的返回码
+    public static final int RESULT_CODE_OK = 99;
+
 
     //联系人信息Item排序字段
     public static final int SORTKEY_PHONE = 1;
@@ -40,8 +49,12 @@ public class Constants {
     public static final int SORTKEY_RING = 7;
     public static final int SORTKEY_REMARK = 8;
 
-    //Activity通讯字段
+    //mainActivity通讯字段
     public static final String MAINACTIVITY_CONTACT_ID = "contact_id";
+
+    //NewOrEditContactActivity通讯字段
+    public static final String NEWOREDITCONTACTACTIVITY_GROUPS = "groups";
+
 
     //所有Activity都可使用的通讯字段
     public static final String ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT = "new_or_edit_contact_mode";  //用于新建或者编辑联系人的模式选择
