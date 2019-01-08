@@ -11,6 +11,11 @@ public class Constants {
     // 初始化新建联系人模式选择列表
     public static final String[] MODE_CHOOSE_PROJECT = {"手机联系人", "SIM联系人"};
 
+    // 初始化联系人照片选择列表
+    public static final String[] MODE_TAKE_PHOTO = {"拍照", "从图库中选择"};
+    public static final int TAKE_PHOTO_FROM_CAMERA = 0;
+    public static final int TAKE_PHOTO_FROM_ALBUM = 1;
+
     // 初始化手机号码标签列表
     public static final String[] PHONE_LABEL_PROJECT = {"手机", "住宅", "单位", "其它"};
 

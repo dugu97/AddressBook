@@ -3,7 +3,10 @@ package com.dugu.addressbook.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,17 +30,39 @@ import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoImpl;
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.InvokeParam;
+import com.jph.takephoto.model.TContextWrap;
+import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.permission.InvokeListener;
+import com.jph.takephoto.permission.PermissionManager;
+import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewOrEditContactFragment extends BaseFragment implements NewOrEditContactContract.Ui {
+public class NewOrEditContactFragment extends BaseFragment implements NewOrEditContactContract.Ui, TakePhoto.TakeResultListener, InvokeListener {
 
     private FragEditAndNewContactBinding binding;
     private NewOrEditContactContract.Presenter presenter;
 
     private int mode; //四种显示模式
+
+    //    takePhoto
+    private TakePhoto takePhoto;
+    private CropOptions cropOptions;  //裁剪参数
+    private CompressConfig compressConfig;  //压缩参数
+    private Uri imageUri;  //图片保存路径
+    private InvokeParam invokeParam;
 
     private ContactInputMegSortedListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
@@ -47,6 +72,18 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         if (bundle != null)
             fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getTakePhoto().onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getTakePhoto().onSaveInstanceState(outState);
     }
 
     @Override
@@ -115,6 +152,25 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
                     makeToast("确定");
                 }
+            }
+        });
+
+        binding.takeContactIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog
+                        .Builder(getActivity())
+                        .setItems(Constants.MODE_TAKE_PHOTO, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == Constants.TAKE_PHOTO_FROM_ALBUM) {
+                                    chooseIconFromTakePhoto(which);
+                                }else if (which == Constants.TAKE_PHOTO_FROM_CAMERA){
+                                    chooseIconFromTakePhoto(which);
+                                }
+                            }
+                        }).create();
+                alertDialog.show();
             }
         });
 
@@ -235,9 +291,98 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         }
     }
 
+    /**
+     * 获取TakePhoto实例
+     *
+     * @return
+     */
+    public TakePhoto getTakePhoto() {
+        if (takePhoto == null) {
+            takePhoto = (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this, this));
+        }
+        return takePhoto;
+    }
+
+    //获得照片的输出保存Uri
+    private Uri getImageCropUri() {
+        File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        return Uri.fromFile(file);
+    }
+
+    private void chooseIconFromTakePhoto(int type) {
+        //获取TakePhoto实例
+        takePhoto = getTakePhoto();
+        //设置裁剪参数
+        cropOptions = new CropOptions.Builder().setWithOwnCrop(true).setOutputX(150).setOutputY(150).setAspectX(1).setAspectY(1).create();
+        //设置压缩参数
+        compressConfig = new CompressConfig.Builder().enableQualityCompress(false).setMaxSize(25 * 1024).create();
+        takePhoto.onEnableCompress(compressConfig, false);  //设置为需要压缩
+
+        if (type == Constants.TAKE_PHOTO_FROM_ALBUM) {
+            imageUri = getImageCropUri();
+            //从相册中选取图片并裁剪
+            takePhoto.onPickFromGalleryWithCrop(imageUri, cropOptions);
+        }
+        if (type == Constants.TAKE_PHOTO_FROM_CAMERA) {
+            imageUri = getImageCropUri();
+            //拍照并裁剪
+            takePhoto.onPickFromCaptureWithCrop(imageUri, cropOptions);
+        }
+    }
+
+    @Override
+    public void takeSuccess(TResult result) {
+        //拍照后最终的URL
+        String iconPath = result.getImage().getOriginalPath(); //这个才是经过压缩的
+        Uri uri = Uri.parse(iconPath);
+        File file = new File(iconPath);
+        byte[] byt;
+
+        InputStream input = null;
+        try {
+            input = new FileInputStream(file);
+            byt = new byte[input.available()];
+            input.read(byt);
+
+            binding.getNewOrEditContactViewModel().setIcon(byt);
+            binding.takeContactIcon.setImageURI(uri);
+            Log.d("123", byt.length + "");
+            Log.d("123", file.length() +  "");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+
+    }
+
+    @Override
+    public void takeCancel() {
+
+    }
+
+    @Override
+    public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
+        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
+        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
+            this.invokeParam = invokeParam;
+        }
+        return type;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //takePhoto 配置
+        getTakePhoto().onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Constants.RESULT_CODE_OK)
             if (requestCode == Constants.REQUEST_CODE_CHOOSE_GROUP) {
                 ArrayList<String> group = data.getStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS);
@@ -276,6 +421,13 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 //            e.printStackTrace();
 //        }
 //    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.handlePermissionsResult(getActivity(), type, invokeParam, this);
+    }
 
     @Override
     public void setPresenter(NewOrEditContactContract.Presenter presenter) {
