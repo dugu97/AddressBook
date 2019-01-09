@@ -40,6 +40,10 @@ public class ContactsViewModel extends BindingItem{
         return contacts;
     }
 
+    public int getContactsSizeWithoutOtherUtilItem(){
+        return contacts.size() - 2;
+    }
+
     public void setContacts(List<ContactItemViewModel> contacts) {
         this.contacts = contacts;
     }

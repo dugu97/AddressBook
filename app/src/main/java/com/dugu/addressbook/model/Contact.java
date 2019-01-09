@@ -32,7 +32,6 @@ public class Contact {
     @ToMany(referencedJoinProperty = "contact_id")
     private List<Email> emailList;
 
-    private String ring;
     private String remark;
     private String address;
     private String birthday;
@@ -47,10 +46,10 @@ public class Contact {
     @Generated(hash = 672515148)
     public Contact() {
     }
-    @Generated(hash = 226200699)
+    @Generated(hash = 138448766)
     public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
-            String job, String firstPingYin, String ring, String remark, String address,
-            String birthday, byte[] businessardData) {
+            String job, String firstPingYin, String remark, String address, String birthday,
+            byte[] businessardData) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
@@ -58,7 +57,6 @@ public class Contact {
         this.organization = organization;
         this.job = job;
         this.firstPingYin = firstPingYin;
-        this.ring = ring;
         this.remark = remark;
         this.address = address;
         this.birthday = birthday;
@@ -99,12 +97,6 @@ public class Contact {
     }
     public void setJob(String job) {
         this.job = job;
-    }
-    public String getRing() {
-        return this.ring;
-    }
-    public void setRing(String ring) {
-        this.ring = ring;
     }
     public String getRemark() {
         return this.remark;

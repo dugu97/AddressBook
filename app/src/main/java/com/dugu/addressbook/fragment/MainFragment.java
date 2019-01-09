@@ -234,7 +234,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         List<ContactItemViewModel> list = binding.getContactsViewModel().getContacts();
 
         //配置联系人总数
-        contactCount = list.size();
+        contactCount = binding.getContactsViewModel().getContactsSizeWithoutOtherUtilItem();
         binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
 
         adapter.setData(list);

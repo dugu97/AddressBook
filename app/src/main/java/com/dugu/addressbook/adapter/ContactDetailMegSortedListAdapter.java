@@ -92,9 +92,6 @@ public class ContactDetailMegSortedListAdapter extends SortedListAdapter<Contact
             case Constants.SORTKEY_GROUP:
                 src = R.drawable.vector_drawable_group_icon;
                 break;
-            case Constants.SORTKEY_RING:
-                src = R.drawable.vector_drawable_ring_icon;
-                break;
             case Constants.SORTKEY_REMARK:
                 src = R.drawable.vector_drawable_remark_icon;
                 break;
@@ -112,7 +109,6 @@ public class ContactDetailMegSortedListAdapter extends SortedListAdapter<Contact
                 src = R.drawable.vector_drawable_sms_message;
                 break;
             case Constants.SORTKEY_EMAIL:
-            case Constants.SORTKEY_RING:
             case Constants.SORTKEY_ADDRESS:
                 src = R.drawable.vector_drawable_right_arrow;
                 break;

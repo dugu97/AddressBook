@@ -1,8 +1,10 @@
 package com.dugu.addressbook.viewmodel;
 
 import com.dugu.addressbook.BR;
+import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.model.Email;
+import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.model.Phone;
 import com.dugu.addressbook.util.AppUtil;
 
@@ -22,18 +24,18 @@ public class ContactDetailViewModel extends BindingItem {
     private String address;
     private String birthday;
 
-    private List<String> groupList;
+    private List<Group> groupList;
     private List<Phone> phoneList;
     private List<Email> emailList;
 
-    private String ring;
     private String remark;
 
+    private boolean isInBlackGroup;
 
     //默认头像颜色随机(基于contact_id)
     private int randomColor;
 
-    public ContactDetailViewModel(Long contact_id, byte[] icon, byte[] businessardData, String name, String organization, String job, String nickname, String address, String birthday, java.util.List<String> groupList, java.util.List<Phone> phoneList, java.util.List<Email> emailList, String ring, String remark) {
+    public ContactDetailViewModel(Long contact_id, byte[] icon, byte[] businessardData, String name, String organization, String job, String nickname, String address, String birthday, java.util.List<Group> groupList, java.util.List<Phone> phoneList, java.util.List<Email> emailList, String remark) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.businessardData = businessardData;
@@ -46,19 +48,34 @@ public class ContactDetailViewModel extends BindingItem {
         this.groupList = groupList;
         this.phoneList = phoneList;
         this.emailList = emailList;
-        this.ring = ring;
         this.remark = remark;
 
-        randomColor = AppUtil.getRandomColor(contact_id);
+        this.randomColor = AppUtil.getRandomColor(contact_id);
+        this.isInBlackGroup = isInBlackGroup();
     }
 
     public String getNameOrPhone() {
+        String temp;
         if (!AppUtil.isNullString(name))
-            return name;
+            temp = name;
         else if (!phoneList.isEmpty())
-            return phoneList.get(0).getPhone();
+            temp = phoneList.get(0).getPhone();
         else
-            return "（无姓名）";
+            temp = "（无姓名）";
+
+        if (isInBlackGroup)
+            temp = temp + " (已加入黑名单)";
+
+        return temp;
+    }
+
+    private boolean isInBlackGroup() {
+        for (Group p : groupList
+                ) {
+            if (p.getGroup_id() == Constants.GROUP_BLACK)
+                return true;
+        }
+        return false;
     }
 
     public boolean needHideOrganization() {
@@ -145,11 +162,11 @@ public class ContactDetailViewModel extends BindingItem {
         this.birthday = birthday;
     }
 
-    public java.util.List<String> getGroupList() {
+    public java.util.List<Group> getGroupList() {
         return groupList;
     }
 
-    public void setGroupList(java.util.List<String> groupList) {
+    public void setGroupList(java.util.List<Group> groupList) {
         this.groupList = groupList;
     }
 
@@ -167,14 +184,6 @@ public class ContactDetailViewModel extends BindingItem {
 
     public void setEmialList(java.util.List<Email> emialList) {
         emialList = emailList;
-    }
-
-    public String getRing() {
-        return ring;
-    }
-
-    public void setRing(String ring) {
-        this.ring = ring;
     }
 
     public String getRemark() {

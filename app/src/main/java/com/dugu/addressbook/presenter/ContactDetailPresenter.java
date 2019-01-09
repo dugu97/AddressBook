@@ -42,13 +42,13 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             public void run() {
                 contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
-                List<String> groupList = new ArrayList<>();
+                List<Group> groupList = new ArrayList<>();
                 //查找归属群组
                 List<GroupLinkContact> linkContacts = AddressBookApplication.getDaoSession().getGroupLinkContactDao().queryBuilder().where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
                 if (linkContacts != null) {
                     for (int i = 0; i < linkContacts.size(); i++) {
                         Group group = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(linkContacts.get(i).getGroup_id())).unique();
-                        groupList.add(group.getGroup_name());
+                        groupList.add(group);
                     }
                 }
 
@@ -64,7 +64,6 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
                         groupList,
                         contact.getPhoneList(),
                         contact.getEmailList(),
-                        contact.getRing(),
                         contact.getRemark());
 
                 mUi.showResult();
@@ -94,13 +93,17 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
         }
 
         String groups = "";
-        List<String> groupList = contactDetailViewModel.getGroupList();
+        List<Group> groupList = contactDetailViewModel.getGroupList();
         if (!AppUtil.isNullList(groupList)) {
             for (int i = 0; i < groupList.size(); i++) {
-                if (i == 0)
-                    groups = groupList.get(i);
-                else
-                    groups = groups + ", " + groupList.get(i);
+                if (groupList.get(i).getGroup_id() != Constants.GROUP_PHONE
+                        && groupList.get(i).getGroup_id() != Constants.GROUP_CARD
+                        && groupList.get(i).getGroup_id() != Constants.GROUP_BLACK) {
+                    if (i == 0)
+                        groups = groupList.get(i).getGroup_name();
+                    else
+                        groups = groups + ", " + groupList.get(i).getGroup_name();
+                }
             }
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_GROUP, "群组", groups));
         }
@@ -111,8 +114,6 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_ADDRESS, "地址", contact.getAddress()));
         if (!AppUtil.isNullString(contactDetailViewModel.getBirthday()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BIRTHDAY, "生日", contact.getBirthday()));
-        if (!AppUtil.isNullString(contactDetailViewModel.getRing()))
-            messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_RING, "铃声", contact.getRing()));
         if (!AppUtil.isNullString(contactDetailViewModel.getRemark()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_REMARK, "备注", contact.getRemark()));
 

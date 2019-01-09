@@ -24,9 +24,10 @@ public class Constants {
 
 
     //初始化群组 group_id（数组序号） 及其 名称;
-    public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "名片夹"};
+    public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "名片夹", "黑名单"};
     public static final int GROUP_PHONE = 3;
     public static final int GROUP_CARD = 4;
+    public static final int GROUP_BLACK = 5;
 
     //主界面工具Item的边界 (工具栏的contact_id为负数)
     public static final int LIST_UTIL_INDEX = 0;
@@ -51,7 +52,7 @@ public class Constants {
     public static final int SORTKEY_ADDRESS = 4;
     public static final int SORTKEY_BIRTHDAY = 5;
     public static final int SORTKEY_GROUP = 6;
-    public static final int SORTKEY_RING = 7;
+//    public static final int SORTKEY_RING = 7;
     public static final int SORTKEY_REMARK = 8;
 
     //mainActivity通讯字段

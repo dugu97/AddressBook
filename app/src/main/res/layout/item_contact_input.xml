@@ -15,8 +15,8 @@
         android:id="@+id/item_contact_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_rectangle_selector"
+        android:paddingTop="10dp"
+        android:background="@color/theme_font_while"
         android:orientation="vertical">
 
         <LinearLayout
