@@ -10,10 +10,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.InputFilter;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -40,6 +44,10 @@ import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.permission.InvokeListener;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
+import com.timmy.tdialog.TDialog;
+import com.timmy.tdialog.base.BindViewHolder;
+import com.timmy.tdialog.listener.OnBindViewListener;
+import com.timmy.tdialog.listener.OnViewClickListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +63,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
     private FragEditAndNewContactBinding binding;
     private NewOrEditContactContract.Presenter presenter;
 
-    private int mode; //四种显示模式
+    private int mode; //两种显示模式
 
     //    takePhoto
     private TakePhoto takePhoto;
@@ -149,9 +157,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
             @Override
             public void onRightButtonClickCallBack() {
-                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
-                    makeToast("确定");
-                }
+                makeToast("确定");
             }
         });
 
@@ -165,7 +171,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                             public void onClick(DialogInterface dialog, int which) {
                                 if (which == Constants.TAKE_PHOTO_FROM_ALBUM) {
                                     chooseIconFromTakePhoto(which);
-                                }else if (which == Constants.TAKE_PHOTO_FROM_CAMERA){
+                                } else if (which == Constants.TAKE_PHOTO_FROM_CAMERA) {
                                     chooseIconFromTakePhoto(which);
                                 }
                             }
@@ -174,121 +180,168 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             }
         });
 
-        binding.chooseContactMode.setOnClickListener(new View.OnClickListener() {
+        adapter.setOnTitleClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
             @Override
-            public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog
-                        .Builder(getActivity())
-                        .setItems(Constants.MODE_CHOOSE_PROJECT, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                makeToast(Constants.MODE_CHOOSE_PROJECT[which]);
-                            }
-                        }).create();
-                alertDialog.show();
+            public void onClick(final ContactInputItemViewModel obj, int position) {
+                if (obj.getSortKey() == Constants.SORTKEY_PHONE || obj.getSortKey() == Constants.SORTKEY_EMAIL) {
+                    makeToast("title");
+                    final String[] strings;
+                    if (obj.getSortKey() == Constants.SORTKEY_PHONE)
+                        strings = Constants.PHONE_LABEL_PROJECT;
+                    else
+                        strings = Constants.EMAIL_LABEL_PROJECT;
+                    AlertDialog alertDialog = new AlertDialog
+                            .Builder(getActivity())
+                            .setItems(strings, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    //选择自定义
+                                    if (which == strings.length - 1) {
+                                        showInputDialog(obj,strings[which]);
+                                        return;
+                                    }
+
+                                    String temp = strings[which];
+                                    updataInputListItemTitle(temp, obj);
+                                }
+                            }).create();
+                    alertDialog.show();
+                }
             }
         });
 
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
-            adapter.setOnTitleClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
-                @Override
-                public void onClick(final ContactInputItemViewModel obj, int position) {
-                    if (obj.getSortKey() == Constants.SORTKEY_PHONE || obj.getSortKey() == Constants.SORTKEY_EMAIL) {
-                        makeToast("title");
-                        AlertDialog alertDialog = new AlertDialog
-                                .Builder(getActivity())
-                                .setItems(Constants.PHONE_LABEL_PROJECT, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        String temp = Constants.PHONE_LABEL_PROJECT[which];
-                                        ContactInputItemViewModel viewModel = new ContactInputItemViewModel(obj.getSortKey(), obj.getSerialNumber(), temp, obj.getContent());
-                                        adapter.addData(viewModel);
-                                        binding.getNewOrEditContactViewModel().getInputList().remove(obj);
-                                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
-                                    }
-                                }).create();
-                        alertDialog.show();
+        adapter.setOnAddMoreInputBtnClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
+            @Override
+            public void onClick(ContactInputItemViewModel obj, int position) {
+                Log.d("123", adapter.getItemCount() + "个");
+                ContactInputItemViewModel viewModel;
+                if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
+                    viewModel = new ContactInputItemViewModel(Constants.SORTKEY_PHONE, adapter.getItemCount() + 1, "手机", null);
+                    adapter.addData(viewModel);
+                    binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
+                } else if (obj.getSortKey() == Constants.SORTKEY_EMAIL) {
+                    viewModel = new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, adapter.getItemCount() + 1, "私人", null);
+                    adapter.addData(viewModel);
+                    binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
+                }
+            }
+        });
+
+        binding.addBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerView pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        binding.birthdayContent.setText(AppUtil.formatTimeInMillis(date.getTime()));
+                    }
+                }).setCancelColor(0xff00ACC2).setCancelText("取消").setSubmitColor(0xff00ACC2).setSubmitText("确定").build();
+                pvTime.show();
+            }
+        });
+
+        binding.addGroupLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), GroupChooseActivity.class);
+                //适配已选择的group
+                ArrayList<String> arrayList = new ArrayList<>();
+                Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + " all");
+                for (Group g : binding.getNewOrEditContactViewModel().getGroupList()) {
+                    if (g.getGroup_id() != Constants.GROUP_PHONE
+                            && g.getGroup_id() != Constants.GROUP_CARD) {
+                        arrayList.add(g.getGroup_id() + "");
                     }
                 }
-            });
+                Log.d("123", arrayList.size() + " send");
 
-            adapter.setOnAddMoreInputBtnClickListener(new OnItemElementClickListener<ContactInputItemViewModel>() {
-                @Override
-                public void onClick(ContactInputItemViewModel obj, int position) {
-                    Log.d("123", adapter.getItemCount() + "个");
-                    ContactInputItemViewModel viewModel;
-                    if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
-                        viewModel = new ContactInputItemViewModel(Constants.SORTKEY_PHONE, adapter.getItemCount() + 1, "手机", null);
-                        adapter.addData(viewModel);
-                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
-                    } else if (obj.getSortKey() == Constants.SORTKEY_EMAIL) {
-                        viewModel = new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, adapter.getItemCount() + 1, "私人", null);
-                        adapter.addData(viewModel);
-                        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
-                    }
+                intent.putStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS, arrayList);
+                startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_GROUP);
+            }
+        });
+
+        binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (ContactInputItemViewModel viewModel : binding.getNewOrEditContactViewModel().getInputList()) {
+                    Log.d("123", viewModel.toString());
                 }
-            });
-
-            binding.addBirthday.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TimePickerView pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-                        @Override
-                        public void onTimeSelect(Date date, View v) {
-                            binding.birthdayContent.setText(AppUtil.formatTimeInMillis(date.getTime()));
-                        }
-                    }).setCancelColor(0xff00ACC2).setCancelText("取消").setSubmitColor(0xff00ACC2).setSubmitText("确定").build();
-                    pvTime.show();
-                }
-            });
-
-//            binding.addRingLayout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    String myUriStr = null;
-//                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-//                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
-//                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "设置来电铃声");
-//                    if (myUriStr != null) {
-//                        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(myUriStr));//将已经勾选过的铃声传递给系统铃声界面进行显示
-//                    }
-//                    startActivityForResult(intent, 0);
-//
-//                }
-//            });
-
-            binding.addGroupLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), GroupChooseActivity.class);
-                    //适配已选择的group
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + " all");
-                    for (Group g : binding.getNewOrEditContactViewModel().getGroupList()) {
-                        if (g.getGroup_id() != Constants.GROUP_PHONE
-                                && g.getGroup_id() != Constants.GROUP_SIM
-                                && g.getGroup_id() != Constants.GROUP_CARD) {
-                            arrayList.add(g.getGroup_id() + "");
-                        }
-                    }
-                    Log.d("123", arrayList.size() + " send");
-
-                    intent.putStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS, arrayList);
-                    startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_GROUP);
-                }
-            });
-
-            binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    for (ContactInputItemViewModel viewModel : binding.getNewOrEditContactViewModel().getInputList()) {
-                        Log.d("123", viewModel.toString());
-                    }
 //                    makeToast(binding.getNewOrEditContactViewModel().getJob())
+//                    showInputDialog();
+            }
+        });
+    }
 
-                }
-            });
-        }
+    private void updataInputListItemTitle(String newTitle, ContactInputItemViewModel oldItem) {
+        ContactInputItemViewModel viewModel = new ContactInputItemViewModel(oldItem.getSortKey(), oldItem.getSerialNumber(), newTitle, oldItem.getContent());
+        adapter.addData(viewModel);
+        binding.getNewOrEditContactViewModel().getInputList().remove(oldItem);
+        binding.getNewOrEditContactViewModel().getInputList().add(viewModel);
+    }
+
+    private void showInputDialog(final ContactInputItemViewModel obj, final String defaultContent) {
+        new TDialog.Builder(getActivity().getSupportFragmentManager())
+                .setLayoutRes(R.layout.dialog_input)    //设置弹窗展示的xml布局
+//                .setDialogView(view)  //设置弹窗布局,直接传入View
+//                .setWidth(600)  //设置弹窗宽度(px)
+//                .setHeight(800)  //设置弹窗高度(px)
+                .setScreenWidthAspect(getContext(), 0.9f)   //设置弹窗宽度(参数aspect为屏幕宽度比例 0 - 1f)
+//                .setScreenHeightAspect(getContext(), 0.3f)  //设置弹窗高度(参数aspect为屏幕宽度比例 0 - 1f)
+                .setGravity(Gravity.CENTER)     //设置弹窗展示位置
+                .setTag("DialogTest")   //设置Tag
+                .setDimAmount(0.6f)     //设置弹窗背景透明度(0-1f)
+                .setCancelableOutside(false)     //弹窗在界面外是否可以点击取消
+//                .setDialogAnimationRes(R.style.animate_dialog)  //设置弹窗动画
+                .setOnDismissListener(new DialogInterface.OnDismissListener() { //弹窗隐藏时回调方法
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+//                        Toast.makeText(DiffentDialogActivity.this, "弹窗消失回调", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnBindViewListener(new OnBindViewListener() {   //通过BindViewHolder拿到控件对象,进行修改
+                    @Override
+                    public void bindView(BindViewHolder bindViewHolder) {
+                        bindViewHolder.setText(R.id.dialog_common_title, "自定义标签名称");
+                        bindViewHolder.setText(R.id.dialog_common_left, "取消");
+                        bindViewHolder.setText(R.id.dialog_common_right, "确定");
+                        EditText editText = bindViewHolder.getView(R.id.dialog_common_content);
+                        InputFilter[] filters = {new InputFilter.LengthFilter(Constants.LABEL_MAX_LENGTH)};
+                        editText.setFilters(filters);
+                        editText.setHint("标签最长为6个字符");
+                    }
+                })
+                .addOnClickListener(R.id.dialog_common_left, R.id.dialog_common_right)   //添加进行点击控件的id
+                .setOnViewClickListener(new OnViewClickListener() {     //View控件点击事件回调
+                    @Override
+                    public void onViewClick(BindViewHolder viewHolder, View view, TDialog tDialog) {
+                        switch (view.getId()) {
+                            case R.id.dialog_common_left:
+                                updataInputListItemTitle(defaultContent, obj);
+                                tDialog.dismiss();
+                                break;
+                            case R.id.dialog_common_right:
+                                EditText editText = viewHolder.getView(R.id.dialog_common_content);
+                                String temp = editText.getText().toString().trim();
+                                if (!AppUtil.isNullString(temp))
+                                    updataInputListItemTitle(temp,obj);
+                                else {
+                                    updataInputListItemTitle(defaultContent, obj);
+                                }
+                                tDialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        return false;
+                    }
+                })
+                .create()   //创建TDialog
+                .show();    //展示
+
     }
 
     /**
@@ -348,7 +401,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             binding.getNewOrEditContactViewModel().setIcon(byt);
             binding.takeContactIcon.setImageURI(uri);
             Log.d("123", byt.length + "");
-            Log.d("123", file.length() +  "");
+            Log.d("123", file.length() + "");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -392,7 +445,6 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 List<Group> result = new ArrayList<>();
                 for (int i = 0; i < groupList.size(); i++) {
                     if (groupList.get(i).getGroup_id() == Constants.GROUP_PHONE
-                            || groupList.get(i).getGroup_id() == Constants.GROUP_SIM
                             || groupList.get(i).getGroup_id() == Constants.GROUP_CARD)
                         result.add(groupList.get(i));
                 }
@@ -407,20 +459,6 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + "");
             }
     }
-
-    //    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        try {
-//            Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI); //获取用户选择的铃声数据
-//            String title = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_TITLE);
-////        myUriStr = pickedUri.toString();
-//            Log.d("123", pickedUri.toString());
-//            Log.d("123", title + " 123");
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_circle_rectangle">
+
+    <TextView
+        android:id="@+id/dialog_common_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:textColor="@color/addressbook_bg_black"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/dialog_common_title"
+        android:background="#40a4a4a4" />
+
+    <EditText
+        android:id="@+id/dialog_common_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/line"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_edittext_gray_rectangle"
+        android:drawableStart="@color/theme_font_deep_gray"
+        android:maxLength="10"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:gravity="center"
+        android:textColor="@color/addressbook_bg_black"
+        android:textCursorDrawable="@drawable/edittext_curcor_style"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_common_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="15dp">
+
+        <Button
+            android:id="@+id/dialog_common_left"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_circle_rectangle_selector"
+            android:textColor="@color/addressbook_actionbar_start_blue"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/dialog_common_right"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_circle_rectangle_selector"
+            android:textColor="@color/addressbook_actionbar_start_blue"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

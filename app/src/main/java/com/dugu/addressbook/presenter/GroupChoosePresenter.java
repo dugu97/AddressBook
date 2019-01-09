@@ -37,9 +37,8 @@ public class GroupChoosePresenter implements GroupChooseContract.Presenter {
                 List<GroupChooseItemViewModel> itemViewModels = new ArrayList<>();
                 for (Group g : groupList) {
                     String name = g.getGroup_name();
-                    if (name.equals(Constants.GROUP_PROJECT[(int) Constants.GROUP_PHONE])
-                            || name.equals(Constants.GROUP_PROJECT[(int) Constants.GROUP_SIM])
-                            || name.equals(Constants.GROUP_PROJECT[(int) Constants.GROUP_CARD])){
+                    if (name.equals(Constants.GROUP_PROJECT[ Constants.GROUP_PHONE])
+                            || name.equals(Constants.GROUP_PROJECT[ Constants.GROUP_CARD])){
                         continue;
                     }
                     itemViewModels.add(new GroupChooseItemViewModel(g,false));

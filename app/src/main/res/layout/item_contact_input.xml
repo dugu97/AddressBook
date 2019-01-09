@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_edittext_white_rectangle"
                 android:hint="@{ContactInputItemViewModel.contentHint}"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/addressbook_bg_black"
                 android:textCursorDrawable="@drawable/edittext_curcor_style"
                 android:textSize="14sp" />

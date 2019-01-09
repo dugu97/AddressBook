@@ -63,7 +63,6 @@ public class ContactsPresenter implements ContactsContract.Presenter {
                     contact.getIcon(),
                     contact.getName(),
                     contact.getFirstPingYin(),
-                    contact.getIsSIM(),
                     phoneList,
                     contact.getOrganization(),
                     contact.getJob());

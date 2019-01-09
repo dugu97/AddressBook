@@ -24,7 +24,6 @@ public class Contact {
     private String organization;
     private String job;
     private String firstPingYin;
-    private boolean isSIM;
 
     // Phone类的contact_id作为外键，与Contact的主键相连。
     @ToMany(referencedJoinProperty = "contact_id")
@@ -48,9 +47,9 @@ public class Contact {
     @Generated(hash = 672515148)
     public Contact() {
     }
-    @Generated(hash = 944752352)
+    @Generated(hash = 226200699)
     public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
-            String job, String firstPingYin, boolean isSIM, String ring, String remark, String address,
+            String job, String firstPingYin, String ring, String remark, String address,
             String birthday, byte[] businessardData) {
         this.contact_id = contact_id;
         this.icon = icon;
@@ -59,7 +58,6 @@ public class Contact {
         this.organization = organization;
         this.job = job;
         this.firstPingYin = firstPingYin;
-        this.isSIM = isSIM;
         this.ring = ring;
         this.remark = remark;
         this.address = address;
@@ -224,12 +222,6 @@ public class Contact {
     }
     public void setFirstPingYin(String firstPingYin) {
         this.firstPingYin = firstPingYin;
-    }
-    public boolean getIsSIM() {
-        return this.isSIM;
-    }
-    public void setIsSIM(boolean isSIM) {
-        this.isSIM = isSIM;
     }
     public String getBirthday() {
         return this.birthday;

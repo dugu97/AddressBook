@@ -25,7 +25,7 @@ android {
 
     // 配置GreenDao基本参数
     greendao {
-        schemaVersion 2    //当前数据库版本
+        schemaVersion 3    //当前数据库版本
         daoPackage 'com.dugu.addressbook.db'  //生成的文件包名
         targetGenDir 'src/main/java'  //路径
     }
@@ -54,4 +54,7 @@ dependencies {
 
     //takePhoto
     implementation 'com.jph.takephoto:takephoto_library:4.0.3'
+
+    implementation 'com.timmy.tdialog:tdialog:2.1.1'
+
 }

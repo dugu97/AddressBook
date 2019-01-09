@@ -7,6 +7,6 @@
 
     <corners android:radius="20dp"/>
 
-    <solid android:color="@color/theme_background_transparent_light_gray"/>
+    <solid android:color="@color/theme_font_while"/>
 
 </shape>

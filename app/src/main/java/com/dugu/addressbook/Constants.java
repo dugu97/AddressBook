@@ -8,25 +8,25 @@ public class Constants {
     // 初始化主界面长按选择列表
     public static final String[] CONTACT_LONG_CLICK_OPERATION_PROJECT = {"编辑", "删除", "分享联系人", "加入黑名单", "创建快捷方式"};
 
-    // 初始化新建联系人模式选择列表
-    public static final String[] MODE_CHOOSE_PROJECT = {"手机联系人", "SIM联系人"};
-
     // 初始化联系人照片选择列表
     public static final String[] MODE_TAKE_PHOTO = {"拍照", "从图库中选择"};
     public static final int TAKE_PHOTO_FROM_CAMERA = 0;
     public static final int TAKE_PHOTO_FROM_ALBUM = 1;
 
     // 初始化手机号码标签列表
-    public static final String[] PHONE_LABEL_PROJECT = {"手机", "住宅", "单位", "其它"};
+    public static final String[] PHONE_LABEL_PROJECT = {"手机", "住宅", "单位", "其它", "自定义"};
 
     // 初始化邮件标签列表
-    public static final String[] EMAIL_LABEL_PROJECT = {"私人", "单位", "其它"};
+    public static final String[] EMAIL_LABEL_PROJECT = {"私人", "单位", "其它", "自定义"};
+
+    // 手机号码 群组 标签最大长度
+    public static final int LABEL_MAX_LENGTH = 6;
+
 
     //初始化群组 group_id（数组序号） 及其 名称;
-    public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "SIM", "名片夹"};
+    public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "名片夹"};
     public static final int GROUP_PHONE = 3;
-    public static final int GROUP_SIM = 4;
-    public static final int GROUP_CARD = 5;
+    public static final int GROUP_CARD = 4;
 
     //主界面工具Item的边界 (工具栏的contact_id为负数)
     public static final int LIST_UTIL_INDEX = 0;

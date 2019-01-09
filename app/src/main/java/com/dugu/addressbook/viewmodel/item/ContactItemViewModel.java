@@ -16,17 +16,15 @@ public class ContactItemViewModel extends BindingItem {
     private String organization;
     private String job;
     private String firstPingYin;
-    private boolean isSIM;
 
     //默认头像颜色随机
     private int randomColor;
 
-    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String firstPingYin, boolean isSIM, List<String> phoneList, String organization, String job) {
+    public ContactItemViewModel(Long contact_id, byte[] icon, String name, String firstPingYin, List<String> phoneList, String organization, String job) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
         this.firstPingYin = firstPingYin;
-        this.isSIM = isSIM;
         this.phoneList = phoneList;
         this.organization = organization;
         this.job = job;
@@ -53,10 +51,6 @@ public class ContactItemViewModel extends BindingItem {
             return phoneList.get(0);
         else
             return "（无姓名）";
-    }
-
-    public boolean needHideSIMIcon() {
-        return !isSIM;
     }
 
     public boolean needHideRightIcon() {

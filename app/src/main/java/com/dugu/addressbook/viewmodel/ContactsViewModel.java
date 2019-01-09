@@ -23,7 +23,6 @@ public class ContactsViewModel extends BindingItem{
                 null,
                 "群组",
                 "#",
-                false,
                 null,
                 null,
                 null));
@@ -32,7 +31,6 @@ public class ContactsViewModel extends BindingItem{
                 null,
                 "名片夹",
                 "#",
-                false,
                 null,
                 null,
                 null));
