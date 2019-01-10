@@ -8,9 +8,7 @@ import android.util.Log;
 import com.dugu.addressbook.db.DBHelper;
 import com.dugu.addressbook.db.DaoMaster;
 import com.dugu.addressbook.db.DaoSession;
-import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Group;
-import com.dugu.addressbook.model.Phone;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -38,89 +36,115 @@ public class AddressBookApplication extends Application {
 
         //数据库
         DBHelper dbHelper = new DBHelper(this, DBNAME);
-        Database database=dbHelper.getEncryptedWritableDb(DBNAME);
-        daoSession=new DaoMaster(database).newSession();
+        Database database = dbHelper.getEncryptedWritableDb(DBNAME);
+        daoSession = new DaoMaster(database).newSession();
 
         printDBLog();
+        initDefaultData();
 
         initDBData();
     }
 
-    private void printDBLog(){
+    private void printDBLog() {
         Log.d("123", "Group: " + Arrays.toString(getDaoSession().getGroupDao().getAllColumns()));
-        Log.d("123", "Phone: " +  Arrays.toString(getDaoSession().getPhoneDao().getAllColumns()));
-        Log.d("123", "Email: " +  Arrays.toString(getDaoSession().getEmailDao().getAllColumns()));
-        Log.d("123", "Contact: " +  Arrays.toString(getDaoSession().getContactDao().getAllColumns()));
+        Log.d("123", "Phone: " + Arrays.toString(getDaoSession().getPhoneDao().getAllColumns()));
+        Log.d("123", "Email: " + Arrays.toString(getDaoSession().getEmailDao().getAllColumns()));
+        Log.d("123", "Contact: " + Arrays.toString(getDaoSession().getContactDao().getAllColumns()));
     }
 
-    private void initDBData(){
-
-        //qing清空数据库
-        getDaoSession().getGroupDao().deleteAll();
-        getDaoSession().getContactDao().deleteAll();
-        getDaoSession().getPhoneDao().deleteAll();
-
+    private void initDefaultData() {
         getDaoSession().startAsyncSession().runInTx(new Runnable() {
             @Override
             public void run() {
+
+                if (getDaoSession().getGroupDao().queryBuilder().count() > 0) {
+                    Log.d("123", "已初始化group表");
+                    return;
+                }
 
                 //初始化Group表  手机联系人id为3  sim联系人为4
                 /*
                     巨坑，数组越界没报错
                  */
                 List<Group> groupList = new ArrayList<>();
-                for (int i = 0; i < Constants.GROUP_PROJECT.length ; i++) {
+                for (int i = 0; i < Constants.GROUP_PROJECT.length; i++) {
                     groupList.add(new Group((long) i, Constants.GROUP_PROJECT[i]));
                 }
                 Log.d("123", groupList.size() + "个初始群组，初始成功");
                 getDaoSession().getGroupDao().insertInTx(groupList);
+            }
+        });
+    }
 
-                Contact a;
-                List<Contact> contacts = new ArrayList<>();
+    private void initDBData() {
 
-                a = new Contact((long) 1,null, "a", "nickname",
-                        null,  null, "A",null,
-                        null,  null, null);
-                contacts.add(a);
+        //qing清空数据库
+        getDaoSession().getContactDao().deleteAll();
+        getDaoSession().getPhoneDao().deleteAll();
+        getDaoSession().getEmailDao().deleteAll();
+        getDaoSession().getGroupLinkContactDao().deleteAll();
 
-                contacts.add(new Contact(null, null, "aa", "nickname",
-                        "organization",  "job", "A",  "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "b", "nickname",
-                        "organization",  "job", "B",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "bb", "nickname",
-                        "organization",  "job", "B",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "c", "nickname",
-                        "organization",  "job", "C",  "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "cc", "nickname",
-                        "organization",  "job", "C",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "ffff", "nickname",
-                        "organization",  "job", "F",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "rrrr", "nickname",
-                        "organization",  "job", "R",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "hhhhh", "nickname",
-                        "organization",  "job", "H",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "tttt", "nickname",
-                        "organization",  "job", "T",   "remark",
-                        "address",   null, null));
-                contacts.add(new Contact(null, null, "ggggg", "nickname",
-                        "organization",  "job", "G",   "remark",
-                        "address",  null, null));
-                getDaoSession().getContactDao().insertInTx(contacts);
+        getDaoSession().startAsyncSession().runInTx(new Runnable() {
+            @Override
+            public void run() {
 
-                List<Phone> phoneList = new ArrayList<>();
-                phoneList.add(new Phone(null, (long) 1,"13728472475","手机"));
-                phoneList.add(new Phone(null, (long) 1,"15622586568","手机"));
-                phoneList.add(new Phone(null, (long) 1,"15622586577","手机"));
-                phoneList.add(new Phone(null, (long) 1,"15622586544","手机"));
-                getDaoSession().getPhoneDao().insertInTx(phoneList);
+//                //初始化Group表  手机联系人id为3  sim联系人为4
+//                /*
+//                    巨坑，数组越界没报错
+//                 */
+//                List<Group> groupList = new ArrayList<>();
+//                for (int i = 0; i < Constants.GROUP_PROJECT.length; i++) {
+//                    groupList.add(new Group((long) i, Constants.GROUP_PROJECT[i]));
+//                }
+//                Log.d("123", groupList.size() + "个初始群组，初始成功");
+//                getDaoSession().getGroupDao().insertInTx(groupList);
+
+//                Contact a;
+//                List<Contact> contacts = new ArrayList<>();
+//
+//                a = new Contact((long) 1,null, "a", "nickname",
+//                        null,  null, null,
+//                        null,  null, null);
+//                contacts.add(a);
+//
+//                contacts.add(new Contact(null, null, "aa", "nickname",
+//                        "organization",  "job",  "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "b", "nickname",
+//                        "organization",  "job",    "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "bb", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "c", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "cc", "nickname",
+//                        "organization",  "job",    "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "ffff", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "rrrr", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "hhhhh", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "tttt", "nickname",
+//                        "organization",  "job",   "remark",
+//                        "address",   null, null));
+//                contacts.add(new Contact(null, null, "ggggg", "nickname",
+//                        "organization",  "job",    "remark",
+//                        "address",  null, null));
+//                getDaoSession().getContactDao().insertInTx(contacts);
+//
+//                List<Phone> phoneList = new ArrayList<>();
+//                phoneList.add(new Phone(null, (long) 1,"13728472475","手机"));
+//                phoneList.add(new Phone(null, (long) 1,"15622586568","手机"));
+//                phoneList.add(new Phone(null, (long) 1,"15622586577","手机"));
+//                phoneList.add(new Phone(null, (long) 1,"15622586544","手机"));
+//                getDaoSession().getPhoneDao().insertInTx(phoneList);
 
             }
         });

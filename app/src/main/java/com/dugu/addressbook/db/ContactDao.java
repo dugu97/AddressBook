@@ -30,11 +30,10 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         public final static Property Nickname = new Property(3, String.class, "nickname", false, "NICKNAME");
         public final static Property Organization = new Property(4, String.class, "organization", false, "ORGANIZATION");
         public final static Property Job = new Property(5, String.class, "job", false, "JOB");
-        public final static Property FirstPingYin = new Property(6, String.class, "firstPingYin", false, "FIRST_PING_YIN");
-        public final static Property Remark = new Property(7, String.class, "remark", false, "REMARK");
-        public final static Property Address = new Property(8, String.class, "address", false, "ADDRESS");
-        public final static Property Birthday = new Property(9, String.class, "birthday", false, "BIRTHDAY");
-        public final static Property BusinessardData = new Property(10, byte[].class, "businessardData", false, "BUSINESSARD_DATA");
+        public final static Property Remark = new Property(6, String.class, "remark", false, "REMARK");
+        public final static Property Address = new Property(7, String.class, "address", false, "ADDRESS");
+        public final static Property Birthday = new Property(8, String.class, "birthday", false, "BIRTHDAY");
+        public final static Property BusinessardData = new Property(9, byte[].class, "businessardData", false, "BUSINESSARD_DATA");
     }
 
     private DaoSession daoSession;
@@ -59,11 +58,10 @@ public class ContactDao extends AbstractDao<Contact, Long> {
                 "\"NICKNAME\" TEXT," + // 3: nickname
                 "\"ORGANIZATION\" TEXT," + // 4: organization
                 "\"JOB\" TEXT," + // 5: job
-                "\"FIRST_PING_YIN\" TEXT," + // 6: firstPingYin
-                "\"REMARK\" TEXT," + // 7: remark
-                "\"ADDRESS\" TEXT," + // 8: address
-                "\"BIRTHDAY\" TEXT," + // 9: birthday
-                "\"BUSINESSARD_DATA\" BLOB);"); // 10: businessardData
+                "\"REMARK\" TEXT," + // 6: remark
+                "\"ADDRESS\" TEXT," + // 7: address
+                "\"BIRTHDAY\" TEXT," + // 8: birthday
+                "\"BUSINESSARD_DATA\" BLOB);"); // 9: businessardData
     }
 
     /** Drops the underlying database table. */
@@ -106,29 +104,24 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindString(6, job);
         }
  
-        String firstPingYin = entity.getFirstPingYin();
-        if (firstPingYin != null) {
-            stmt.bindString(7, firstPingYin);
-        }
- 
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(7, remark);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(9, address);
+            stmt.bindString(8, address);
         }
  
         String birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindString(10, birthday);
+            stmt.bindString(9, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
         if (businessardData != null) {
-            stmt.bindBlob(11, businessardData);
+            stmt.bindBlob(10, businessardData);
         }
     }
 
@@ -166,29 +159,24 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             stmt.bindString(6, job);
         }
  
-        String firstPingYin = entity.getFirstPingYin();
-        if (firstPingYin != null) {
-            stmt.bindString(7, firstPingYin);
-        }
- 
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(7, remark);
         }
  
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(9, address);
+            stmt.bindString(8, address);
         }
  
         String birthday = entity.getBirthday();
         if (birthday != null) {
-            stmt.bindString(10, birthday);
+            stmt.bindString(9, birthday);
         }
  
         byte[] businessardData = entity.getBusinessardData();
         if (businessardData != null) {
-            stmt.bindBlob(11, businessardData);
+            stmt.bindBlob(10, businessardData);
         }
     }
 
@@ -212,11 +200,10 @@ public class ContactDao extends AbstractDao<Contact, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // nickname
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // organization
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // job
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // firstPingYin
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // remark
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // address
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // birthday
-            cursor.isNull(offset + 10) ? null : cursor.getBlob(offset + 10) // businessardData
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // remark
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // address
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // birthday
+            cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9) // businessardData
         );
         return entity;
     }
@@ -229,11 +216,10 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         entity.setNickname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setOrganization(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setJob(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setFirstPingYin(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setRemark(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setAddress(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setBirthday(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setBusinessardData(cursor.isNull(offset + 10) ? null : cursor.getBlob(offset + 10));
+        entity.setRemark(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setAddress(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setBirthday(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setBusinessardData(cursor.isNull(offset + 9) ? null : cursor.getBlob(offset + 9));
      }
     
     @Override

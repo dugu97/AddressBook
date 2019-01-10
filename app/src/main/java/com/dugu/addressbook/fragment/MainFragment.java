@@ -43,6 +43,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     private LinearLayoutManager linearLayoutManager;
 
     private ContactsViewModel contactsViewModel;
+    private List<ContactItemViewModel> list;
 
     private int contactCount;
 

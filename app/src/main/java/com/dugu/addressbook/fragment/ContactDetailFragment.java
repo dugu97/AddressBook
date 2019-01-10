@@ -44,13 +44,15 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     @Override
     protected void initViews(View rootView) {
+        //启动presenter
+        presenter.start();
+
         binding.toolbar.setNavigationIcon(R.drawable.vector_drawable_left_arrow);
         binding.toolbar.inflateMenu(R.menu.navi_qr_code_icon);
         binding.toolbarLayout.setTitleEnabled(false);
 
         Intent intent = getActivity().getIntent();
         Long contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
-
         presenter.createContactDetailViewModel(contact_id);
 
 
@@ -66,8 +68,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     @Override
     protected void initData() {
-        //启动presenter
-        presenter.start();
+
     }
 
     @Override

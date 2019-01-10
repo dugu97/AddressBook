@@ -23,7 +23,6 @@ public class Contact {
     private String nickname;
     private String organization;
     private String job;
-    private String firstPingYin;
 
     // Phone类的contact_id作为外键，与Contact的主键相连。
     @ToMany(referencedJoinProperty = "contact_id")
@@ -46,17 +45,15 @@ public class Contact {
     @Generated(hash = 672515148)
     public Contact() {
     }
-    @Generated(hash = 138448766)
+    @Generated(hash = 185685560)
     public Contact(Long contact_id, byte[] icon, String name, String nickname, String organization,
-            String job, String firstPingYin, String remark, String address, String birthday,
-            byte[] businessardData) {
+            String job, String remark, String address, String birthday, byte[] businessardData) {
         this.contact_id = contact_id;
         this.icon = icon;
         this.name = name;
         this.nickname = nickname;
         this.organization = organization;
         this.job = job;
-        this.firstPingYin = firstPingYin;
         this.remark = remark;
         this.address = address;
         this.birthday = birthday;
@@ -208,12 +205,6 @@ public class Contact {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getContactDao() : null;
-    }
-    public String getFirstPingYin() {
-        return this.firstPingYin;
-    }
-    public void setFirstPingYin(String firstPingYin) {
-        this.firstPingYin = firstPingYin;
     }
     public String getBirthday() {
         return this.birthday;

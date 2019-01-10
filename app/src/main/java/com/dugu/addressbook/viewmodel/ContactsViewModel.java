@@ -22,7 +22,6 @@ public class ContactsViewModel extends BindingItem{
         contacts.add(new ContactItemViewModel(new Long(-9),
                 null,
                 "群组",
-                "#",
                 null,
                 null,
                 null));
@@ -30,7 +29,6 @@ public class ContactsViewModel extends BindingItem{
         contacts.add(new ContactItemViewModel(new Long(-5),
                 null,
                 "名片夹",
-                "#",
                 null,
                 null,
                 null));

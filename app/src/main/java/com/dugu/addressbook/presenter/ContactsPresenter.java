@@ -62,7 +62,6 @@ public class ContactsPresenter implements ContactsContract.Presenter {
             item = new ContactItemViewModel(contact.getContact_id(),
                     contact.getIcon(),
                     contact.getName(),
-                    contact.getFirstPingYin(),
                     phoneList,
                     contact.getOrganization(),
                     contact.getJob());

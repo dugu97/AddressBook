@@ -1,5 +1,7 @@
 package com.dugu.addressbook.presenter;
 
+import android.util.Log;
+
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.ContactDetailContract;
@@ -83,6 +85,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             for (Phone phone : phoneList) {
                 messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_PHONE, phone.getPhone_name(), phone.getPhone()));
             }
+            Log.d("123", phoneList.size() + "phone");
         }
 
         List<Email> emailList = contactDetailViewModel.getEmailList();
@@ -93,6 +96,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
         }
 
         String groups = "";
+        boolean isContainOther = false;
         List<Group> groupList = contactDetailViewModel.getGroupList();
         if (!AppUtil.isNullList(groupList)) {
             for (int i = 0; i < groupList.size(); i++) {
@@ -103,9 +107,12 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
                         groups = groupList.get(i).getGroup_name();
                     else
                         groups = groups + ", " + groupList.get(i).getGroup_name();
+
+                    isContainOther = true;
                 }
             }
-            messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_GROUP, "群组", groups));
+            if (isContainOther)
+                messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_GROUP, "群组", groups));
         }
 
         if (!AppUtil.isNullString(contactDetailViewModel.getNickname()))

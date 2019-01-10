@@ -158,6 +158,8 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             @Override
             public void onRightButtonClickCallBack() {
                 makeToast("确定");
+                presenter.createContact(binding.getNewOrEditContactViewModel());
+                getActivity().finish();
             }
         });
 
