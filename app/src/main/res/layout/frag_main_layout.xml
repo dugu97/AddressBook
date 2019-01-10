@@ -33,6 +33,7 @@
                     android:layout_weight="1"
                     android:clipToPadding="false"
                     android:paddingTop="35dp"
+                    android:paddingBottom="40dp"
                     android:visibility="visible" />
 
                 <com.dugu.addressbook.assembly.SideBar

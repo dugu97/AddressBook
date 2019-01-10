@@ -65,8 +65,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initViews(View rootView) {
-        //启动presenter
-        presenter.start();
 
         //配置sidebar
         binding.sidebar.setTextView(binding.dialog);
@@ -84,6 +82,8 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initData() {
+        //启动presenter
+        presenter.start();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
 
-                makeToast(position + "");
+                makeToast(position + "DDD" + obj.getContact_id());
 
                 if (obj.getContact_id() >= Constants.LIST_UTIL_INDEX) {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
@@ -126,7 +126,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
                 intent.putExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, Constants.CONTACT_MODE_NEW_PHONE_CONTACT);
-                startActivity(intent);
+                startActivityForResult(intent,Constants.REQUEST_CODE_NEW_CONTACT);
             }
         });
 
@@ -194,6 +194,16 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_CODE_OK){
+            if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT){
+                reStartActivity();
+            }
+        }
+    }
+
     /**
      * 此方法是让recycleview滑动到指定位置，并且是让其到顶部
      *
@@ -220,7 +230,12 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                 .setItems(Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        makeToast("选择了第" + which + "个");
+                        if (which == Constants.CONTACT_LONG_CLICK_OPERATION_DELETE) {
+                            presenter.deleteContact(obj.getContact_id());
+                            reStartActivity();
+                        }else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_ADD_BLACK){
+                            presenter.addContactInBlack(obj.getContact_id());
+                        }
                     }
                 }).create();
         alertDialog.show();
@@ -237,17 +252,17 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         //配置联系人总数
         contactCount = binding.getContactsViewModel().getContactsSizeWithoutOtherUtilItem();
         binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
-
         adapter.setData(list);
+
+        Log.d("123", list.size() + "ggg");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        //TODO 其它activity返回后要刷新联系人数据
+    private void reStartActivity(){
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
     }
-
 
     @Override
     public void setPresenter(ContactsContract.Presenter presenter) {

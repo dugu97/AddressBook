@@ -1,8 +1,15 @@
 package com.dugu.addressbook.presenter;
 
 import com.dugu.addressbook.AddressBookApplication;
+import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.ContactsContract;
+import com.dugu.addressbook.db.DaoSession;
+import com.dugu.addressbook.db.EmailDao;
+import com.dugu.addressbook.db.GroupLinkContactDao;
+import com.dugu.addressbook.db.PhoneDao;
 import com.dugu.addressbook.model.Contact;
+import com.dugu.addressbook.model.Email;
+import com.dugu.addressbook.model.GroupLinkContact;
 import com.dugu.addressbook.model.Phone;
 import com.dugu.addressbook.viewmodel.ContactsViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
@@ -36,9 +43,6 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         });
     }
 
-    public void updateContact(){
-        //TODO 更新item
-    }
 
     private List<ContactItemViewModel> formatData(List<Contact> list) {
 
@@ -70,6 +74,45 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         }
 
         return result;
+    }
+
+    @Override
+    public void addContactInBlack(final Long contact_id) {
+        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
+            @Override
+            public void run() {
+                DaoSession daoSession = AddressBookApplication.getDaoSession();
+                daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, contact_id, (long) Constants.GROUP_BLACK));
+            }
+        });
+    }
+
+    @Override
+    public void deleteContact(final Long contact_id) {
+        // 开始异步删除
+        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
+            @Override
+            public void run() {
+                DaoSession daoSession = AddressBookApplication.getDaoSession();
+
+                daoSession.getContactDao().deleteByKey(contact_id);
+
+                List<GroupLinkContact> groupLinkContact = daoSession.getGroupLinkContactDao().queryBuilder()
+                        .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
+                daoSession.getGroupLinkContactDao().deleteInTx(groupLinkContact);
+
+                List<Phone> phoneList = daoSession.getPhoneDao().queryBuilder()
+                        .where(PhoneDao.Properties.Contact_id.eq(contact_id)).list();
+                daoSession.getPhoneDao().deleteInTx(phoneList);
+
+                List<Email> emailList = daoSession.getEmailDao().queryBuilder()
+                        .where(EmailDao.Properties.Contact_id.eq(contact_id)).list();
+                daoSession.getEmailDao().deleteInTx(emailList);
+
+                //数据加载完成 显示UI
+                mUi.showResult();
+            }
+        });
     }
 
     @Override

@@ -30,21 +30,8 @@ public class ContactItemViewModel extends BindingItem {
         this.job = job;
 
 
-        //计算firstPingYin
-        if (contact_id > 0) {
-            String phone = "";
-            for (int i = 0; i < phoneList.size(); i++) {
-                phone = phone + phoneList.get(i);
-            }
-            String temp = name + organization + job + phone;
-            if (!AppUtil.isNullString(temp))
-                this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
-            if (!this.firstPingYin.matches("[a-zA-Z]"))
-                this.firstPingYin = "#";
-        }else {
-            this.firstPingYin = "#";
-        }
 
+        updateFirstPingYin();
         randomColor = AppUtil.getRandomColor(contact_id);
     }
 
@@ -54,7 +41,7 @@ public class ContactItemViewModel extends BindingItem {
         else if (!phoneList.isEmpty())
             return phoneList.get(0);
         else
-            return "（无姓名）";
+            return "(无姓名)";
     }
 
     public boolean needHideRightIcon() {
@@ -79,6 +66,37 @@ public class ContactItemViewModel extends BindingItem {
         if (AppUtil.isNullString(organization) && AppUtil.isNullString(job))
             return true;
         return false;
+    }
+
+    private void updateFirstPingYin(){
+        //计算firstPingYin
+        if (contact_id > 0) {
+            String phone = "";
+            for (int i = 0; i < phoneList.size(); i++) {
+                phone = phone + phoneList.get(i);
+            }
+
+            String temp = "";
+            if (!AppUtil.isNullString(name))
+                temp = name;
+            if (!AppUtil.isNullString(organization))
+                temp = temp + organization;
+            if (!AppUtil.isNullString(job))
+                temp = temp + job;
+            if (!AppUtil.isNullString(phone))
+                temp = temp + phone;
+
+            if (!AppUtil.isNullString(temp)) {
+                this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
+            }else {
+                this.firstPingYin = "#";
+            }
+            if (!this.firstPingYin.matches("[a-zA-Z]"))
+                this.firstPingYin = "#";
+
+        } else {
+            this.firstPingYin = "#";
+        }
     }
 
     public void setRandomColor() {

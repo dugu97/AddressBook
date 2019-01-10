@@ -159,6 +159,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             public void onRightButtonClickCallBack() {
                 makeToast("确定");
                 presenter.createContact(binding.getNewOrEditContactViewModel());
+                getActivity().setResult(Constants.RESULT_CODE_OK);
                 getActivity().finish();
             }
         });
@@ -200,7 +201,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
                                     //选择自定义
                                     if (which == strings.length - 1) {
-                                        showInputDialog(obj,strings[which]);
+                                        showInputDialog(obj, strings[which]);
                                         return;
                                     }
 
@@ -327,7 +328,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                                 EditText editText = viewHolder.getView(R.id.dialog_common_content);
                                 String temp = editText.getText().toString().trim();
                                 if (!AppUtil.isNullString(temp))
-                                    updataInputListItemTitle(temp,obj);
+                                    updataInputListItemTitle(temp, obj);
                                 else {
                                     updataInputListItemTitle(defaultContent, obj);
                                 }

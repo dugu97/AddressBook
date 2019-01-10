@@ -21,7 +21,6 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
 
     private NewOrEditContactViewModel newOrEditContactViewModel;
 
-    private Contact contact;
 
     public NewOrEditContactPresenter(NewOrEditContactContract.Ui mUi) {
         this.mUi = mUi;
@@ -84,18 +83,22 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                     }
                 }
 
+                Contact contact = new Contact(viewModel.getContact_id(),
+                        viewModel.getIcon(),
+                        viewModel.getName(),
+                        nickName,
+                        viewModel.getOrganization(),
+                        viewModel.getJob(),
+                        remark,
+                        address,
+                        viewModel.getBirthday(),
+                        null);
+
                 // 插入联系人
                 Long contactId = AddressBookApplication.getDaoSession().getContactDao()
-                        .insert(new Contact(viewModel.getContact_id(),
-                                viewModel.getIcon(),
-                                viewModel.getName(),
-                                nickName,
-                                viewModel.getOrganization(),
-                                viewModel.getJob(),
-                                remark,
-                                address,
-                                viewModel.getBirthday(),
-                                null));
+                        .insert(contact);
+
+                contact.setContact_id(contactId);
 
                 for (int i = 0; i < inputList.size(); i++) {
                     data = inputList.get(i);

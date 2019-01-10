@@ -54,6 +54,8 @@ public class ContactInputItemViewModel extends BindingItem {
     }
 
     public String getContent() {
+        if (content == null)
+            return content;
         return content.trim();
     }
 

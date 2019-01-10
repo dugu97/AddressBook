@@ -8,6 +8,8 @@ public interface ContactsContract {
     }
 
     interface Presenter extends BasePresenter{
+        void deleteContact(Long contact_id);
+        void addContactInBlack(Long contact_id);
         ContactsViewModel getContactsViewModel();
     }
 }

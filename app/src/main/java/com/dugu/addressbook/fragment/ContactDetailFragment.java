@@ -44,8 +44,6 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     @Override
     protected void initViews(View rootView) {
-        //启动presenter
-        presenter.start();
 
         binding.toolbar.setNavigationIcon(R.drawable.vector_drawable_left_arrow);
         binding.toolbar.inflateMenu(R.menu.navi_qr_code_icon);
@@ -68,7 +66,8 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     @Override
     protected void initData() {
-
+        //启动presenter
+        presenter.start();
     }
 
     @Override
