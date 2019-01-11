@@ -56,74 +56,69 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
 
     @Override
     public void createContact(final NewOrEditContactViewModel viewModel) {
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
 
-                List<ContactInputItemViewModel> inputList = viewModel.getInputList();
+        List<ContactInputItemViewModel> inputList = viewModel.getInputList();
 
-                String nickName = null;
-                String remark = null;
-                String address = null;
-                List<Phone> phoneList = new ArrayList<>();
-                List<Email> emailList = new ArrayList<>();
-                ContactInputItemViewModel data;
+        String nickName = null;
+        String remark = null;
+        String address = null;
+        List<Phone> phoneList = new ArrayList<>();
+        List<Email> emailList = new ArrayList<>();
+        ContactInputItemViewModel data;
 
-                for (int i = 0; i < inputList.size(); i++) {
-                    data = inputList.get(i);
-                    if (data.getSortKey() == Constants.SORTKEY_NICKNAME) {
-                        if (!AppUtil.isNullString(data.getContent()))
-                            nickName = data.getContent();
-                    } else if (data.getSortKey() == Constants.SORTKEY_REMARK) {
-                        if (!AppUtil.isNullString(data.getContent()))
-                            remark = data.getContent();
-                    } else if (data.getSortKey() == Constants.SORTKEY_ADDRESS) {
-                        if (!AppUtil.isNullString(data.getContent()))
-                            address = data.getContent();
-                    }
-                }
-
-                Contact contact = new Contact(viewModel.getContact_id(),
-                        viewModel.getIcon(),
-                        viewModel.getName(),
-                        nickName,
-                        viewModel.getOrganization(),
-                        viewModel.getJob(),
-                        remark,
-                        address,
-                        viewModel.getBirthday(),
-                        null);
-
-                // 插入联系人
-                Long contactId = AddressBookApplication.getDaoSession().getContactDao()
-                        .insert(contact);
-
-                contact.setContact_id(contactId);
-
-                for (int i = 0; i < inputList.size(); i++) {
-                    data = inputList.get(i);
-                    if (data.getSortKey() == Constants.SORTKEY_PHONE) {
-                        if (!AppUtil.isNullString(data.getContent()))
-                            phoneList.add(new Phone(null, contactId, data.getContent(), data.getTitle()));
-                    } else if (data.getSortKey() == Constants.SORTKEY_EMAIL) {
-                        if (!AppUtil.isNullString(data.getContent()))
-                            emailList.add(new Email(null, contactId, data.getContent(), data.getTitle()));
-                    }
-                }
-
-                //插入Phone和Email
-                AddressBookApplication.getDaoSession().getPhoneDao().insertInTx(phoneList);
-                AddressBookApplication.getDaoSession().getEmailDao().insertInTx(emailList);
-
-                //插入群组
-                for (int i = 0; i < viewModel.getGroupList().size(); i++) {
-                    AddressBookApplication.getDaoSession().getGroupLinkContactDao()
-                            .insert(new GroupLinkContact(
-                                    null,
-                                    contactId,
-                                    viewModel.getGroupList().get(i).getGroup_id()));
-                }
+        for (int i = 0; i < inputList.size(); i++) {
+            data = inputList.get(i);
+            if (data.getSortKey() == Constants.SORTKEY_NICKNAME) {
+                if (!AppUtil.isNullString(data.getContent()))
+                    nickName = data.getContent();
+            } else if (data.getSortKey() == Constants.SORTKEY_REMARK) {
+                if (!AppUtil.isNullString(data.getContent()))
+                    remark = data.getContent();
+            } else if (data.getSortKey() == Constants.SORTKEY_ADDRESS) {
+                if (!AppUtil.isNullString(data.getContent()))
+                    address = data.getContent();
             }
-        });
+        }
+
+        Contact contact = new Contact(viewModel.getContact_id(),
+                viewModel.getIcon(),
+                viewModel.getName(),
+                nickName,
+                viewModel.getOrganization(),
+                viewModel.getJob(),
+                remark,
+                address,
+                viewModel.getBirthday(),
+                null);
+
+        // 插入联系人
+        Long contactId = AddressBookApplication.getDaoSession().getContactDao()
+                .insert(contact);
+
+        contact.setContact_id(contactId);
+
+        for (int i = 0; i < inputList.size(); i++) {
+            data = inputList.get(i);
+            if (data.getSortKey() == Constants.SORTKEY_PHONE) {
+                if (!AppUtil.isNullString(data.getContent()))
+                    phoneList.add(new Phone(null, contactId, data.getContent(), data.getTitle()));
+            } else if (data.getSortKey() == Constants.SORTKEY_EMAIL) {
+                if (!AppUtil.isNullString(data.getContent()))
+                    emailList.add(new Email(null, contactId, data.getContent(), data.getTitle()));
+            }
+        }
+
+        //插入Phone和Email
+        AddressBookApplication.getDaoSession().getPhoneDao().insertInTx(phoneList);
+        AddressBookApplication.getDaoSession().getEmailDao().insertInTx(emailList);
+
+        //插入群组
+        for (int i = 0; i < viewModel.getGroupList().size(); i++) {
+            AddressBookApplication.getDaoSession().getGroupLinkContactDao()
+                    .insert(new GroupLinkContact(
+                            null,
+                            contactId,
+                            viewModel.getGroupList().get(i).getGroup_id()));
+        }
     }
 }

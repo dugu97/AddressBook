@@ -2,37 +2,30 @@ package com.dugu.addressbook.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
-import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.BusinessCardActivity;
 import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.activity.GroupActivity;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
-import com.dugu.addressbook.adapter.ContactSortedListAdapter;
-import com.dugu.addressbook.adapter.ContactSortedListCallback;
-import com.dugu.addressbook.adapter.recycleview.HidingScrollListener;
+import com.dugu.addressbook.adapter.ContactsAdapter;
+import com.dugu.addressbook.adapter.CustomItemDecoration;
 import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.util.CommonUtil;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 import java.util.List;
@@ -40,8 +33,10 @@ import java.util.List;
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     private ContactsContract.Presenter presenter;
-    private ContactSortedListAdapter adapter;
+    private ContactsAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+
+    private CustomItemDecoration decoration;
 
 
     private int contactCount;
@@ -71,16 +66,25 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     @Override
     protected void initData() {
         //配置sidebar
-        binding.sidebar.setTextView(binding.dialog);
+//        binding.sidebar.setTextView(binding.dialog);
 
         //配置RecycleView
-        adapter = new ContactSortedListAdapter();
-        ContactSortedListCallback sortedListCallback = new ContactSortedListCallback(adapter);
-        SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
-        adapter.setSortedList(sortedList);
-        binding.contactsRecycleView.setAdapter(adapter);
-        linearLayoutManager = new LinearLayoutManager(getContext());
+//        adapter = new ContactSortedListAdapter();
+//        ContactSortedListCallback sortedListCallback = new ContactSortedListCallback(adapter);
+//        SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
+//        adapter.setSortedList(sortedList);
+//        binding.contactsRecycleView.setAdapter(adapter);
+//        linearLayoutManager = new LinearLayoutManager(getContext());
+//        binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
+
+        adapter = new ContactsAdapter();
+        //侧边导航栏
+//        side_bar = (SideBar) findViewById(R.id.side_bar);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
+        binding.contactsRecycleView.addItemDecoration(decoration = new CustomItemDecoration(getActivity()));
+//        initDatas();
+        binding.contactsRecycleView.setAdapter(adapter);
 
         //启动presenter
         presenter.start();
@@ -88,12 +92,25 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void addListener() {
-        binding.sidebar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+//        binding.sidebar.setOnTouchingLetterChangedListener(new SidBar.OnTouchingLetterChangedListener() {
+//            @Override
+//            public void onTouchingLetterChanged(String s) {
+//                if (adapter.getIndexMap().containsKey(s)) {
+//                    int indexPosition = adapter.getIndexMap().get(s);
+//                    MoveToPosition(linearLayoutManager, binding.contactsRecycleView, indexPosition);
+//                }
+//            }
+//        });
+
+        binding.sideBar.setIndexChangeListener(new SideBar.indexChangeListener() {
             @Override
-            public void onTouchingLetterChanged(String s) {
-                if (adapter.getIndexMap().containsKey(s)) {
-                    int indexPosition = adapter.getIndexMap().get(s);
-                    MoveToPosition(linearLayoutManager, binding.contactsRecycleView, indexPosition);
+            public void indexChanged(String tag) {
+                if (TextUtils.isEmpty(tag) || binding.getContactsViewModel().getContacts().size() <= 0) return;
+                for (int i = 0; i < binding.getContactsViewModel().getContacts().size(); i++) {
+                    if (tag.equals(binding.getContactsViewModel().getContacts().get(i).getFirstPingYin())) {
+                        linearLayoutManager.scrollToPositionWithOffset(i, 0);
+                        return;
+                    }
                 }
             }
         });
@@ -145,61 +162,61 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             }
         });
 
-        binding.contactsRecycleView.addOnScrollListener(new HidingScrollListener() {
-            @Override
-            public void onHide() {
-                Resources resources = getActivity().getResources();
-                DisplayMetrics dm = resources.getDisplayMetrics();
-                float density = dm.density;
-                int width = dm.widthPixels;
-                int height = dm.heightPixels;
-                binding.SearchContainer.animate()
-                        .translationY(-height)
-                        .setDuration(800)
-                        .setInterpolator(new AccelerateInterpolator(2))
-                        .start();
+//        binding.contactsRecycleView.addOnScrollListener(new HidingScrollListener() {
+//            @Override
+//            public void onHide() {
+//                Resources resources = getActivity().getResources();
+//                DisplayMetrics dm = resources.getDisplayMetrics();
+//                float density = dm.density;
+//                int width = dm.widthPixels;
+//                int height = dm.heightPixels;
+//                binding.SearchContainer.animate()
+//                        .translationY(-height)
+//                        .setDuration(800)
+//                        .setInterpolator(new AccelerateInterpolator(2))
+//                        .start();
+//
+//            }
+//
+//            @Override
+//            public void onShow() {
+//                binding.SearchContainer.animate()
+//                        .translationY(0)
+//                        .setInterpolator(new DecelerateInterpolator(2)
+//                        ).setDuration(800)
+//                        .start();
+//            }
+//        });
 
-            }
+//        binding.deleteText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                binding.etSearch.setText("");
+//                Log.d("123", AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list().size() + "");
+//                Log.d("123", AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list().size() + "");
+//            }
+//        });
 
-            @Override
-            public void onShow() {
-                binding.SearchContainer.animate()
-                        .translationY(0)
-                        .setInterpolator(new DecelerateInterpolator(2)
-                        ).setDuration(800)
-                        .start();
-            }
-        });
-
-        binding.deleteText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.etSearch.setText("");
-                Log.d("123", AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list().size() + "");
-                Log.d("123", AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list().size() + "");
-            }
-        });
-
-        binding.etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                makeToast(s.toString());
-                if ("".equals(s.toString()))
-                    binding.deleteText.setVisibility(View.GONE);
-                else
-                    binding.deleteText.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        binding.etSearch.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                makeToast(s.toString());
+//                if ("".equals(s.toString()))
+//                    binding.deleteText.setVisibility(View.GONE);
+//                else
+//                    binding.deleteText.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -239,8 +256,10 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == Constants.CONTACT_LONG_CLICK_OPERATION_DELETE) {
+                            adapter.remove(position);
+                            binding.getContactsViewModel().getContacts().remove(position);
                             presenter.deleteContact(obj.getContact().getContact_id());
-                            adapter.removeData(position);
+//                            adapter.removeData(position);
                         }else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_ADD_BLACK){
                             presenter.addContactInBlack(obj.getContact().getContact_id());
                         }
@@ -259,8 +278,16 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
         //配置联系人总数
         contactCount = binding.getContactsViewModel().getContactsSizeWithoutOtherUtilItem();
-        binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
-        adapter.setData(list);
+//        binding.etSearch.setHint("在全部" + contactCount + "个联系人中搜索");
+//        adapter.setData(list);
+
+        //对数据源进行排序
+        CommonUtil.sortData(list);
+        //返回一个包含所有Tag字母在内的字符串并赋值给tagsStr
+        String tagsStr = CommonUtil.getTags(list);
+//        binding.sideBar.setIndexStr("#ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        decoration.setDatas(list, tagsStr);
+        adapter.addAll(list);
 
         Log.d("123", list.size() + "ggg");
     }
@@ -270,6 +297,17 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         Intent intent = getActivity().getIntent();
         getActivity().finish();
         startActivity(intent);
+
+//        ContactItemViewModel bean = new ContactItemViewModel();
+//        bean.setName("安其拉666");
+//        binding.getContactsViewModel().getContacts().add(bean);
+//        //对数据源进行排序
+//        CommonUtil.sortData(binding.getContactsViewModel().getContacts());
+//        //返回一个包含所有Tag字母在内的字符串并赋值给tagsStr
+//        String tagsStr = CommonUtil.getTags(binding.getContactsViewModel().getContacts());
+//        decoration.setDatas(binding.getContactsViewModel().getContacts(), tagsStr);
+//        //这里写死位置1 只是为了看动画效果
+//        adapter.add(bean, 1);
     }
 
     @Override

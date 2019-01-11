@@ -36,21 +36,16 @@ public class GroupDetailPresenter implements GroupDetailContract.Presenter {
 
     @Override
     public void start() {
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
-                DaoSession daoSession = AddressBookApplication.getDaoSession();
-                Group group = daoSession.getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(group_id)).unique();
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        Group group = daoSession.getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(group_id)).unique();
 
-                List<GroupDetailItemViewModel> viewModels = new ArrayList<>();
-                for (Contact contact :
-                        group.getContactList()) {
-                    viewModels.add(new GroupDetailItemViewModel(contact));
-                }
-                groupDetailViewModel = new GroupDetailViewModel(group,viewModels);
+        List<GroupDetailItemViewModel> viewModels = new ArrayList<>();
+        for (Contact contact :
+                group.getContactList()) {
+            viewModels.add(new GroupDetailItemViewModel(contact));
+        }
+        groupDetailViewModel = new GroupDetailViewModel(group, viewModels);
 
-                mUi.showResult();
-            }
-        });
+        mUi.showResult();
     }
 }

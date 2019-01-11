@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 
 import com.dugu.addressbook.viewmodel.BindingItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +27,7 @@ public class CommonViewAdapter<T extends BindingItem, TD extends ViewDataBinding
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
 
     public CommonViewAdapter() {
+        mItems = new ArrayList<>();
     }
 
     public List<T> getmItems() {
@@ -35,6 +37,32 @@ public class CommonViewAdapter<T extends BindingItem, TD extends ViewDataBinding
     public void setmItems(List<T> mItems) {
         this.mItems = mItems;
         notifyDataSetChanged();
+    }
+
+    public void addAll(List<T> beans) {
+        if (mItems.size() > 0) {
+            mItems.clear();
+        }
+        mItems.addAll(beans);
+        notifyDataSetChanged();
+    }
+
+    public void add(T bean, int position) {
+        mItems.add(position, bean);
+        notifyItemInserted(position);
+    }
+
+    public void add(T bean) {
+        mItems.add(bean);
+        notifyItemChanged(mItems.size() - 1);
+    }
+
+    public void remove(int position) {
+        mItems.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+//        notifyItemRemoved(position);
+//        notifyDataSetChanged();
     }
 
     @Override
@@ -73,7 +101,7 @@ public class CommonViewAdapter<T extends BindingItem, TD extends ViewDataBinding
 
     @Override
     public int getItemCount() {
-        return mItems == null ? 0 : mItems.size();
+        return mItems.size();
     }
 
     public AdapterView.OnItemClickListener getOnItemClickListener() {

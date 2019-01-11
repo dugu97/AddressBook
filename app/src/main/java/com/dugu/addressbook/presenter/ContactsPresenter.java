@@ -29,18 +29,12 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Override
     public void start() {
-        // 开始异步加载
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
-                List<Contact> list = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list();
+        List<Contact> list = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list();
 
-                contactsViewModel = new ContactsViewModel(formatData(list));
+        contactsViewModel = new ContactsViewModel(formatData(list));
 
-                //数据加载完成 显示UI
-                mUi.showResult();
-            }
-        });
+        //数据加载完成 显示UI
+        mUi.showResult();
     }
 
 
@@ -73,45 +67,36 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Override
     public void addContactInBlack(final Long contact_id) {
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
-                DaoSession daoSession = AddressBookApplication.getDaoSession();
-                daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, contact_id, (long) Constants.GROUP_BLACK));
-            }
-        });
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, contact_id, (long) Constants.GROUP_BLACK));
     }
 
     @Override
     public void deleteContact(final Long contact_id) {
-        // 开始异步删除
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
-                DaoSession daoSession = AddressBookApplication.getDaoSession();
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
 
-                daoSession.getContactDao().deleteByKey(contact_id);
+        daoSession.getContactDao().deleteByKey(contact_id);
 
-                List<GroupLinkContact> groupLinkContact = daoSession.getGroupLinkContactDao().queryBuilder()
-                        .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
-                daoSession.getGroupLinkContactDao().deleteInTx(groupLinkContact);
+        List<GroupLinkContact> groupLinkContact = daoSession.getGroupLinkContactDao().queryBuilder()
+                .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getGroupLinkContactDao().deleteInTx(groupLinkContact);
 
-                List<Phone> phoneList = daoSession.getPhoneDao().queryBuilder()
-                        .where(PhoneDao.Properties.Contact_id.eq(contact_id)).list();
-                daoSession.getPhoneDao().deleteInTx(phoneList);
+        List<Phone> phoneList = daoSession.getPhoneDao().queryBuilder()
+                .where(PhoneDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getPhoneDao().deleteInTx(phoneList);
 
-                List<Email> emailList = daoSession.getEmailDao().queryBuilder()
-                        .where(EmailDao.Properties.Contact_id.eq(contact_id)).list();
-                daoSession.getEmailDao().deleteInTx(emailList);
+        List<Email> emailList = daoSession.getEmailDao().queryBuilder()
+                .where(EmailDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getEmailDao().deleteInTx(emailList);
 
-                //数据加载完成 显示UI
-                mUi.showResult();
-            }
-        });
+        daoSession.getContactDao().detachAll();
+
+        //数据加载完成 显示UI
+        mUi.showResult();
     }
 
     @Override
-    public ContactsViewModel getContactsViewModel(){
+    public ContactsViewModel getContactsViewModel() {
         return contactsViewModel;
     }
 }

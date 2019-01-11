@@ -29,21 +29,15 @@ public class GroupChoosePresenter implements GroupChooseContract.Presenter {
 
     @Override
     public void start() {
-        // 异步加载群组
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
-                List<Group> groupList = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list();
-                List<GroupChooseItemViewModel> itemViewModels = new ArrayList<>();
-                for (Group g : groupList) {
-                    if (g.getGroup_id() > Constants.GROUP_BLACK) {
-                        itemViewModels.add(new GroupChooseItemViewModel(g,false));
-                    }
-                }
-                groupChooseViewModel = new GroupChooseViewModel(itemViewModels);
-
-                mUi.showResult();
+        List<Group> groupList = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list();
+        List<GroupChooseItemViewModel> itemViewModels = new ArrayList<>();
+        for (Group g : groupList) {
+            if (g.getGroup_id() > Constants.GROUP_BLACK) {
+                itemViewModels.add(new GroupChooseItemViewModel(g, false));
             }
-        });
+        }
+        groupChooseViewModel = new GroupChooseViewModel(itemViewModels);
+
+        mUi.showResult();
     }
 }
