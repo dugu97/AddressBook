@@ -10,5 +10,6 @@ public interface GroupDetailContract {
 
     interface Presenter extends BasePresenter{
         GroupDetailViewModel getGroupDetailViewModel();
+        void setGroupId(Long groupId);
     }
 }

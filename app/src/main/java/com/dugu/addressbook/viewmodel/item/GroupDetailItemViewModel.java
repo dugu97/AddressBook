@@ -1,5 +1,6 @@
 package com.dugu.addressbook.viewmodel.item;
 
+import com.dugu.addressbook.BR;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.util.AppUtil;
@@ -37,6 +38,6 @@ public class GroupDetailItemViewModel extends BindingItem {
 
     @Override
     public int getViewVariableId() {
-        return 0;
+        return BR.GroupDetailItemViewModel;
     }
 }

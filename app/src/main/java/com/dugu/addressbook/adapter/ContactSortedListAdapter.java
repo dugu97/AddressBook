@@ -49,7 +49,7 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         });
 
         //设置联系人头像
-        if (obj.getContact_id() > 0 && obj.getIcon() != null && obj.getIcon().length > 0) {
+        if (obj.getIcon() != null && obj.getIcon().length > 0) {
             RequestOptions options = new RequestOptions();
             options.diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(AddressBookApplication.getAppContext()).load(obj.getIcon())

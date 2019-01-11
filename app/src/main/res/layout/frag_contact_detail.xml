@@ -172,8 +172,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:textColor="@color/theme_font_deep_gray"
-                        android:textSize="8sp"
+                        android:textAppearance="@style/AppBottomNavi_TextStyle"
                         android:text="编辑"/>
 
                 </LinearLayout>

@@ -37,6 +37,7 @@ import com.dugu.addressbook.viewmodel.ContactsViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 import java.util.List;
+import java.util.Random;
 
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
@@ -68,6 +69,11 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     @Override
     protected void initViews(View rootView) {
 
+    }
+
+
+    @Override
+    protected void initData() {
         //配置sidebar
         binding.sidebar.setTextView(binding.dialog);
 
@@ -79,11 +85,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
         adapter.setSortedList(sortedList);
         binding.contactsRecycleView.setAdapter(adapter);
-    }
 
-
-    @Override
-    protected void initData() {
         //启动presenter
         presenter.start();
     }
@@ -209,7 +211,10 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_CODE_OK){
             if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT){
-                reStartActivity();
+                Random random = new Random();
+                ContactItemViewModel viewModel = new ContactItemViewModel((long) random.nextInt(1000), null, "A", null, null, null);
+                adapter.addData(viewModel);
+                binding.getContactsViewModel().getContacts().add(viewModel);
             }
         }
     }

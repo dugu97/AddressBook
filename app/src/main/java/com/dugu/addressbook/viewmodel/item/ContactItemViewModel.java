@@ -30,7 +30,6 @@ public class ContactItemViewModel extends BindingItem {
         this.job = job;
 
 
-
         updateFirstPingYin();
         randomColor = AppUtil.getRandomColor(contact_id);
     }
@@ -68,13 +67,14 @@ public class ContactItemViewModel extends BindingItem {
         return false;
     }
 
-    private void updateFirstPingYin(){
+    private void updateFirstPingYin() {
         //计算firstPingYin
         if (contact_id > 0) {
             String phone = "";
-            for (int i = 0; i < phoneList.size(); i++) {
-                phone = phone + phoneList.get(i);
-            }
+            if (phoneList != null)
+                for (int i = 0; i < phoneList.size(); i++) {
+                    phone = phone + phoneList.get(i);
+                }
 
             String temp = "";
             if (!AppUtil.isNullString(name))
@@ -88,7 +88,7 @@ public class ContactItemViewModel extends BindingItem {
 
             if (!AppUtil.isNullString(temp)) {
                 this.firstPingYin = String.valueOf(HanZiToPinYinUtil.getFirstPinyin(temp).charAt(0));
-            }else {
+            } else {
                 this.firstPingYin = "#";
             }
             if (!this.firstPingYin.matches("[a-zA-Z]"))

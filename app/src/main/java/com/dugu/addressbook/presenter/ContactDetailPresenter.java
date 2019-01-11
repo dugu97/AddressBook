@@ -41,16 +41,6 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             public void run() {
                 contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
-//                List<Group> groupList = new ArrayList<>();
-//                //查找归属群组
-//                List<GroupLinkContact> linkContacts = AddressBookApplication.getDaoSession().getGroupLinkContactDao().queryBuilder().where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
-//                if (linkContacts != null) {
-//                    for (int i = 0; i < linkContacts.size(); i++) {
-//                        Group group = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(linkContacts.get(i).getGroup_id())).unique();
-//                        groupList.add(group);
-//                    }
-//                }
-
                 contactDetailViewModel = new ContactDetailViewModel(contact_id,
                         contact.getIcon(),
                         contact.getBusinessardData(),

@@ -7,21 +7,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
-import com.dugu.addressbook.BR;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.adapter.recycleview.SimpleAdapter;
+import com.dugu.addressbook.activity.ContactDetailActivity;
+import com.dugu.addressbook.adapter.GroupDetailAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.contract.GroupDetailContract;
 import com.dugu.addressbook.databinding.FragGroupDetailBinding;
-import com.dugu.addressbook.viewmodel.item.GroupDetailItemViewModel;
 
 public class GroupDetailFragment extends BaseFragment implements GroupDetailContract.Ui {
 
     private GroupDetailContract.Presenter presenter;
     private FragGroupDetailBinding binding;
-    private SimpleAdapter<GroupDetailItemViewModel> simpleAdapter;
+    private GroupDetailAdapter adapter;
 
     public static GroupDetailFragment newInstance(Bundle bundle) {
         GroupDetailFragment fragment = new GroupDetailFragment();
@@ -43,8 +43,10 @@ public class GroupDetailFragment extends BaseFragment implements GroupDetailCont
         String group_name = intent.getStringExtra(Constants.GROUPACTIVITY_GROUP_NAME);
         getABActionBar().setTitleText(group_name);
 
-        simpleAdapter = new SimpleAdapter<>(R.layout.item_group_detail, BR.GroupDetailItemViewModel);
-        binding.contactList.setAdapter(simpleAdapter);
+        presenter.setGroupId(group_id);
+
+        adapter = new GroupDetailAdapter();
+        binding.contactList.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.contactList.setLayoutManager(manager);
@@ -68,11 +70,22 @@ public class GroupDetailFragment extends BaseFragment implements GroupDetailCont
 
             }
         });
+
+        adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Long contact_id = binding.getGroupDetailViewModel().getViewModels().get(position).getContact().getContact_id();
+                Intent intent = new Intent(getContext(), ContactDetailActivity.class);
+                intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, contact_id);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void showResult() {
         binding.setGroupDetailViewModel(presenter.getGroupDetailViewModel());
+        adapter.setmItems(binding.getGroupDetailViewModel().getViewModels());
     }
 
     @Override
