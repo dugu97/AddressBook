@@ -55,20 +55,15 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
         for (Contact contact :
                 list) {
-            //注意 phoneList 存储的数据类型为 String
-            List<String> phoneList = new ArrayList<>();
-            List<Phone> phoneListSource = contact.getPhoneList();
-            if (phoneListSource.size() != 0)
-                for (int i = 0; i < phoneListSource.size(); i++) {
-                    phoneList.add(phoneListSource.get(i).getPhone());
-                }
+//            //注意 phoneList 存储的数据类型为 String
+//            List<String> phoneList = new ArrayList<>();
+//            List<Phone> phoneListSource = contact.getPhoneList();
+//            if (phoneListSource.size() != 0)
+//                for (int i = 0; i < phoneListSource.size(); i++) {
+//                    phoneList.add(phoneListSource.get(i).getPhone());
+//                }
 
-            item = new ContactItemViewModel(contact.getContact_id(),
-                    contact.getIcon(),
-                    contact.getName(),
-                    phoneList,
-                    contact.getOrganization(),
-                    contact.getJob());
+            item = new ContactItemViewModel(contact);
 
             result.add(item);
         }

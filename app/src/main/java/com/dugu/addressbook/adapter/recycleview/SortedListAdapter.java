@@ -28,6 +28,10 @@ public class SortedListAdapter<T extends BindingItem, TD extends ViewDataBinding
     public SortedListAdapter() {
     }
 
+    public SortedListAdapter(SortedList<T> sortedList) {
+        this.sortedList = sortedList;
+    }
+
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -70,6 +74,7 @@ public class SortedListAdapter<T extends BindingItem, TD extends ViewDataBinding
         sortedList.beginBatchedUpdates();
         sortedList.addAll(mData);
         sortedList.endBatchedUpdates();
+        notifyDataSetChanged();
     }
 
     public void addData(T item){
@@ -77,8 +82,8 @@ public class SortedListAdapter<T extends BindingItem, TD extends ViewDataBinding
         notifyDataSetChanged();
     }
 
-    public void removeData(T item){
-        sortedList.remove(item);
+    public void removeData(int position){
+        sortedList.removeItemAt(position);
         notifyDataSetChanged();
     }
 

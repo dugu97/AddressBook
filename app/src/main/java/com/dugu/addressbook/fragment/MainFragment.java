@@ -33,11 +33,9 @@ import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
-import com.dugu.addressbook.viewmodel.ContactsViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 import java.util.List;
-import java.util.Random;
 
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
@@ -45,8 +43,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     private ContactSortedListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
-    private ContactsViewModel contactsViewModel;
-    private List<ContactItemViewModel> list;
 
     private int contactCount;
 
@@ -78,13 +74,13 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         binding.sidebar.setTextView(binding.dialog);
 
         //配置RecycleView
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
         adapter = new ContactSortedListAdapter();
         ContactSortedListCallback sortedListCallback = new ContactSortedListCallback(adapter);
         SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
         adapter.setSortedList(sortedList);
         binding.contactsRecycleView.setAdapter(adapter);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
 
         //启动presenter
         presenter.start();
@@ -106,17 +102,17 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
 
-                makeToast(position + "DDD" + obj.getContact_id());
+                makeToast(position + "DDD" + obj.getContact().getContact_id());
 
-                if (obj.getContact_id() >= Constants.LIST_UTIL_INDEX) {
+                if (obj.getContact().getContact_id() >= Constants.LIST_UTIL_INDEX) {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
-                    intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact_id());
+                    intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact().getContact_id());
                     startActivity(intent);
                 }else {
-                    if (obj.getContact_id() == Constants.UTIL_GROUP_INDEX){
+                    if (obj.getContact().getContact_id() == Constants.UTIL_GROUP_INDEX){
                         Intent intent = new Intent(getContext(), GroupActivity.class);
                         startActivity(intent);
-                    }else if (obj.getContact_id() == Constants.UTIL_BUSINESS_CARD_INDEX){
+                    }else if (obj.getContact().getContact_id() == Constants.UTIL_BUSINESS_CARD_INDEX){
                         Intent intent = new Intent(getContext(), BusinessCardActivity.class);
                         startActivity(intent);
                     }
@@ -128,8 +124,8 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
                 //即正式的联系人选项
-                if (obj.getContact_id() > 0)
-                    showAlertDialog(obj);
+                if (obj.getContact().getContact_id() > 0)
+                    showAlertDialog(obj, position);
             }
         });
 
@@ -211,10 +207,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_CODE_OK){
             if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT){
-                Random random = new Random();
-                ContactItemViewModel viewModel = new ContactItemViewModel((long) random.nextInt(1000), null, "A", null, null, null);
-                adapter.addData(viewModel);
-                binding.getContactsViewModel().getContacts().add(viewModel);
+                reStartActivity();
             }
         }
     }
@@ -239,17 +232,17 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         }
     }
 
-    private void showAlertDialog(final ContactItemViewModel obj) {
+    private void showAlertDialog(final ContactItemViewModel obj, final int position) {
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()).setTitle(obj.getNameOrPhone())
                 .setItems(Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == Constants.CONTACT_LONG_CLICK_OPERATION_DELETE) {
-                            presenter.deleteContact(obj.getContact_id());
-                            reStartActivity();
+                            presenter.deleteContact(obj.getContact().getContact_id());
+                            adapter.removeData(position);
                         }else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_ADD_BLACK){
-                            presenter.addContactInBlack(obj.getContact_id());
+                            presenter.addContactInBlack(obj.getContact().getContact_id());
                         }
                     }
                 }).create();

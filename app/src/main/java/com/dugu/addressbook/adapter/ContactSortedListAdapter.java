@@ -1,6 +1,7 @@
 package com.dugu.addressbook.adapter;
 
 import android.graphics.Color;
+import android.support.v7.util.SortedList;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +31,10 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         super();
     }
 
+    public ContactSortedListAdapter(SortedList<ContactItemViewModel> sortedList) {
+        super(sortedList);
+    }
+
     @Override
     protected void handleViewHolder(SimpleViewHolder<ItemContactListBinding> holder, ItemContactListBinding binding, final ContactItemViewModel obj, final int position) {
         super.handleViewHolder(holder, binding, obj, position);
@@ -49,10 +54,10 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         });
 
         //设置联系人头像
-        if (obj.getIcon() != null && obj.getIcon().length > 0) {
+        if (obj.getContact().getIcon() != null && obj.getContact().getIcon().length > 0) {
             RequestOptions options = new RequestOptions();
             options.diskCacheStrategy(DiskCacheStrategy.ALL);
-            Glide.with(AddressBookApplication.getAppContext()).load(obj.getIcon())
+            Glide.with(AddressBookApplication.getAppContext()).load(obj.getContact().getIcon())
                     .apply(options).into(binding.contactIcon);
         } else {
             binding.contactIcon.setCircleBackgroundColor(obj.getRandomColor());
@@ -70,12 +75,12 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
         }
 
         //设置工具栏item 的图标
-        if (obj.getContact_id() < Constants.LIST_UTIL_INDEX) {
+        if (obj.getContact().getContact_id() < Constants.LIST_UTIL_INDEX) {
             // 非正式联系人的灰底
-            if (obj.getName().equals("群组")){
+            if (obj.getContact().getName().equals("群组")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_group_main_icon);
                 binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#CDCDCD"));
-            }else if (obj.getName().equals("名片夹")){
+            }else if (obj.getContact().getName().equals("名片夹")){
                 binding.contactIcon.setImageResource(R.drawable.vector_drawable_card_contact);
                 binding.contactIcon.setCircleBackgroundColor(Color.parseColor("#CDCDCD"));
             }
@@ -84,6 +89,11 @@ public class ContactSortedListAdapter extends SortedListAdapter<ContactItemViewM
 
     public HashMap<String, Integer> getIndexMap() {
         return indexMap;
+    }
+
+    public void resetIndexMap(){
+        oldChar = "";
+        indexMap.clear();
     }
 
     public OnItemElementClickListener<ContactItemViewModel> getOnClickListener() {

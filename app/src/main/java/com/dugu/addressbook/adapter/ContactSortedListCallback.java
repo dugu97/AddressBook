@@ -17,7 +17,7 @@ public class ContactSortedListCallback extends SortedListAdapterCallback<Contact
     @Override
     public int compare(ContactItemViewModel o1, ContactItemViewModel o2) {
         if (o1.getFirstPingYin().equals(o2.getFirstPingYin()))
-            return o1.getContact_id().compareTo(o2.getContact_id());
+            return o1.getContact().getContact_id().compareTo(o2.getContact().getContact_id());
         return o1.getFirstPingYin().compareTo(o2.getFirstPingYin());
     }
 
@@ -26,7 +26,7 @@ public class ContactSortedListCallback extends SortedListAdapterCallback<Contact
      */
     @Override
     public boolean areItemsTheSame(ContactItemViewModel item1, ContactItemViewModel item2) {
-        return item1.getContact_id() == item2.getContact_id();
+        return item1.getContact().getContact_id() == item2.getContact().getContact_id();
     }
 
 
@@ -36,9 +36,9 @@ public class ContactSortedListCallback extends SortedListAdapterCallback<Contact
      */
     @Override
     public boolean areContentsTheSame(ContactItemViewModel oldItem, ContactItemViewModel newItem) {
-        if (oldItem.getContact_id() != newItem.getContact_id()) {
+        if (oldItem.getContact().getContact_id() != newItem.getContact().getContact_id()) {
             return false;
         }
-        return oldItem.getContact_id().equals(newItem.getContact_id());
+        return oldItem.getContact().getContact_id().equals(newItem.getContact().getContact_id());
     }
 }

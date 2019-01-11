@@ -2,87 +2,77 @@ package com.dugu.addressbook.viewmodel.item;
 
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.HanZiToPinYinUtil;
 import com.dugu.addressbook.viewmodel.BindingItem;
 
-import java.util.List;
-
 public class ContactItemViewModel extends BindingItem {
 
-    private Long contact_id;
-    private byte[] icon;   //头像
-    private String name;
-    private List<String> phoneList;
-    private String organization;
-    private String job;
+    private Contact contact;
+
+
     private String firstPingYin;
 
     //默认头像颜色随机
     private int randomColor;
 
-    public ContactItemViewModel(Long contact_id, byte[] icon, String name, List<String> phoneList, String organization, String job) {
-        this.contact_id = contact_id;
-        this.icon = icon;
-        this.name = name;
-        this.phoneList = phoneList;
-        this.organization = organization;
-        this.job = job;
-
+    public ContactItemViewModel(Contact contact) {
+        this.contact = contact;
 
         updateFirstPingYin();
-        randomColor = AppUtil.getRandomColor(contact_id);
+        randomColor = AppUtil.getRandomColor(contact.getContact_id());
     }
 
     public String getNameOrPhone() {
-        if (!AppUtil.isNullString(name))
-            return name;
-        else if (!phoneList.isEmpty())
-            return phoneList.get(0);
+        if (!AppUtil.isNullString(contact.getName()))
+            return contact.getName();
+        else if (!contact.getPhoneList().isEmpty())
+            return contact.getPhoneList().get(0).getPhone();
         else
             return "(无姓名)";
     }
 
     public boolean needHideRightIcon() {
         //contact_id < 0 为工具栏
-        if (contact_id < 0)
+        if (contact.getContact_id() < 0)
             return false;
         return true;
     }
 
     public String getOrganizationOrJob() {
-        if (!AppUtil.isNullString(organization) && !AppUtil.isNullString(job))
-            return organization + "  " + job;
-        else if (!AppUtil.isNullString(organization))
-            return organization;
-        else if (!AppUtil.isNullString(job))
-            return job;
+        if (!AppUtil.isNullString(contact.getOrganization()) && !AppUtil.isNullString(contact.getJob()))
+            return contact.getOrganization() + "  " + contact.getJob();
+        else if (!AppUtil.isNullString(contact.getOrganization()))
+            return contact.getOrganization();
+        else if (!AppUtil.isNullString(contact.getJob()))
+            return contact.getJob();
         else
             return "";
     }
 
     public boolean needHideOrganizationAndJob() {
-        if (AppUtil.isNullString(organization) && AppUtil.isNullString(job))
+        if (AppUtil.isNullString(contact.getOrganization()) && AppUtil.isNullString(contact.getJob()))
             return true;
         return false;
     }
 
     private void updateFirstPingYin() {
         //计算firstPingYin
-        if (contact_id > 0) {
+        if (contact.getContact_id() > 0) {
             String phone = "";
-            if (phoneList != null)
-                for (int i = 0; i < phoneList.size(); i++) {
-                    phone = phone + phoneList.get(i);
+            if (contact.getPhoneList() != null)
+                for (int i = 0; i < contact.getPhoneList().size(); i++) {
+                    phone = phone + contact.getPhoneList().get(i).getPhone();
                 }
 
             String temp = "";
-            if (!AppUtil.isNullString(name))
-                temp = name;
-            if (!AppUtil.isNullString(organization))
-                temp = temp + organization;
-            if (!AppUtil.isNullString(job))
-                temp = temp + job;
+            if (!AppUtil.isNullString(contact.getName()))
+                temp = contact.getName();
+            if (!AppUtil.isNullString(contact.getOrganization()))
+                temp = temp + contact.getOrganization();
+            if (!AppUtil.isNullString(contact.getJob()))
+                temp = temp + contact.getJob();
             if (!AppUtil.isNullString(phone))
                 temp = temp + phone;
 
@@ -107,56 +97,24 @@ public class ContactItemViewModel extends BindingItem {
         return randomColor;
     }
 
-    public Long getContact_id() {
-        return contact_id;
-    }
-
     public String getFirstPingYin() {
         return firstPingYin;
     }
 
-    public String getName() {
-        return name;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
-    public List<String> getPhone() {
-        return phoneList;
+    public void setFirstPingYin(String firstPingYin) {
+        this.firstPingYin = firstPingYin;
     }
 
-    public void setPhone(List<String> phoneList) {
-        this.phoneList = phoneList;
-    }
-
-    public byte[] getIcon() {
-        return icon;
-    }
-
-    public void setIcon(byte[] icon) {
-        this.icon = icon;
-    }
-
-    public String getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public List<String> getPhoneList() {
-        return phoneList;
+    public void setRandomColor(int randomColor) {
+        this.randomColor = randomColor;
     }
 
     @Override
