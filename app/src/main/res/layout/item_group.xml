@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="ContactItemViewModel"
-            type="com.dugu.addressbook.viewmodel.item.ContactItemViewModel" />
+            <variable
+                name="GroupItemViewModel"
+                type="com.dugu.addressbook.viewmodel.item.GroupItemViewModel"/>
     </data>
 
     <LinearLayout
@@ -18,7 +14,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/contact_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_rectangle_selector"
@@ -26,30 +21,14 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/charIndex"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@{ContactItemViewModel.firstPingYin}"
-                android:textColor="@color/theme_background_transparent_deep_gray"
-                android:textSize="15sp" />
 
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/contact_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/vector_drawable_contact_default_icon" />
 
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -60,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="@{ContactItemViewModel.nameOrPhone}"
+                    android:text="@{GroupItemViewModel.group.group_name}"
                     android:textColor="@color/addressbook_bg_black"
                     android:textSize="16sp" />
 
@@ -70,10 +49,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="@{ContactItemViewModel.organizationOrJob}"
+                    android:text="@{GroupItemViewModel.numberString}"
                     android:textColor="@color/theme_font_deep_gray"
-                    android:textSize="13sp"
-                    android:visibility="@{ContactItemViewModel.needHideOrganizationAndJob() ? View.GONE : View.VISIBLE}" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -83,9 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/vector_drawable_right_arrow"
-                android:visibility="@{ContactItemViewModel.needHideRightIcon() ? View.GONE : View.VISIBLE}" />
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/vector_drawable_right_arrow" />
 
         </LinearLayout>
 
@@ -93,9 +70,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="90dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:background="@color/theme_background_transparent_gray" />
 
     </LinearLayout>
+
 
 </layout>

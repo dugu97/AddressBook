@@ -3,10 +3,9 @@ package com.dugu.addressbook.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.dugu.addressbook.R;
 import com.dugu.addressbook.fragment.GroupDetailFragment;
-import com.dugu.addressbook.fragment.GroupFragment;
 import com.dugu.addressbook.presenter.GroupDetailPresenter;
-import com.dugu.addressbook.presenter.GroupPresenter;
 
 public class GroupDetailActivity extends SingleFragmentActivity{
 
@@ -23,7 +22,7 @@ public class GroupDetailActivity extends SingleFragmentActivity{
 
     @Override
     protected void initViews() {
-
+        getToolBar().setNavigationIcon(R.drawable.vector_drawable_left_arrow);
     }
 
     @Override

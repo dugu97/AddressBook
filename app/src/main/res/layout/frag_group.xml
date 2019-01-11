@@ -16,12 +16,12 @@
         <TextView
             android:background="@color/addressbook_edittext_bg_gray"
             android:layout_width="match_parent"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:text="手机群组"
             android:gravity="center_vertical"
             android:textColor="@color/addressbook_bg_black"
-            android:paddingStart="10dp"
-            android:layout_height="30dp" />
+            android:paddingStart="20dp"
+            android:layout_height="35dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/group_list"

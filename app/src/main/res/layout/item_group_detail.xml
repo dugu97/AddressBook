@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="GroupDetailItemViewModel"
+            type="com.dugu.addressbook.viewmodel.item.GroupDetailItemViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_font_while"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/contact_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_rectangle_selector"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/contact_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/vector_drawable_contact_default_icon" />
+
+
+            <TextView
+                android:id="@+id/contacts_name_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@{GroupDetailItemViewModel.nameOrPhone}"
+                android:textColor="@color/addressbook_bg_black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="90dp"
+            android:background="@color/theme_background_transparent_gray" />
+
+    </LinearLayout>
+
+</layout>

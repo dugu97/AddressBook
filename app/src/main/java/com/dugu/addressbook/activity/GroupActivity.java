@@ -3,6 +3,7 @@ package com.dugu.addressbook.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.dugu.addressbook.R;
 import com.dugu.addressbook.fragment.GroupFragment;
 import com.dugu.addressbook.presenter.GroupPresenter;
 
@@ -21,6 +22,7 @@ public class GroupActivity extends SingleFragmentActivity {
     @Override
     protected void initViews() {
         getToolBar().setTitleText("群组");
+        getToolBar().setNavigationIcon(R.drawable.vector_drawable_left_arrow);
     }
 
     @Override

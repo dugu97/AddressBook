@@ -22,7 +22,9 @@ import android.view.animation.DecelerateInterpolator;
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.BusinessCardActivity;
 import com.dugu.addressbook.activity.ContactDetailActivity;
+import com.dugu.addressbook.activity.GroupActivity;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactSortedListAdapter;
 import com.dugu.addressbook.adapter.ContactSortedListCallback;
@@ -108,6 +110,14 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
                     intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact_id());
                     startActivity(intent);
+                }else {
+                    if (obj.getContact_id() == Constants.UTIL_GROUP_INDEX){
+                        Intent intent = new Intent(getContext(), GroupActivity.class);
+                        startActivity(intent);
+                    }else if (obj.getContact_id() == Constants.UTIL_BUSINESS_CARD_INDEX){
+                        Intent intent = new Intent(getContext(), BusinessCardActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });

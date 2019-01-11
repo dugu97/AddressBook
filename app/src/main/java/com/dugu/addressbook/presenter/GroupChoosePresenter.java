@@ -36,12 +36,9 @@ public class GroupChoosePresenter implements GroupChooseContract.Presenter {
                 List<Group> groupList = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().list();
                 List<GroupChooseItemViewModel> itemViewModels = new ArrayList<>();
                 for (Group g : groupList) {
-                    if (g.getGroup_id() == Constants.GROUP_PHONE
-                            || g.getGroup_id() == Constants.GROUP_CARD
-                            || g.getGroup_id() == Constants.GROUP_BLACK) {
-                        continue;
+                    if (g.getGroup_id() > Constants.GROUP_BLACK) {
+                        itemViewModels.add(new GroupChooseItemViewModel(g,false));
                     }
-                    itemViewModels.add(new GroupChooseItemViewModel(g,false));
                 }
                 groupChooseViewModel = new GroupChooseViewModel(itemViewModels);
 

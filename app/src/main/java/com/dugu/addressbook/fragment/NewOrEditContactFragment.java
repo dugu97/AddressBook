@@ -252,9 +252,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 ArrayList<String> arrayList = new ArrayList<>();
                 Log.d("123", binding.getNewOrEditContactViewModel().getGroupList().size() + " all");
                 for (Group g : binding.getNewOrEditContactViewModel().getGroupList()) {
-                    if (g.getGroup_id() != Constants.GROUP_PHONE
-                            && g.getGroup_id() != Constants.GROUP_CARD
-                            && g.getGroup_id() != Constants.GROUP_BLACK) {
+                    if (g.getGroup_id() > Constants.GROUP_BLACK) {
                         arrayList.add(g.getGroup_id() + "");
                     }
                 }

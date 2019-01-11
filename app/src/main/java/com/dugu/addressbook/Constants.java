@@ -26,13 +26,15 @@ public class Constants {
 
 
     //初始化群组 group_id（数组序号） 及其 名称;
-    public static final String[] GROUP_PROJECT = {"工作", "好友", "家人", "手机联系人", "名片夹", "黑名单"};
-    public static final int GROUP_PHONE = 3;
-    public static final int GROUP_CARD = 4;
-    public static final int GROUP_BLACK = 5;
+    public static final String[] GROUP_PROJECT = {"手机联系人", "名片夹", "黑名单", "工作", "好友", "家人"};
+    public static final int GROUP_PHONE = 0;
+    public static final int GROUP_CARD = 1;
+    public static final int GROUP_BLACK = 2;
 
     //主界面工具Item的边界 (工具栏的contact_id为负数)
     public static final int LIST_UTIL_INDEX = 0;
+    public static final int UTIL_GROUP_INDEX = -9;
+    public static final int UTIL_BUSINESS_CARD_INDEX = -5;
 
     //新建和编辑联系人的模式选择
     public static final int CONTACT_MODE_NEW_PHONE_CONTACT = 1;
@@ -64,6 +66,10 @@ public class Constants {
 
     //NewOrEditContactActivity通讯字段
     public static final String NEWOREDITCONTACTACTIVITY_GROUPS = "groups";
+
+    //GroupActivity通讯字段
+    public static final String GROUPACTIVITY_GROUP_ID = "group_id";
+    public static final String GROUPACTIVITY_GROUP_NAME = "group_name";
 
 
     //所有Activity都可使用的通讯字段

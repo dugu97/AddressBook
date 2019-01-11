@@ -1,6 +1,7 @@
 package com.dugu.addressbook.viewmodel;
 
 import com.dugu.addressbook.BR;
+import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
@@ -19,14 +20,14 @@ public class ContactsViewModel extends BindingItem{
 
     private void addUtilItem(){
         //添加工具栏
-        contacts.add(new ContactItemViewModel(new Long(-9),
+        contacts.add(new ContactItemViewModel(new Long(Constants.UTIL_GROUP_INDEX),
                 null,
                 "群组",
                 null,
                 null,
                 null));
 
-        contacts.add(new ContactItemViewModel(new Long(-5),
+        contacts.add(new ContactItemViewModel(new Long(Constants.UTIL_BUSINESS_CARD_INDEX),
                 null,
                 "名片夹",
                 null,
