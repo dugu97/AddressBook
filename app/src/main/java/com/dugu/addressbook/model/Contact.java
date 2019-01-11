@@ -3,18 +3,21 @@ package com.dugu.addressbook.model;
 import com.dugu.addressbook.db.ContactDao;
 import com.dugu.addressbook.db.DaoSession;
 import com.dugu.addressbook.db.EmailDao;
+import com.dugu.addressbook.db.GroupDao;
 import com.dugu.addressbook.db.PhoneDao;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
 
 @Entity
 public class Contact {
+
     @Id(autoincrement = true)
     private Long contact_id;
 
@@ -30,6 +33,10 @@ public class Contact {
 
     @ToMany(referencedJoinProperty = "contact_id")
     private List<Email> emailList;
+
+    @ToMany
+    @JoinEntity(entity = GroupLinkContact.class, sourceProperty = "contact_id", targetProperty = "group_id")
+    private List<Group> groupList;
 
     private String remark;
     private String address;
@@ -211,5 +218,31 @@ public class Contact {
     }
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1602951020)
+    public List<Group> getGroupList() {
+        if (groupList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            GroupDao targetDao = daoSession.getGroupDao();
+            List<Group> groupListNew = targetDao._queryContact_GroupList(contact_id);
+            synchronized (this) {
+                if (groupList == null) {
+                    groupList = groupListNew;
+                }
+            }
+        }
+        return groupList;
+    }
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 114754500)
+    public synchronized void resetGroupList() {
+        groupList = null;
     }
 }

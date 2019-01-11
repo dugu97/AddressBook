@@ -1,5 +1,6 @@
 package com.dugu.addressbook.db;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -8,6 +9,10 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import com.dugu.addressbook.model.GroupLinkContact;
 
 import com.dugu.addressbook.model.Contact;
 
@@ -38,6 +43,7 @@ public class ContactDao extends AbstractDao<Contact, Long> {
 
     private DaoSession daoSession;
 
+    private Query<Contact> group_ContactListQuery;
 
     public ContactDao(DaoConfig config) {
         super(config);
@@ -247,4 +253,19 @@ public class ContactDao extends AbstractDao<Contact, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "contactList" to-many relationship of Group. */
+    public List<Contact> _queryGroup_ContactList(Long group_id) {
+        synchronized (this) {
+            if (group_ContactListQuery == null) {
+                QueryBuilder<Contact> queryBuilder = queryBuilder();
+                queryBuilder.join(GroupLinkContact.class, GroupLinkContactDao.Properties.Contact_id)
+                    .where(GroupLinkContactDao.Properties.Group_id.eq(group_id));
+                group_ContactListQuery = queryBuilder.build();
+            }
+        }
+        Query<Contact> query = group_ContactListQuery.forCurrentThread();
+        query.setParameter(0, group_id);
+        return query.list();
+    }
+
 }

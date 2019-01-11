@@ -1,5 +1,6 @@
 package com.dugu.addressbook.db;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -8,6 +9,10 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import com.dugu.addressbook.model.GroupLinkContact;
 
 import com.dugu.addressbook.model.Group;
 
@@ -28,6 +33,9 @@ public class GroupDao extends AbstractDao<Group, Long> {
         public final static Property Group_name = new Property(1, String.class, "group_name", false, "GROUP_NAME");
     }
 
+    private DaoSession daoSession;
+
+    private Query<Group> contact_GroupListQuery;
 
     public GroupDao(DaoConfig config) {
         super(config);
@@ -35,6 +43,7 @@ public class GroupDao extends AbstractDao<Group, Long> {
     
     public GroupDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -82,6 +91,12 @@ public class GroupDao extends AbstractDao<Group, Long> {
     }
 
     @Override
+    protected final void attachEntity(Group entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
     public Long readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
@@ -126,4 +141,19 @@ public class GroupDao extends AbstractDao<Group, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "groupList" to-many relationship of Contact. */
+    public List<Group> _queryContact_GroupList(Long contact_id) {
+        synchronized (this) {
+            if (contact_GroupListQuery == null) {
+                QueryBuilder<Group> queryBuilder = queryBuilder();
+                queryBuilder.join(GroupLinkContact.class, GroupLinkContactDao.Properties.Group_id)
+                    .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id));
+                contact_GroupListQuery = queryBuilder.build();
+            }
+        }
+        Query<Group> query = contact_GroupListQuery.forCurrentThread();
+        query.setParameter(0, contact_id);
+        return query.list();
+    }
+
 }

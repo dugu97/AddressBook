@@ -6,12 +6,9 @@ import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.db.ContactDao;
-import com.dugu.addressbook.db.GroupDao;
-import com.dugu.addressbook.db.GroupLinkContactDao;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Email;
 import com.dugu.addressbook.model.Group;
-import com.dugu.addressbook.model.GroupLinkContact;
 import com.dugu.addressbook.model.Phone;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.ContactDetailViewModel;
@@ -44,15 +41,15 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             public void run() {
                 contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
-                List<Group> groupList = new ArrayList<>();
-                //查找归属群组
-                List<GroupLinkContact> linkContacts = AddressBookApplication.getDaoSession().getGroupLinkContactDao().queryBuilder().where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
-                if (linkContacts != null) {
-                    for (int i = 0; i < linkContacts.size(); i++) {
-                        Group group = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(linkContacts.get(i).getGroup_id())).unique();
-                        groupList.add(group);
-                    }
-                }
+//                List<Group> groupList = new ArrayList<>();
+//                //查找归属群组
+//                List<GroupLinkContact> linkContacts = AddressBookApplication.getDaoSession().getGroupLinkContactDao().queryBuilder().where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
+//                if (linkContacts != null) {
+//                    for (int i = 0; i < linkContacts.size(); i++) {
+//                        Group group = AddressBookApplication.getDaoSession().getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(linkContacts.get(i).getGroup_id())).unique();
+//                        groupList.add(group);
+//                    }
+//                }
 
                 contactDetailViewModel = new ContactDetailViewModel(contact_id,
                         contact.getIcon(),
@@ -63,7 +60,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
                         contact.getNickname(),
                         contact.getAddress(),
                         contact.getBirthday(),
-                        groupList,
+                        contact.getGroupList(),
                         contact.getPhoneList(),
                         contact.getEmailList(),
                         contact.getRemark());
@@ -100,10 +97,8 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
         List<Group> groupList = contactDetailViewModel.getGroupList();
         if (!AppUtil.isNullList(groupList)) {
             for (int i = 0; i < groupList.size(); i++) {
-                if (groupList.get(i).getGroup_id() != Constants.GROUP_PHONE
-                        && groupList.get(i).getGroup_id() != Constants.GROUP_CARD
-                        && groupList.get(i).getGroup_id() != Constants.GROUP_BLACK) {
-                    if (i == 0)
+                if (groupList.get(i).getGroup_id() > Constants.GROUP_BLACK) {
+                    if (groups.equals(""))
                         groups = groupList.get(i).getGroup_name();
                     else
                         groups = groups + ", " + groupList.get(i).getGroup_name();

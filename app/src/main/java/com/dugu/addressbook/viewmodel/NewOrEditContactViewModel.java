@@ -83,13 +83,17 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     public String getGroupNamesWithData(){
         String groups = "";
+
         //剔除不显示的群组
-        for (int i = 1; i < groupList.size(); i++) {
-            if (i == 1)
-                groups = groupList.get(i).getGroup_name();
-            else
-                groups = groups + ", " + groupList.get(i).getGroup_name();
+        for (int i = 0; i < groupList.size(); i++) {
+            if (groupList.get(i).getGroup_id() > Constants.GROUP_BLACK) {
+                if (groups.equals(""))
+                    groups = groupList.get(i).getGroup_name();
+                else
+                    groups = groups + ", " + groupList.get(i).getGroup_name();
+            }
         }
+
         return groups;
     }
 
