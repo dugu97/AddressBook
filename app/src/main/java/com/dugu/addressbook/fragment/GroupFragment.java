@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.GroupChooseActivity;
 import com.dugu.addressbook.activity.GroupDetailActivity;
 import com.dugu.addressbook.adapter.recycleview.SimpleAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
@@ -29,6 +31,9 @@ import com.timmy.tdialog.TDialog;
 import com.timmy.tdialog.base.BindViewHolder;
 import com.timmy.tdialog.listener.OnBindViewListener;
 import com.timmy.tdialog.listener.OnViewClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupFragment extends BaseFragment implements GroupContract.Ui {
 
@@ -95,6 +100,39 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
                 showInputDialog();
             }
         });
+
+        binding.deleteGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), GroupChooseActivity.class);
+
+                ArrayList<String> arrayList = new ArrayList<>();
+                Log.d("123", arrayList.size() + " send");
+
+                intent.putStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE, arrayList);
+                startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_GROUP);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_CODE_OK)
+            if (requestCode == Constants.REQUEST_CODE_CHOOSE_GROUP) {
+                ArrayList<String> group = data.getStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE);
+                if (group == null){
+                    return;
+                }
+                List<Group> result = new ArrayList<>();
+                for (int i = 0; i < group.size(); i++) {
+                    String s = group.get(i);
+                    String[] d = s.split(" ");
+                    result.add(new Group(Long.parseLong(d[0]), d[1]));
+                }
+                binding.getGroupViewModel().setDeleteGroup(result);
+                showConfirmDialog();
+            }
     }
 
     @Override
@@ -173,6 +211,60 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
 
     }
 
+    private void showConfirmDialog() {
+        new TDialog.Builder(getActivity().getSupportFragmentManager())
+                .setLayoutRes(R.layout.dialog_confirm)    //设置弹窗展示的xml布局
+//                .setDialogView(view)  //设置弹窗布局,直接传入View
+//                .setWidth(600)  //设置弹窗宽度(px)
+//                .setHeight(800)  //设置弹窗高度(px)
+                .setScreenWidthAspect(getContext(), 0.9f)   //设置弹窗宽度(参数aspect为屏幕宽度比例 0 - 1f)
+//                .setScreenHeightAspect(getContext(), 0.3f)  //设置弹窗高度(参数aspect为屏幕宽度比例 0 - 1f)
+                .setGravity(Gravity.CENTER)     //设置弹窗展示位置
+                .setTag("DialogTest")   //设置Tag
+                .setDimAmount(0.6f)     //设置弹窗背景透明度(0-1f)
+                .setCancelableOutside(false)     //弹窗在界面外是否可以点击取消
+//                .setDialogAnimationRes(R.style.animate_dialog)  //设置弹窗动画
+                .setOnDismissListener(new DialogInterface.OnDismissListener() { //弹窗隐藏时回调方法
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+//                        Toast.makeText(DiffentDialogActivity.this, "弹窗消失回调", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnBindViewListener(new OnBindViewListener() {   //通过BindViewHolder拿到控件对象,进行修改
+                    @Override
+                    public void bindView(BindViewHolder bindViewHolder) {
+                        bindViewHolder.setText(R.id.dialog_common_title, "是否删除所选群组?");
+                        bindViewHolder.setText(R.id.dialog_common_left, "取消");
+                        bindViewHolder.setText(R.id.dialog_common_right, "确定");
+                        bindViewHolder.setText(R.id.dialog_common_content,"群组内的联系人并不会被删除。");
+                    }
+                })
+                .addOnClickListener(R.id.dialog_common_left, R.id.dialog_common_right)   //添加进行点击控件的id
+                .setOnViewClickListener(new OnViewClickListener() {     //View控件点击事件回调
+                    @Override
+                    public void onViewClick(BindViewHolder viewHolder, View view, TDialog tDialog) {
+                        switch (view.getId()) {
+                            case R.id.dialog_common_left:
+                                tDialog.dismiss();
+                                break;
+                            case R.id.dialog_common_right:
+                                presenter.deleteGroup(binding.getGroupViewModel().getDeleteGroup());
+                                presenter.start();
+                                tDialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        return false;
+                    }
+                })
+                .create()   //创建TDialog
+                .show();    //展示
+
+    }
 
     @Override
     public void setPresenter(GroupContract.Presenter presenter) {

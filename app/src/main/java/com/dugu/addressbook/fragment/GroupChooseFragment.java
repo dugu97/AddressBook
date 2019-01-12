@@ -81,7 +81,7 @@ public class GroupChooseFragment extends BaseFragment implements GroupChooseCont
                     }
                 }
                 Intent intent = new Intent();
-                intent.putStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS, groupChooseList);
+                intent.putStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE, groupChooseList);
                 getActivity().setResult(Constants.RESULT_CODE_OK, intent);
                 getActivity().finish();
             }
@@ -93,7 +93,7 @@ public class GroupChooseFragment extends BaseFragment implements GroupChooseCont
         binding.setGroupChooseViewModel(presenter.getGroupChooseViewModel());
 
         Intent intent = getActivity().getIntent();
-        ArrayList<String> arrayList = intent.getStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS);
+        ArrayList<String> arrayList = intent.getStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE);
         List<GroupChooseItemViewModel> viewModels = binding.getGroupChooseViewModel().getGroupListViewModel();
         for (int i = 0; i < viewModels.size(); i++) {
             for (int j = 0; j < arrayList.size(); j++) {

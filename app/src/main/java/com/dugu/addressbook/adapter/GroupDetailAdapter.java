@@ -7,10 +7,12 @@ import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.adapter.recycleview.CommonViewAdapter;
 import com.dugu.addressbook.adapter.recycleview.SimpleViewHolder;
 import com.dugu.addressbook.databinding.ItemGroupDetailBinding;
-import com.dugu.addressbook.util.AppUtil;
+import com.dugu.addressbook.util.ColorGenerator;
 import com.dugu.addressbook.viewmodel.item.GroupDetailItemViewModel;
 
 public class GroupDetailAdapter extends CommonViewAdapter<GroupDetailItemViewModel, ItemGroupDetailBinding> {
+
+    private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
 
     public GroupDetailAdapter() {
         super();
@@ -27,7 +29,7 @@ public class GroupDetailAdapter extends CommonViewAdapter<GroupDetailItemViewMod
             Glide.with(AddressBookApplication.getAppContext()).load(obj.getContact().getIcon())
                     .apply(options).into(binding.contactIcon);
         } else {
-            binding.contactIcon.setCircleBackgroundColor(AppUtil.getRandomColor(obj.getContact().getContact_id()));
+            binding.contactIcon.setCircleBackgroundColor(mColorGenerator.getColor(obj.getContact().getContact_id()));
         }
     }
 

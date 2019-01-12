@@ -258,7 +258,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 }
                 Log.d("123", arrayList.size() + " send");
 
-                intent.putStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS, arrayList);
+                intent.putStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE, arrayList);
                 startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_GROUP);
             }
         });
@@ -440,7 +440,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
         if (resultCode == Constants.RESULT_CODE_OK)
             if (requestCode == Constants.REQUEST_CODE_CHOOSE_GROUP) {
-                ArrayList<String> group = data.getStringArrayListExtra(Constants.NEWOREDITCONTACTACTIVITY_GROUPS);
+                ArrayList<String> group = data.getStringArrayListExtra(Constants.ALLACTIVITY_GROUPS_CHOOSE);
                 if (group == null)
                     return;
                 List<Group> groupList = binding.getNewOrEditContactViewModel().getGroupList();

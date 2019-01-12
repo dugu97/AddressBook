@@ -10,6 +10,9 @@ import com.dugu.addressbook.AddressBookApplication;
 
 public class BindingUtil {
 
+    private static ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
+
+
     //绑定联系人详情的背景图片
     @BindingAdapter({"image_data", "seed"})
     public static void loadImage(ImageView view, byte[] data, long seed) {
@@ -17,7 +20,7 @@ public class BindingUtil {
             Glide.with(AddressBookApplication.getAppContext()).load(data)
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(view);
         } else {
-            view.setBackgroundColor(AppUtil.getRandomColor(seed));
+            view.setBackgroundColor(mColorGenerator.getColor(seed));
         }
     }
 }

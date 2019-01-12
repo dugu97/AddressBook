@@ -64,9 +64,6 @@ public class Constants {
     //mainActivity通讯字段
     public static final String MAINACTIVITY_CONTACT_ID = "contact_id";
 
-    //NewOrEditContactActivity通讯字段
-    public static final String NEWOREDITCONTACTACTIVITY_GROUPS = "groups";
-
     //GroupActivity通讯字段
     public static final String GROUPACTIVITY_GROUP_ID = "group_id";
     public static final String GROUPACTIVITY_GROUP_NAME = "group_name";
@@ -75,5 +72,5 @@ public class Constants {
     //所有Activity都可使用的通讯字段
     public static final String ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT = "new_or_edit_contact_mode";  //用于新建或者编辑联系人的模式选择
     public static final String ALLACTIVITY_CONTACT_ID = "all_activity_contact_id";  //用于新建或者编辑联系人的模式选择(与上一个字段搭配使用)
-
+    public static final String ALLACTIVITY_GROUPS_CHOOSE = "groups_choose";
 }

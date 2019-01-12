@@ -5,6 +5,7 @@ import android.util.Log;
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.GroupContract;
+import com.dugu.addressbook.db.DaoSession;
 import com.dugu.addressbook.db.GroupLinkContactDao;
 import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.viewmodel.GroupViewModel;
@@ -45,6 +46,20 @@ public class GroupPresenter implements GroupContract.Presenter {
         }
         groupViewModel = new GroupViewModel(viewModels);
         mUi.showResult();
+    }
+
+    @Override
+    public void deleteGroup(List<Group> groupList) {
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        for (Group group : groupList) {
+            daoSession.getGroupLinkContactDao().deleteInTx(
+                    daoSession.getGroupLinkContactDao().queryBuilder()
+                            .where(GroupLinkContactDao.Properties.Group_id.eq(group.getGroup_id())).list());
+            daoSession.getGroupDao().deleteByKey(group.getGroup_id());
+        }
+
+        //清除缓存
+        daoSession.clear();
     }
 
     @Override
