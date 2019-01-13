@@ -9,6 +9,7 @@ public interface GroupDetailContract {
     }
 
     interface Presenter extends BasePresenter{
+        void renameGroup(String newName);
         GroupDetailViewModel getGroupDetailViewModel();
         void setGroupId(Long groupId);
     }

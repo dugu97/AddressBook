@@ -40,20 +40,6 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     }
 
-    public boolean needHideNewModeTitle() {
-        if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_SMS_CONTACT)
-            return true;
-        return false;
-    }
-
-    public String getModeTitle() {
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT)
-            return "手机联系人";
-        else if (mode == Constants.CONTACT_MODE_NEW_SMS_CONTACT)
-            return "SIM联系人";
-        else
-            return "";
-    }
 
     public void setNewPhoneContactDefaultInputListAndGroupList() {
         //新建手机联系人基本输入信息

@@ -6,7 +6,7 @@
 
         <variable
             name="GroupDetailViewModel"
-            type="com.dugu.addressbook.viewmodel.GroupDetailViewModel"/>
+            type="com.dugu.addressbook.viewmodel.GroupDetailViewModel" />
 
     </data>
 
@@ -16,14 +16,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:background="@color/addressbook_edittext_bg_gray"
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:textSize="13sp"
-            android:text="群组成员"
+            android:layout_height="30dp"
+            android:background="@color/addressbook_edittext_bg_gray"
             android:gravity="center_vertical"
-            android:textColor="@color/addressbook_bg_black"
             android:paddingStart="20dp"
-            android:layout_height="30dp" />
+            android:text="群组成员"
+            android:textColor="@color/addressbook_bg_black"
+            android:textSize="13sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -37,13 +38,15 @@
 
             </android.support.v7.widget.RecyclerView>
 
+            <include android:id="@+id/no_contact" layout="@layout/no_content_flat"/>
+
             <android.support.v7.widget.CardView
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
+                android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:background="@color/theme_font_while"
-                android:layout_gravity="bottom|center_horizontal">
+                app:cardCornerRadius="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,44 +63,44 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/vector_drawable_add_icon"/>
+                            android:src="@drawable/vector_drawable_add_icon" />
 
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:textAppearance="@style/AppBottomNavi_TextStyle"
-                            android:text="添加成员"/>
+                            android:text="添加成员"
+                            android:textAppearance="@style/AppBottomNavi_TextStyle" />
 
                     </LinearLayout>
 
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <LinearLayout
-                        android:id="@+id/delete_group"
-                        android:layout_marginEnd="20dp"
+                        android:id="@+id/moreOperation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
                         android:orientation="vertical">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/vector_drawable_more_icon"/>
+                            android:src="@drawable/vector_drawable_more_icon" />
 
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:text="更多"
                             android:gravity="center"
-                            android:textAppearance="@style/AppBottomNavi_TextStyle"/>
+                            android:text="更多"
+                            android:textAppearance="@style/AppBottomNavi_TextStyle" />
 
                     </LinearLayout>
 
@@ -105,7 +108,6 @@
 
             </android.support.v7.widget.CardView>
         </FrameLayout>
-
 
 
     </LinearLayout>

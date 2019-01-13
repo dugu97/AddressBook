@@ -48,4 +48,12 @@ public class GroupDetailPresenter implements GroupDetailContract.Presenter {
 
         mUi.showResult();
     }
+
+    @Override
+    public void renameGroup(String newName) {
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        Group group = daoSession.getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(group_id)).unique();
+        group.setGroup_name(newName);
+        daoSession.getGroupDao().update(group);
+    }
 }

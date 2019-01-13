@@ -2,15 +2,46 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="ContactChooseViewModel"
-            type="com.dugu.addressbook.viewmodel.ContactChooseViewModel"/>
+            type="com.dugu.addressbook.viewmodel.ContactChooseViewModel" />
 
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/addressbook_edittext_bg_gray"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="手机联系人"
+            android:textColor="@color/addressbook_bg_black"
+            android:textSize="13sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contact_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/theme_font_while">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <include
+                android:id="@+id/no_contact"
+                layout="@layout/no_content_flat" />
+        </FrameLayout>
+
 
     </LinearLayout>
 

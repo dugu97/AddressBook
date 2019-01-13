@@ -116,6 +116,13 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //刷新页面
+        presenter.start();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_CODE_OK)
