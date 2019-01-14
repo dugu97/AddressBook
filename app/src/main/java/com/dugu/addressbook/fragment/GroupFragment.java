@@ -131,13 +131,14 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
                 if (group == null){
                     return;
                 }
+                Log.d("123", group.size() + "555");
                 List<Group> result = new ArrayList<>();
                 for (int i = 0; i < group.size(); i++) {
                     String s = group.get(i);
                     String[] d = s.split(" ");
                     result.add(new Group(Long.parseLong(d[0]), d[1]));
                 }
-                binding.getGroupViewModel().setDeleteGroup(result);
+                presenter.setDeleteGroup(result);
                 showConfirmDialog();
             }
     }
@@ -255,7 +256,7 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
                                 tDialog.dismiss();
                                 break;
                             case R.id.dialog_common_right:
-                                presenter.deleteGroup(binding.getGroupViewModel().getDeleteGroup());
+                                presenter.deleteGroup();
                                 presenter.start();
                                 tDialog.dismiss();
                                 break;

@@ -13,7 +13,8 @@ public interface GroupContract {
     }
 
     interface Presenter extends BasePresenter{
-        void deleteGroup(List<Group> groupIds);
+        void setDeleteGroup(List<Group> groupIds);
+        void deleteGroup();
         void createGroup(String group_name);
         GroupViewModel getGroupViewModel();
     }

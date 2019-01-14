@@ -19,6 +19,7 @@ public class GroupPresenter implements GroupContract.Presenter {
     private final GroupContract.Ui mUi;
 
     private GroupViewModel groupViewModel;
+    private List<Group> deleteGroup;
 
     public GroupPresenter(GroupContract.Ui mUi) {
         this.mUi = mUi;
@@ -48,16 +49,21 @@ public class GroupPresenter implements GroupContract.Presenter {
         mUi.showResult();
     }
 
+
     @Override
-    public void deleteGroup(List<Group> groupList) {
+    public void setDeleteGroup(List<Group> deleteGroup) {
+        this.deleteGroup = deleteGroup;
+    }
+
+    @Override
+    public void deleteGroup() {
         DaoSession daoSession = AddressBookApplication.getDaoSession();
-        for (Group group : groupList) {
+        for (int i = 0; i < deleteGroup.size(); i++) {
             daoSession.getGroupLinkContactDao().deleteInTx(
                     daoSession.getGroupLinkContactDao().queryBuilder()
-                            .where(GroupLinkContactDao.Properties.Group_id.eq(group.getGroup_id())).list());
-            daoSession.getGroupDao().deleteByKey(group.getGroup_id());
+                            .where(GroupLinkContactDao.Properties.Group_id.eq(deleteGroup.get(i).getGroup_id())).list());
+            daoSession.getGroupDao().deleteByKey(deleteGroup.get(i).getGroup_id());
         }
-
         //清除缓存
         daoSession.clear();
     }
