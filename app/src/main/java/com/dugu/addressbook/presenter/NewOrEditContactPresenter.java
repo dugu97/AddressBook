@@ -1,8 +1,15 @@
 package com.dugu.addressbook.presenter;
 
+import android.util.Log;
+
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.NewOrEditContactContract;
+import com.dugu.addressbook.db.ContactDao;
+import com.dugu.addressbook.db.DaoSession;
+import com.dugu.addressbook.db.EmailDao;
+import com.dugu.addressbook.db.GroupLinkContactDao;
+import com.dugu.addressbook.db.PhoneDao;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Email;
 import com.dugu.addressbook.model.Group;
@@ -29,13 +36,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
 
     @Override
     public void start() {
-        // 异步加载单个联系人（Edit的情况）
-        AddressBookApplication.getDaoSession().startAsyncSession().runInTx(new Runnable() {
-            @Override
-            public void run() {
 
-            }
-        });
     }
 
     @Override
@@ -46,17 +47,39 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
     @Override
     public void createViewModel(int mode, Long contact_id) {
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
-            newOrEditContactViewModel = new NewOrEditContactViewModel(mode, null, null, null, null, null, new ArrayList<ContactInputItemViewModel>(), new ArrayList<Group>());
+            newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new ArrayList<ContactInputItemViewModel>(),
+                    new ArrayList<Group>());
         }
 
         if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
+            Contact contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
+            newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
+                    contact_id,
+                    contact.getIcon(),
+                    contact.getName(),
+                    contact.getOrganization(),
+                    contact.getJob(),
+                    getContactInputList(contact),
+                    contact.getGroupList());
+
+            if (!AppUtil.isNullString(contact.getBirthday()))
+                newOrEditContactViewModel.setBirthday(contact.getBirthday());
         }
+
+        mUi.showResult();
     }
 
     @Override
-    public void createContact(final NewOrEditContactViewModel viewModel) {
+    public void createOrUpdateContact(final NewOrEditContactViewModel viewModel) {
 
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
         List<ContactInputItemViewModel> inputList = viewModel.getInputList();
 
         String nickName = null;
@@ -91,11 +114,32 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                 viewModel.getBirthday(),
                 null);
 
-        // 插入联系人
-        Long contactId = AddressBookApplication.getDaoSession().getContactDao()
-                .insert(contact);
 
-        contact.setContact_id(contactId);
+        Long contactId = viewModel.getContact_id();
+
+        // 插入联系人
+        if (viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
+            contactId = daoSession.getContactDao().insert(contact);
+            contact.setContact_id(contactId);
+        } else if (viewModel.getMode() == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
+            daoSession.getContactDao().update(contact);
+
+            daoSession.getPhoneDao().deleteInTx(
+                    daoSession.getPhoneDao().queryBuilder()
+                            .where(PhoneDao.Properties.Contact_id.eq(contactId)).list()
+            );
+
+            daoSession.getEmailDao().deleteInTx(
+                    daoSession.getEmailDao().queryBuilder()
+                            .where(EmailDao.Properties.Contact_id.eq(contactId)).list()
+            );
+
+            daoSession.getGroupLinkContactDao().deleteInTx(
+                    daoSession.getGroupLinkContactDao().queryBuilder()
+                            .where(GroupLinkContactDao.Properties.Contact_id.eq(contactId)).list()
+            );
+        }
+
 
         for (int i = 0; i < inputList.size(); i++) {
             data = inputList.get(i);
@@ -120,5 +164,53 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                             contactId,
                             viewModel.getGroupList().get(i).getGroup_id()));
         }
+
+        daoSession.clear();
+    }
+
+    private List<ContactInputItemViewModel> getContactInputList(Contact contact) {
+
+        //特别注意   无数据时也要初始输入框
+        List<ContactInputItemViewModel> inputList = new ArrayList<>();
+
+        List<Phone> phoneList;
+        List<Email> emailList;
+
+        phoneList = contact.getPhoneList();
+        emailList = contact.getEmailList();
+
+        if (phoneList.size() == 0)
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, inputList.size(), "手机", ""));
+        for (int i = 0; i < phoneList.size(); i++) {
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, inputList.size(), phoneList.get(i).getPhone_name(), phoneList.get(i).getPhone()));
+        }
+
+        if (emailList.size() == 0)
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, inputList.size(), "私人", ""));
+        for (int i = 0; i < emailList.size(); i++) {
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, inputList.size(), emailList.get(i).getEmail_name(), emailList.get(i).getEmail()));
+        }
+
+        if (!AppUtil.isNullString(contact.getNickname()))
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_NICKNAME, inputList.size(), "昵称", contact.getNickname()));
+        else
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_NICKNAME, inputList.size(), "昵称", ""));
+
+
+        if (!AppUtil.isNullString(contact.getAddress()))
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_ADDRESS, inputList.size(), "地址", contact.getAddress()));
+        else
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_ADDRESS, inputList.size(), "地址", ""));
+
+
+        if (!AppUtil.isNullString(contact.getRemark()))
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_REMARK, inputList.size(), "备注", contact.getRemark()));
+        else
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_REMARK, inputList.size(), "备注", ""));
+
+
+        Log.d("123", inputList.size() + "");
+
+        return inputList;
     }
 }

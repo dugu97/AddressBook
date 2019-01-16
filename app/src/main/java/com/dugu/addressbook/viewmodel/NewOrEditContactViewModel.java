@@ -33,6 +33,7 @@ public class NewOrEditContactViewModel extends BindingItem {
         this.organization = organization;
         this.job = job;
         this.groupList = groupList;
+        this.inputList = inputList;
 
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
             setNewPhoneContactDefaultInputListAndGroupList();

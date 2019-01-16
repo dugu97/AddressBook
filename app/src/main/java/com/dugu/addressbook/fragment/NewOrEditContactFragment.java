@@ -103,48 +103,48 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
     @Override
     protected void initViews(View rootView) {
         //启动presenter
-        presenter.start();
-
-
-        Intent intent = getActivity().getIntent();
-        mode = intent.getIntExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, -1);
+//        presenter.start();
 
         //-1 系统出错
         if (mode == -1)
             return;
 
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
+        //配置RecycleView
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.contactInputList.setLayoutManager(linearLayoutManager);
+        adapter = new ContactInputMegSortedListAdapter();
+        ContactInputMegSortedListCallback sortedListCallback = new ContactInputMegSortedListCallback(adapter);
+        SortedList<ContactInputItemViewModel> sortedList = new SortedList<>(ContactInputItemViewModel.class, sortedListCallback);
+        adapter.setSortedList(sortedList);
+        binding.contactInputList.setAdapter(adapter);
 
-            getABActionBar().setCenterTitleText("新建联系人");
-
-            //配置RecycleView
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            binding.contactInputList.setLayoutManager(linearLayoutManager);
-            adapter = new ContactInputMegSortedListAdapter();
-            ContactInputMegSortedListCallback sortedListCallback = new ContactInputMegSortedListCallback(adapter);
-            SortedList<ContactInputItemViewModel> sortedList = new SortedList<>(ContactInputItemViewModel.class, sortedListCallback);
-            adapter.setSortedList(sortedList);
-            binding.contactInputList.setAdapter(adapter);
-
-            if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
-                presenter.createViewModel(mode, null);
-                adapter.setData(presenter.getNewOrEditContactViewModel().getInputList());
-                binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
-            }
-
-            if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
-                long contact_id = intent.getLongExtra(Constants.ALLACTIVITY_CONTACT_ID, -1);
-                if (contact_id != -1)
-                    presenter.createViewModel(mode, contact_id);
-
-                //TODO 初始列表
-            }
-        }
     }
 
     @Override
     protected void initData() {
+        Intent intent = getActivity().getIntent();
+        mode = intent.getIntExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, -1);
 
+        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
+            getABActionBar().setCenterTitleText("新建联系人");
+            presenter.createViewModel(mode, null);
+//            adapter.setData(presenter.getNewOrEditContactViewModel().getInputList());
+//            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
+        } else if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
+            getABActionBar().setCenterTitleText("编辑联系人");
+            long contact_id = intent.getLongExtra(Constants.ALLACTIVITY_CONTACT_ID, -1);
+            if (contact_id != -1)
+                presenter.createViewModel(mode, contact_id);
+
+//            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
+//            adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
+        }
+    }
+
+    @Override
+    public void showResult() {
+        binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
+        adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             @Override
             public void onRightButtonClickCallBack() {
                 makeToast("确定");
-                presenter.createContact(binding.getNewOrEditContactViewModel());
+                presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
                 getActivity().setResult(Constants.RESULT_CODE_OK);
                 getActivity().finish();
             }
@@ -474,8 +474,4 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         this.presenter = presenter;
     }
 
-    @Override
-    public void showResult() {
-
-    }
 }

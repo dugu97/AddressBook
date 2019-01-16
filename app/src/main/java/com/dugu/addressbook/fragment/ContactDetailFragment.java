@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactDetailMegSortedListAdapter;
 import com.dugu.addressbook.adapter.ContactDetailMegSortedListCallback;
 import com.dugu.addressbook.contract.ContactDetailContract;
@@ -25,6 +27,8 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     private FragContactDetailBinding binding;
     private ContactDetailContract.Presenter presenter;
+
+    private Long contact_id;
 
     private ContactDetailMegSortedListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
@@ -50,8 +54,9 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         binding.toolbarLayout.setTitleEnabled(false);
 
         Intent intent = getActivity().getIntent();
-        Long contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
-        presenter.createContactDetailViewModel(contact_id);
+        contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
+        if (contact_id != -1)
+            presenter.createContactDetailViewModel(contact_id);
 
 
         //配置RecycleView
@@ -82,7 +87,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.qr_code:
                         makeToast("点击了");
                         break;
@@ -103,18 +108,36 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             public void onClick(ContactDetailItemViewModel obj, int position) {
                 if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
                     makeToast("right");
-//                    adapter.removeData(obj);
-                    adapter.addData(new ContactDetailItemViewModel(Constants.SORTKEY_PHONE, "add" + position, "add"));
                 }
             }
         });
+
+        binding.editContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
+                intent.putExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, Constants.CONTACT_MODE_EDIT_PHONE_CONTACT);
+                intent.putExtra(Constants.ALLACTIVITY_CONTACT_ID, binding.getContactDetailViewModel().getContact_id());
+                startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_CODE_OK)
+            if (requestCode == Constants.REQUEST_CODE_EDIT_CONTACT) {
+                presenter.createContactDetailViewModel(contact_id);
+                Log.d("123", "000");
+            }
+
     }
 
     @Override
     public void showResult() {
         //设置viewModel
         binding.setContactDetailViewModel(presenter.getContactDetailViewModel());
-
         adapter.setData(presenter.getAllMessageItems());
     }
 

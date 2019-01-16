@@ -10,6 +10,6 @@ public interface NewOrEditContactContract {
     interface Presenter extends BasePresenter{
         NewOrEditContactViewModel getNewOrEditContactViewModel();
         void createViewModel(int mode, Long contact_id);
-        void createContact(NewOrEditContactViewModel viewModel);
+        void createOrUpdateContact(NewOrEditContactViewModel viewModel);
     }
 }

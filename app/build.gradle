@@ -57,4 +57,8 @@ dependencies {
 
     implementation 'com.timmy.tdialog:tdialog:2.1.1'
 
+    //VCard
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.5'
+
+
 }

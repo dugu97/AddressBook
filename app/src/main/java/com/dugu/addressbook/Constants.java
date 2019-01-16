@@ -55,7 +55,8 @@ public class Constants {
     //Activity之间的请求码
     public static final int REQUEST_CODE_CHOOSE_GROUP = 1;
     public static final int REQUEST_CODE_NEW_CONTACT = 2;
-    public static final int REQUEST_CODE_CHOOSE_CONTACT = 3;
+    public static final int REQUEST_CODE_EDIT_CONTACT = 3;
+    public static final int REQUEST_CODE_CHOOSE_CONTACT = 4;
 
     //Activity之间的返回码
     public static final int RESULT_CODE_OK = 99;
