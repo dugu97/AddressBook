@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
-import com.dugu.addressbook.adapter.ContactDetailMegSortedListAdapter;
+import com.dugu.addressbook.adapter.ContactDetailMegAdapter;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
@@ -31,7 +31,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     private Long contact_id;
 
-    private ContactDetailMegSortedListAdapter adapter;
+    private ContactDetailMegAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
 
     public static ContactDetailFragment newInstance(Bundle bundle) {
@@ -64,7 +64,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
         binding.contactDetailMegRecycleview.setLayoutManager(linearLayoutManager);
-        adapter = new ContactDetailMegSortedListAdapter();
+        adapter = new ContactDetailMegAdapter();
 //        ContactDetailMegSortedListCallback sortedListCallback = new ContactDetailMegSortedListCallback(adapter);
 //        SortedList<ContactDetailItemViewModel> sortedList = new SortedList<>(ContactDetailItemViewModel.class, sortedListCallback);
 //        adapter.setSortedList(sortedList);

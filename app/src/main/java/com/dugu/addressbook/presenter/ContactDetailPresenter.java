@@ -100,6 +100,8 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
                 messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_GROUP, "群组", groups));
         }
 
+        if (contactDetailViewModel.getBusinessardData() != null && contactDetailViewModel.getBusinessardData().length > 0)
+            messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BUSINESS_CARD, null, "查看名片"));
         if (!AppUtil.isNullString(contactDetailViewModel.getNickname()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_NICKNAME, "昵称", contact.getNickname()));
         if (!AppUtil.isNullString(contactDetailViewModel.getAddress()))

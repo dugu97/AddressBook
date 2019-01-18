@@ -11,17 +11,12 @@ public class ContactItemViewModel extends BindingItem {
 
     private Contact contact;
 
-
     private String firstPingYin;
-
-    //默认头像颜色随机
-    private int randomColor;
 
     public ContactItemViewModel(Contact contact) {
         this.contact = contact;
 
         updateFirstPingYin();
-        randomColor = AppUtil.getRandomColor(contact.getContact_id());
     }
 
     public String getNameOrPhone() {
@@ -89,14 +84,6 @@ public class ContactItemViewModel extends BindingItem {
         }
     }
 
-    public void setRandomColor() {
-        this.randomColor = randomColor;
-    }
-
-    public int getRandomColor() {
-        return randomColor;
-    }
-
     public String getFirstPingYin() {
         return firstPingYin;
     }
@@ -113,9 +100,6 @@ public class ContactItemViewModel extends BindingItem {
         this.firstPingYin = firstPingYin;
     }
 
-    public void setRandomColor(int randomColor) {
-        this.randomColor = randomColor;
-    }
 
     @Override
     public int getViewType() {

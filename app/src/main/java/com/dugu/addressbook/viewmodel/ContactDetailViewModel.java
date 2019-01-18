@@ -32,9 +32,6 @@ public class ContactDetailViewModel extends BindingItem {
 
     private boolean isInBlackGroup;
 
-    //默认头像颜色随机(基于contact_id)
-    private int randomColor;
-
     public ContactDetailViewModel(Long contact_id, byte[] icon, byte[] businessardData, String name, String organization, String job, String nickname, String address, String birthday, java.util.List<Group> groupList, java.util.List<Phone> phoneList, java.util.List<Email> emailList, String remark) {
         this.contact_id = contact_id;
         this.icon = icon;
@@ -50,7 +47,6 @@ public class ContactDetailViewModel extends BindingItem {
         this.emailList = emailList;
         this.remark = remark;
 
-        this.randomColor = AppUtil.getRandomColor(contact_id);
         this.isInBlackGroup = isInBlackGroup();
     }
 
@@ -192,14 +188,6 @@ public class ContactDetailViewModel extends BindingItem {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public int getRandomColor() {
-        return randomColor;
-    }
-
-    public void setRandomColor(int randomColor) {
-        this.randomColor = randomColor;
     }
 
     @Override

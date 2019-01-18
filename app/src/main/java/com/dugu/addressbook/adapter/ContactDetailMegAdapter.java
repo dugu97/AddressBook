@@ -10,7 +10,7 @@ import com.dugu.addressbook.databinding.ItemContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 
-public class ContactDetailMegSortedListAdapter extends CommonViewAdapter<ContactDetailItemViewModel, ItemContactDetailBinding> {
+public class ContactDetailMegAdapter extends CommonViewAdapter<ContactDetailItemViewModel, ItemContactDetailBinding> {
 
     private int oldSortKey = -1;
 
@@ -18,7 +18,7 @@ public class ContactDetailMegSortedListAdapter extends CommonViewAdapter<Contact
     private OnItemElementClickListener<ContactDetailItemViewModel> onLongClickListener;
     private OnItemElementClickListener<ContactDetailItemViewModel> onRightBtnClickListener;
 
-    public ContactDetailMegSortedListAdapter() {
+    public ContactDetailMegAdapter() {
         super();
     }
 
@@ -74,6 +74,9 @@ public class ContactDetailMegSortedListAdapter extends CommonViewAdapter<Contact
     private int getSortKeyIcon(int sortKey) {
         int src;
         switch (sortKey) {
+            case Constants.SORTKEY_BUSINESS_CARD:
+                src = R.drawable.vector_drawable_business_card;
+                break;
             case Constants.SORTKEY_PHONE:
                 src = R.drawable.vector_drawable_phone_icon;
                 break;
@@ -108,6 +111,7 @@ public class ContactDetailMegSortedListAdapter extends CommonViewAdapter<Contact
             case Constants.SORTKEY_PHONE:
                 src = R.drawable.vector_drawable_sms_message;
                 break;
+            case Constants.SORTKEY_BUSINESS_CARD:
             case Constants.SORTKEY_EMAIL:
             case Constants.SORTKEY_ADDRESS:
                 src = R.drawable.vector_drawable_right_arrow;

@@ -19,6 +19,12 @@ public class ContactDetailItemViewModel extends BindingItem {
         this.content = content;
     }
 
+    public boolean needHideTitle(){
+        if (title == null || "".equals(title))
+            return true;
+        return false;
+    }
+
     public int getSortKey() {
         return sortKey;
     }

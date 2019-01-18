@@ -64,14 +64,15 @@ public class Constants {
 
 
     //联系人信息Item排序字段
-    public static final int SORTKEY_PHONE = 1;
-    public static final int SORTKEY_EMAIL = 2;
-    public static final int SORTKEY_NICKNAME = 3;
-    public static final int SORTKEY_ADDRESS = 4;
-    public static final int SORTKEY_BIRTHDAY = 5;
-    public static final int SORTKEY_GROUP = 6;
-//    public static final int SORTKEY_RING = 7;
-    public static final int SORTKEY_REMARK = 8;
+    public static final int SORTKEY_BUSINESS_CARD = 1;
+    public static final int SORTKEY_PHONE = 2;
+    public static final int SORTKEY_EMAIL = 3;
+    public static final int SORTKEY_NICKNAME = 4;
+    public static final int SORTKEY_ADDRESS = 5;
+    public static final int SORTKEY_BIRTHDAY = 6;
+    public static final int SORTKEY_GROUP = 7;
+//    public static final int SORTKEY_RING = 8;
+    public static final int SORTKEY_REMARK = 9;
 
     //mainActivity通讯字段
     public static final String MAINACTIVITY_CONTACT_ID = "contact_id";

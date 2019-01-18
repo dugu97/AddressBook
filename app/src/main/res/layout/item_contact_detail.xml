@@ -56,7 +56,8 @@
                     android:maxLines="1"
                     android:text="@{ContactDetailItemViewModel.title}"
                     android:textColor="@color/theme_font_deep_gray"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    android:visibility="@{ContactDetailItemViewModel.needHideTitle() ? View.GONE : View.VISIBLE}" />
 
             </LinearLayout>
 
