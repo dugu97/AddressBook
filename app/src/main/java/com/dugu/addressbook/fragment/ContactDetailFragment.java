@@ -3,24 +3,25 @@ package com.dugu.addressbook.fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactDetailMegSortedListAdapter;
-import com.dugu.addressbook.adapter.ContactDetailMegSortedListCallback;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.util.CommonUtil;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
+
+import java.util.List;
 
 public class ContactDetailFragment extends BaseFragmentNoBar implements ContactDetailContract.Ui {
 
@@ -61,11 +62,12 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
         //配置RecycleView
         linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
         binding.contactDetailMegRecycleview.setLayoutManager(linearLayoutManager);
         adapter = new ContactDetailMegSortedListAdapter();
-        ContactDetailMegSortedListCallback sortedListCallback = new ContactDetailMegSortedListCallback(adapter);
-        SortedList<ContactDetailItemViewModel> sortedList = new SortedList<>(ContactDetailItemViewModel.class, sortedListCallback);
-        adapter.setSortedList(sortedList);
+//        ContactDetailMegSortedListCallback sortedListCallback = new ContactDetailMegSortedListCallback(adapter);
+//        SortedList<ContactDetailItemViewModel> sortedList = new SortedList<>(ContactDetailItemViewModel.class, sortedListCallback);
+//        adapter.setSortedList(sortedList);
         binding.contactDetailMegRecycleview.setAdapter(adapter);
     }
 
@@ -128,8 +130,11 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_CODE_OK)
             if (requestCode == Constants.REQUEST_CODE_EDIT_CONTACT) {
-                presenter.createContactDetailViewModel(contact_id);
-                Log.d("123", "000");
+                //重启Activity刷新数据 并通知MainActivity刷新
+                Intent intent = getActivity().getIntent();
+                getActivity().startActivity(intent);
+                getActivity().setResult(Constants.RESULT_CODE_OK);
+                getActivity().finish();
             }
 
     }
@@ -138,7 +143,9 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
     public void showResult() {
         //设置viewModel
         binding.setContactDetailViewModel(presenter.getContactDetailViewModel());
-        adapter.setData(presenter.getAllMessageItems());
+        List<ContactDetailItemViewModel> list = presenter.getAllMessageItems();
+        CommonUtil.sortContactDetailItemViewModelData(list);
+        adapter.addAll(list);
     }
 
     @Override

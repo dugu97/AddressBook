@@ -22,6 +22,10 @@ import android.widget.EditText;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.GroupChooseActivity;
@@ -145,6 +149,15 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
     public void showResult() {
         binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
         adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
+
+        byte[] icon = binding.getNewOrEditContactViewModel().getIcon();
+        //设置联系人头像
+        if (icon != null && icon.length > 0) {
+            RequestOptions options = new RequestOptions();
+            options.diskCacheStrategy(DiskCacheStrategy.ALL);
+            Glide.with(AddressBookApplication.getAppContext()).load(icon)
+                    .apply(options).into(binding.takeContactIcon);
+        }
     }
 
     @Override

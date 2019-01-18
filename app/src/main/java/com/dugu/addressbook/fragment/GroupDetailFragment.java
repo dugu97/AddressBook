@@ -117,6 +117,9 @@ public class GroupDetailFragment extends BaseFragment implements GroupDetailCont
     @Override
     public void onResume() {
         super.onResume();
+
+        presenter.start();
+
         if (adapter.getItemCount() == 0){
             binding.title.setVisibility(View.GONE);
             binding.noContact.setVisibility(View.VISIBLE);

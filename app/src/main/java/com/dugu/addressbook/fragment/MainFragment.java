@@ -123,7 +123,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                 if (obj.getContact().getContact_id() >= Constants.LIST_UTIL_INDEX) {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
                     intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact().getContact_id());
-                    startActivity(intent);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
                 }else {
                     if (obj.getContact().getContact_id() == Constants.UTIL_GROUP_INDEX){
                         Intent intent = new Intent(getContext(), GroupActivity.class);
@@ -164,10 +164,16 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_CODE_OK){
-            if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT){
+            if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT || requestCode == Constants.REQUEST_CODE_EDIT_CONTACT){
                 presenter.start();
             }
         }
@@ -204,7 +210,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
         contactCount = binding.getContactsViewModel().getContactsSizeWithoutOtherUtilItem();
 
         //对数据源进行排序
-        CommonUtil.sortData(list);
+        CommonUtil.sortContactItemViewModelData(list);
         //返回一个包含所有Tag字母在内的字符串并赋值给tagsStr
         String tagsStr = CommonUtil.getTags(list);
 //        binding.sideBar.setIndexStr("#ABCDEFGHIJKLMNOPQRSTUVWXYZ");

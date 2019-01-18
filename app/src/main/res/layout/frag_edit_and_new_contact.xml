@@ -202,6 +202,7 @@
                         android:layout_marginEnd="10dp"
                         android:gravity="left|center_vertical"
                         android:maxLines="1"
+                        android:text="@{NewOrEditContactViewModel.groupNamesWithData}"
                         android:textColor="@color/addressbook_bg_black"
                         android:textSize="14sp"/>
 

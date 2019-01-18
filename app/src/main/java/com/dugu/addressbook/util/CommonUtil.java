@@ -2,6 +2,7 @@ package com.dugu.addressbook.util;
 
 import android.view.View;
 
+import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class CommonUtil {
      *
      * @param list 要进行排序的数据源
      */
-    public static void sortData(List<ContactItemViewModel> list) {
+    public static void sortContactItemViewModelData(List<ContactItemViewModel> list) {
         if (list == null || list.size() == 0) return;
         Collections.sort(list, new Comparator<ContactItemViewModel>() {
             @Override
@@ -38,6 +39,16 @@ public class CommonUtil {
                     return o1.getContact().getContact_id().compareTo(o2.getContact().getContact_id());
                 else
                     return o1.getFirstPingYin().compareTo(o2.getFirstPingYin());
+            }
+        });
+    }
+
+    public static void sortContactDetailItemViewModelData(List<ContactDetailItemViewModel> list) {
+        if (list == null || list.size() == 0) return;
+        Collections.sort(list, new Comparator<ContactDetailItemViewModel>() {
+            @Override
+            public int compare(ContactDetailItemViewModel o1, ContactDetailItemViewModel o2) {
+                return o1.getSortKey() - o2.getSortKey();
             }
         });
     }

@@ -4,13 +4,13 @@ import android.view.View;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.adapter.recycleview.CommonViewAdapter;
 import com.dugu.addressbook.adapter.recycleview.SimpleViewHolder;
-import com.dugu.addressbook.adapter.recycleview.SortedListAdapter;
 import com.dugu.addressbook.databinding.ItemContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 
-public class ContactDetailMegSortedListAdapter extends SortedListAdapter<ContactDetailItemViewModel, ItemContactDetailBinding> {
+public class ContactDetailMegSortedListAdapter extends CommonViewAdapter<ContactDetailItemViewModel, ItemContactDetailBinding> {
 
     private int oldSortKey = -1;
 
