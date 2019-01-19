@@ -4,24 +4,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.fragment.BusinessCardFragment;
-import com.dugu.addressbook.presenter.BusinessCardPresenter;
+import com.dugu.addressbook.fragment.ImportAndExportFragment;
+import com.dugu.addressbook.presenter.ImportAndExportPresenter;
 
-public class BusinessCardActivity extends SingleFragmentActivity{
+public class ImportAndExportActivity extends SingleFragmentActivity {
 
-    private BusinessCardPresenter presenter;
+    private ImportAndExportPresenter presenter;
 
     @Override
     protected Fragment createFragment(Bundle bundle) {
-        BusinessCardFragment fragment = BusinessCardFragment.newInstance(bundle);
+        ImportAndExportFragment fragment = ImportAndExportFragment.newInstance(bundle);
         //创建Presenter
-        presenter = new BusinessCardPresenter(fragment);
+        presenter = new ImportAndExportPresenter(fragment);
         return fragment;
     }
 
     @Override
     protected void initViews() {
-        getToolBar().setTitleText("名片夹");
+        getToolBar().setTitleText("导入/导出联系人");
         getToolBar().setNavigationIcon(R.drawable.vector_drawable_left_arrow);
     }
 

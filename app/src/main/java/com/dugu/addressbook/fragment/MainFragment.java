@@ -17,6 +17,7 @@ import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.BusinessCardActivity;
 import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.activity.GroupActivity;
+import com.dugu.addressbook.activity.ImportAndExportActivity;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
 import com.dugu.addressbook.adapter.ContactsAdapter;
 import com.dugu.addressbook.adapter.CustomItemDecoration;
@@ -158,6 +159,14 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        binding.moreOperation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ImportAndExportActivity.class);
+                startActivity(intent);
             }
         });
 
