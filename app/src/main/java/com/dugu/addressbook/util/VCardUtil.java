@@ -21,7 +21,7 @@ import ezvcard.property.Telephone;
 
 public class VCardUtil {
 
-    private static void createVCard(List<Contact> contactList, File file) throws IOException {
+    public static void createVCard(List<Contact> contactList, File file) throws IOException {
 
         List<VCard> vCardList = new ArrayList<>();
 
@@ -84,10 +84,10 @@ public class VCardUtil {
         Ezvcard.write(vCardList).version(VCardVersion.V4_0).go(file);
     }
 
-    public static List<ContactWithPhoneAndEmail> parseVCard() throws IOException {
+    public static List<ContactWithPhoneAndEmail> parseVCard(File file) throws IOException {
 
         List<ContactWithPhoneAndEmail> contactList = new ArrayList<>();
-        List<VCard> vCards = Ezvcard.parse(new File("00001.vcf")).all();
+        List<VCard> vCards = Ezvcard.parse(file).all();
 
         for (VCard v : vCards) {
 

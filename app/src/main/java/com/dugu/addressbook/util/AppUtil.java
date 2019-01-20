@@ -22,6 +22,7 @@ import com.dugu.addressbook.Constants;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,16 @@ public class AppUtil {
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年 MM月 dd日");
         String fmt = dateFormat.format(date);
+        return fmt;
+    }
+
+    public static String formatFileNameWithTime(long timeInMillis) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timeInMillis);
+        Date date = cal.getTime();
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String fmt = "vcards_" + dateFormat.format(date) + ".vcf";
         return fmt;
     }
 
@@ -65,6 +76,25 @@ public class AppUtil {
 //        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density);
 //        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density * dp);
         return (int) (context.getResources().getDisplayMetrics().density * dp);
+    }
+
+    public static List<String> getFileList(String strPath) {
+        List<String> filelist = new ArrayList<>();
+        File dir = new File(strPath);
+        File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                String fileName = files[i].getName();
+                if (files[i].isDirectory()) { // 判断是文件还是文件夹
+//                    getFileList(files[i].getAbsolutePath()); // 获取文件绝对路径
+                } else if (fileName.endsWith(".vcf")) { // 判断文件名是否以.avi结尾
+                    String strFileName = files[i].getAbsolutePath();
+                    filelist.add(strFileName);
+                }
+            }
+
+        }
+        return filelist;
     }
 
     public static void loadImageWithGlide(Context context, ImageView imageView, byte[] data) {
@@ -123,7 +153,7 @@ public class AppUtil {
         Uri newUri = null;
         String deleteId = "";
         try {
-            Cursor cursor = context.getContentResolver().query(uri, null, MediaStore.MediaColumns.DATA + "=?", new String[] { path },null);
+            Cursor cursor = context.getContentResolver().query(uri, null, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
             if (cursor.moveToFirst()) {
                 deleteId = cursor.getString(cursor.getColumnIndex("_id"));
             }
@@ -151,7 +181,6 @@ public class AppUtil {
             } else {
                 setRingStoneUri = oldRingtoneUri;
             }
-
 
 
             RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, setRingStoneUri);

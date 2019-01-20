@@ -171,6 +171,8 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             @Override
             public void onRightButtonClickCallBack() {
                 makeToast("确定");
+                if (isMultiplicationClick())
+                    return;
                 presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
                 getActivity().setResult(Constants.RESULT_CODE_OK);
                 getActivity().finish();
@@ -384,7 +386,7 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         //设置裁剪参数
         cropOptions = new CropOptions.Builder().setWithOwnCrop(true).setOutputX(150).setOutputY(150).setAspectX(1).setAspectY(1).create();
         //设置压缩参数
-        compressConfig = new CompressConfig.Builder().enableQualityCompress(false).setMaxSize(25 * 1024).create();
+        compressConfig = new CompressConfig.Builder().enableQualityCompress(false).setMaxSize(10 * 1024).create();
         takePhoto.onEnableCompress(compressConfig, false);  //设置为需要压缩
 
         if (type == Constants.TAKE_PHOTO_FROM_ALBUM) {

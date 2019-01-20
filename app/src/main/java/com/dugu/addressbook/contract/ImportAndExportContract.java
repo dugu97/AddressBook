@@ -1,6 +1,9 @@
 package com.dugu.addressbook.contract;
 
+import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
 import com.dugu.addressbook.viewmodel.ImportAndExportViewModel;
+
+import java.util.List;
 
 public interface ImportAndExportContract {
 
@@ -10,6 +13,7 @@ public interface ImportAndExportContract {
 
     interface Presenter extends BasePresenter{
         ImportAndExportViewModel getImportAndExportViewModel();
+        void importContact(List<ContactWithPhoneAndEmail> models);
     }
 
 }

@@ -58,6 +58,9 @@ public class Constants {
     public static final int REQUEST_CODE_EDIT_CONTACT = 3;
     public static final int REQUEST_CODE_CHOOSE_CONTACT = 4;
 
+    //文件选择请求码
+    public static final int REQUEST_CODE_FILE_SELECT = 23;
+
     //Activity之间的返回码
     public static final int RESULT_CODE_OK = 99;
     public static final int RESULT_CODE_FAILURE = 98;

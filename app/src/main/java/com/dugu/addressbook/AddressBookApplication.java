@@ -79,10 +79,10 @@ public class AddressBookApplication extends Application {
     private void initDBData() {
 
         //qing清空数据库
-        getDaoSession().getContactDao().deleteAll();
-        getDaoSession().getPhoneDao().deleteAll();
-        getDaoSession().getEmailDao().deleteAll();
-        getDaoSession().getGroupLinkContactDao().deleteAll();
+//        getDaoSession().getContactDao().deleteAll();
+//        getDaoSession().getPhoneDao().deleteAll();
+//        getDaoSession().getEmailDao().deleteAll();
+//        getDaoSession().getGroupLinkContactDao().deleteAll();
 
         getDaoSession().startAsyncSession().runInTx(new Runnable() {
             @Override

@@ -2,6 +2,7 @@ package com.dugu.addressbook.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,14 +71,14 @@ public abstract class BaseFragment extends Fragment implements OnKeyDownListener
     protected abstract void addListener();
 
     /**
-     * 是否点击了多次 小于1秒当作是一次点击了
+     * 是否点击了多次 小于2秒当作是一次点击了
      **/
     protected boolean isMultiplicationClick() {
         if (curClickTimeMillis == 0) {
             curClickTimeMillis = System.currentTimeMillis();
             return false;
         }
-        boolean rs = System.currentTimeMillis() - curClickTimeMillis < 1000;
+        boolean rs = System.currentTimeMillis() - curClickTimeMillis < 2000;
         curClickTimeMillis = System.currentTimeMillis();
         return rs;
     }
@@ -88,6 +89,25 @@ public abstract class BaseFragment extends Fragment implements OnKeyDownListener
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return false;
+    }
+
+    /**
+     * 显示加载框
+     *
+     * @param message
+     */
+    public void showLoadingDialog(String message) {
+        mActivity.showLoadingDialog(message);
+        Log.d("dugu", "showLoadingDialog: ");
+    }
+
+
+    /**
+     * 关闭加载框
+     */
+    public void closeLoadingDialog() {
+        mActivity.closeLoadingDialog();
+        Log.d("dugu", "closeLoadingDialog: ");
     }
 
 }

@@ -72,6 +72,9 @@ public class GroupChooseFragment extends BaseFragment implements GroupChooseCont
 
             @Override
             public void onRightButtonClickCallBack() {
+                if (isMultiplicationClick())
+                    return;
+
                 ArrayList<String> groupChooseList = new ArrayList<>();
                 List<GroupChooseItemViewModel> list = adapter.getmItems();
                 for (GroupChooseItemViewModel model : list) {

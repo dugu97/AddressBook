@@ -222,16 +222,11 @@ public class GroupFragment extends BaseFragment implements GroupContract.Ui {
     private void showConfirmDialog() {
         new TDialog.Builder(getActivity().getSupportFragmentManager())
                 .setLayoutRes(R.layout.dialog_confirm)    //设置弹窗展示的xml布局
-//                .setDialogView(view)  //设置弹窗布局,直接传入View
-//                .setWidth(600)  //设置弹窗宽度(px)
-//                .setHeight(800)  //设置弹窗高度(px)
                 .setScreenWidthAspect(getContext(), 0.9f)   //设置弹窗宽度(参数aspect为屏幕宽度比例 0 - 1f)
-//                .setScreenHeightAspect(getContext(), 0.3f)  //设置弹窗高度(参数aspect为屏幕宽度比例 0 - 1f)
                 .setGravity(Gravity.CENTER)     //设置弹窗展示位置
                 .setTag("DialogTest")   //设置Tag
                 .setDimAmount(0.6f)     //设置弹窗背景透明度(0-1f)
                 .setCancelableOutside(false)     //弹窗在界面外是否可以点击取消
-//                .setDialogAnimationRes(R.style.animate_dialog)  //设置弹窗动画
                 .setOnDismissListener(new DialogInterface.OnDismissListener() { //弹窗隐藏时回调方法
                     @Override
                     public void onDismiss(DialogInterface dialog) {

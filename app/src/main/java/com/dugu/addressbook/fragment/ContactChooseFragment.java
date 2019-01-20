@@ -75,6 +75,9 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
 
             @Override
             public void onRightButtonClickCallBack() {
+                if (isMultiplicationClick())
+                    return;
+
                 List<ContactChooseItemViewModel> list = adapter.getmItems();
                 presenter.insertOrDeleteContactsToGroup(list, mode);
                 getActivity().setResult(Constants.RESULT_CODE_OK);
