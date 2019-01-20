@@ -1,13 +1,10 @@
 package com.dugu.addressbook.util;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.transform.TransformerException;
 
-import ezvcard.Ezvcard;
 import ezvcard.VCard;
-import ezvcard.VCardVersion;
 import ezvcard.parameter.AddressType;
 import ezvcard.parameter.EmailType;
 import ezvcard.parameter.TelephoneType;
@@ -25,36 +22,39 @@ public class Test {
 //        Bitmap bmp=BitmapFactory.decodeResource(AddressBookApplication.getAppContext().getResources(), R.drawable.vector_drawable_group_main_icon);
 //        Log.d("123", bmp.toString());
 
-        VCard vcard = createVCard();
+//        UUID uuid = UUID.fromString("2");
+//        System.out.println(uuid.toString());
 
-        //validate vCard for version 3.0
-        System.out.println("Version 3.0 validation warnings:");
-        System.out.println(vcard.validate(VCardVersion.V3_0));
-        System.out.println();
-
-        //validate vCard for version 4.0 (xCard and jCard use this version)
-        System.out.println("Version 4.0 validation warnings:");
-        System.out.println(vcard.validate(VCardVersion.V4_0));
-
+//        VCard vcard = createVCard();
+//
+//        //validate vCard for version 3.0
+//        System.out.println("Version 3.0 validation warnings:");
+//        System.out.println(vcard.validate(VCardVersion.V3_0));
+//        System.out.println();
+//
+//        //validate vCard for version 4.0 (xCard and jCard use this version)
+//        System.out.println("Version 4.0 validation warnings:");
+//        System.out.println(vcard.validate(VCardVersion.V4_0));
+//
         //write vCard
-        File file = new File("john-doe.vcf");
-        System.out.println("Writing " + file.getName() + "...");
-        Ezvcard.write(vcard).version(VCardVersion.V3_0).go(file);
-
-        //write xCard
-        file = new File("john-doe.xml");
-        System.out.println("Writing " + file.getName() + "...");
-        Ezvcard.writeXml(vcard).indent(2).go(file);
-
-        //write hCard
-        file = new File("john-doe.html");
-        System.out.println("Writing " + file.getName() + "...");
-        Ezvcard.writeHtml(vcard).go(file);
-
-        //write jCard
-        file = new File("john-doe.json");
-        System.out.println("Writing " + file.getName() + "...");
-        Ezvcard.writeJson(vcard).go(file);
+//        File file = new File("john-doe.vcf");
+//        System.out.println("Writing " + file.getName() + "...");
+//        Ezvcard.write(vcard).version(VCardVersion.V3_0).go(file);
+//
+//        //write xCard
+//        file = new File("john-doe.xml");
+//        System.out.println("Writing " + file.getName() + "...");
+//        Ezvcard.writeXml(vcard).indent(2).go(file);
+//
+//        //write hCard
+//        file = new File("john-doe.html");
+//        System.out.println("Writing " + file.getName() + "...");
+//        Ezvcard.writeHtml(vcard).go(file);
+//
+//        //write jCard
+//        file = new File("john-doe.json");
+//        System.out.println("Writing " + file.getName() + "...");
+//        Ezvcard.writeJson(vcard).go(file);
     }
 
     private static VCard createVCard() throws IOException {
