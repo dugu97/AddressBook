@@ -70,12 +70,6 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
         binding.importVCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FilePicker.from(ImportAndExportFragment.this)
-//                        .chooseForBrowser()
-//                        .isSingle()
-//                        .setFileTypes("vcf")
-//                        .requestCode(Constants.REQUEST_CODE_FILE_SELECT)
-//                        .start();
                 showLoadingDialog("正在根目录搜索vcf文件...");
                 new Thread(new Runnable() {
                     @Override
@@ -147,17 +141,6 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                 })
                 .create()
                 .show();
-
-
-//        AlertDialog alertDialog = new AlertDialog
-//                .Builder(getContext()).setTitle("VCard文件")
-//                .setItems(showString, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                       makeToast(which + "");
-//                    }
-//                }).create();
-//        alertDialog.show();
     }
 
     private void showConfirmDialog(final String fileName) {
