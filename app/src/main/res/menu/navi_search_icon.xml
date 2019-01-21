@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="qr_code"
-        android:id="@+id/qr_code"
-        android:icon="@drawable/vector_drawable_qr_code"
+        android:title="search"
+        android:id="@+id/search"
+        android:icon="@drawable/vector_drawable_search_icon"
         app:showAsAction="always"/>
 
 </menu>

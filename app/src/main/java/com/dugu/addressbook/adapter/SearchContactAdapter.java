@@ -4,23 +4,23 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 
 import com.dugu.addressbook.adapter.recycleview.CommonViewAdapter;
-import com.dugu.addressbook.databinding.ItemContactChooseBinding;
+import com.dugu.addressbook.databinding.ItemSearchContactBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.util.ColorGenerator;
-import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.SearchContactItemViewModel;
 
-public class ContactChooseAdapter extends CommonViewAdapter<ContactChooseItemViewModel, ItemContactChooseBinding> {
+public class SearchContactAdapter extends CommonViewAdapter<SearchContactItemViewModel, ItemSearchContactBinding> {
 
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
 
-    private OnItemElementClickListener<ContactChooseItemViewModel> onClickListener;
+    private OnItemElementClickListener<SearchContactItemViewModel> onClickListener;
 
-    public ContactChooseAdapter() {
+    public SearchContactAdapter() {
         super();
     }
 
     @Override
-    protected void handleViewHolder(final ItemContactChooseBinding binding, final ContactChooseItemViewModel obj, final int position) {
+    protected void handleViewHolder(final ItemSearchContactBinding binding, final SearchContactItemViewModel obj, final int position) {
         super.handleViewHolder(binding, obj, position);
 
         //设置联系人头像
@@ -33,23 +33,16 @@ public class ContactChooseAdapter extends CommonViewAdapter<ContactChooseItemVie
         binding.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (obj.isChecked()) {
-                    obj.setChecked(false);
-                    binding.itemCheckbox.setChecked(false);
-                } else {
-                    obj.setChecked(true);
-                    binding.itemCheckbox.setChecked(true);
-                }
                 onClickListener.onClick(obj, position);
             }
         });
     }
 
-    public OnItemElementClickListener<ContactChooseItemViewModel> getOnClickListener() {
+    public OnItemElementClickListener<SearchContactItemViewModel> getOnClickListener() {
         return onClickListener;
     }
 
-    public void setOnClickListener(OnItemElementClickListener<ContactChooseItemViewModel> onClickListener) {
+    public void setOnClickListener(OnItemElementClickListener<SearchContactItemViewModel> onClickListener) {
         this.onClickListener = onClickListener;
     }
 }

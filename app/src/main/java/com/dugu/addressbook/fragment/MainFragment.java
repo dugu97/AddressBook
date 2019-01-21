@@ -19,8 +19,10 @@ import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.activity.GroupActivity;
 import com.dugu.addressbook.activity.ImportAndExportActivity;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
+import com.dugu.addressbook.activity.SearchContactActivity;
 import com.dugu.addressbook.adapter.ContactsAdapter;
 import com.dugu.addressbook.adapter.CustomItemDecoration;
+import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
@@ -65,25 +67,10 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initData() {
-        //配置sidebar
-//        binding.sidebar.setTextView(binding.dialog);
-
-        //配置RecycleView
-//        adapter = new ContactSortedListAdapter();
-//        ContactSortedListCallback sortedListCallback = new ContactSortedListCallback(adapter);
-//        SortedList<ContactItemViewModel> sortedList = new SortedList<>(ContactItemViewModel.class, sortedListCallback);
-//        adapter.setSortedList(sortedList);
-//        binding.contactsRecycleView.setAdapter(adapter);
-//        linearLayoutManager = new LinearLayoutManager(getContext());
-//        binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
-
         adapter = new ContactsAdapter();
-        //侧边导航栏
-//        side_bar = (SideBar) findViewById(R.id.side_bar);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.contactsRecycleView.setLayoutManager(linearLayoutManager);
         binding.contactsRecycleView.addItemDecoration(decoration = new CustomItemDecoration(getActivity()));
-//        initDatas();
         binding.contactsRecycleView.setAdapter(adapter);
 
         //启动presenter
@@ -92,20 +79,25 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void addListener() {
-//        binding.sidebar.setOnTouchingLetterChangedListener(new SidBar.OnTouchingLetterChangedListener() {
-//            @Override
-//            public void onTouchingLetterChanged(String s) {
-//                if (adapter.getIndexMap().containsKey(s)) {
-//                    int indexPosition = adapter.getIndexMap().get(s);
-//                    MoveToPosition(linearLayoutManager, binding.contactsRecycleView, indexPosition);
-//                }
-//            }
-//        });
+
+        getABActionBar().addDuguToolBarCallBack(new ABToolBar.ABToolBarCallBack() {
+            @Override
+            public void onFallbackClickCallBack() {
+
+            }
+
+            @Override
+            public void onRightButtonClickCallBack() {
+                Intent intent = new Intent(getContext(), SearchContactActivity.class);
+                startActivity(intent);
+            }
+        });
 
         binding.sideBar.setIndexChangeListener(new SideBar.indexChangeListener() {
             @Override
             public void indexChanged(String tag) {
-                if (TextUtils.isEmpty(tag) || binding.getContactsViewModel().getContacts().size() <= 0) return;
+                if (TextUtils.isEmpty(tag) || binding.getContactsViewModel().getContacts().size() <= 0)
+                    return;
                 for (int i = 0; i < binding.getContactsViewModel().getContacts().size(); i++) {
                     if (tag.equals(binding.getContactsViewModel().getContacts().get(i).getFirstPingYin())) {
                         linearLayoutManager.scrollToPositionWithOffset(i, 0);

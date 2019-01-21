@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.dugu.addressbook.R;
 import com.dugu.addressbook.fragment.MainFragment;
 import com.dugu.addressbook.presenter.ContactsPresenter;
 
@@ -23,6 +24,7 @@ public class MainActivity extends SingleFragmentActivity {
     protected void initViews() {
         getToolBar().setCenterTitleVisiblity(View.GONE);
         getToolBar().setTitleText("通讯录");
+        getToolBar().getToolbar().inflateMenu(R.menu.navi_search_icon);
     }
 
     @Override

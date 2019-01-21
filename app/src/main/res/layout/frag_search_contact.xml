@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="SearchContactViewModel"
+            type="com.dugu.addressbook.viewmodel.SearchContactViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_blue_gradient_actionbar"
+        android:orientation="vertical">
+
+       <android.support.v7.widget.Toolbar
+           android:fitsSystemWindows="true"
+           android:id="@+id/toolbar"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <EditText
+               android:id="@+id/edit_query"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@null"
+               android:textCursorDrawable="@drawable/edittext_curcor_white_style"
+               android:textSize="17sp"
+               android:singleLine="true"
+               android:textColorHint="@color/addressbook_edittext_bg_gray"
+               android:textColor="@color/theme_font_while"
+               android:hint="搜索(支持名字、号码)"/>
+
+       </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/contact_list"
+            android:background="@color/theme_font_while"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+</layout>

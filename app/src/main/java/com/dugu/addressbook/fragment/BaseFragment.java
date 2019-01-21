@@ -98,7 +98,7 @@ public abstract class BaseFragment extends Fragment implements OnKeyDownListener
      */
     public void showLoadingDialog(String message) {
         mActivity.showLoadingDialog(message);
-        Log.d("dugu", "showLoadingDialog: ");
+        Log.d("123", "showLoadingDialog: ");
     }
 
 
@@ -107,7 +107,7 @@ public abstract class BaseFragment extends Fragment implements OnKeyDownListener
      */
     public void closeLoadingDialog() {
         mActivity.closeLoadingDialog();
-        Log.d("dugu", "closeLoadingDialog: ");
+        Log.d("123", "closeLoadingDialog: ");
     }
 
 }

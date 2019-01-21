@@ -64,7 +64,7 @@
             <!--android:layout_height="match_parent"-->
             <!--android:background="@drawable/bg_edittext_gray_rectangle"-->
             <!--android:drawableStart="@color/theme_font_deep_gray"-->
-            <!--android:textCursorDrawable="@drawable/edittext_curcor_style"-->
+            <!--android:textCursorDrawable="@drawable/edittext_curcor_blue_style"-->
             <!--android:drawablePadding="30dp"-->
             <!--android:singleLine="true"-->
             <!--android:textSize="14sp" />-->

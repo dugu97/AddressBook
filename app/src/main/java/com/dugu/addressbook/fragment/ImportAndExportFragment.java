@@ -127,6 +127,7 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                 .setOnAdapterItemClickListener(new TBaseAdapter.OnAdapterItemClickListener<String>() {
                     @Override
                     public void onItemClick(BindViewHolder holder, int position, String s, TDialog tDialog) {
+                        showLoadingDialog("正在导入中...");
                         try {
                             List<ContactWithPhoneAndEmail> models = VCardUtil.parseVCard(new File(strings.get(position)));
                             if (models.size() > 0)
@@ -135,12 +136,16 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                                 makeToast("VCard格式不支持");
                         } catch (IOException e) {
                             e.printStackTrace();
+                            makeToast("导入出错");
+                        }finally {
+                            closeLoadingDialog();
+                            tDialog.dismiss();
                         }
-                        tDialog.dismiss();
                     }
                 })
                 .create()
                 .show();
+
     }
 
     private void showConfirmDialog(final String fileName) {

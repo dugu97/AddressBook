@@ -2,6 +2,7 @@ package com.dugu.addressbook.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,26 @@ public abstract class BaseFragmentNoBar extends Fragment implements OnKeyDownLis
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return false;
+    }
+
+
+    /**
+     * 显示加载框
+     *
+     * @param message
+     */
+    public void showLoadingDialog(String message) {
+        mActivity.showLoadingDialog(message);
+        Log.d("123", "showLoadingDialog: ");
+    }
+
+
+    /**
+     * 关闭加载框
+     */
+    public void closeLoadingDialog() {
+        mActivity.closeLoadingDialog();
+        Log.d("123", "closeLoadingDialog: ");
     }
 
 }

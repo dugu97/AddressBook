@@ -128,7 +128,9 @@ public class VCardUtil {
             if (!v.getTelephoneNumbers().isEmpty()) {
                 List<String> phoneList = new ArrayList<>();
                 for (Telephone phone : v.getTelephoneNumbers()) {
-                    phoneList.add(phone.getText());
+                    String string = phone.getText();
+                    string.replace(" ", "");
+                    phoneList.add(string);
                 }
                 contact.setPhoneList(phoneList);
             }

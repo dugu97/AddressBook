@@ -48,7 +48,7 @@
                         android:hint="姓名"
                         android:text="@={NewOrEditContactViewModel.name}"
                         android:textColor="@color/addressbook_bg_black"
-                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textCursorDrawable="@drawable/edittext_curcor_blue_style"
                         android:textSize="16sp" />
 
                     <View
@@ -66,7 +66,7 @@
                         android:hint="工作单位"
                         android:text="@={NewOrEditContactViewModel.organization}"
                         android:textColor="@color/addressbook_bg_black"
-                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textCursorDrawable="@drawable/edittext_curcor_blue_style"
                         android:textSize="16sp" />
 
                     <View
@@ -83,7 +83,7 @@
                         android:hint="职位"
                         android:text="@={NewOrEditContactViewModel.job}"
                         android:textColor="@color/addressbook_bg_black"
-                        android:textCursorDrawable="@drawable/edittext_curcor_style"
+                        android:textCursorDrawable="@drawable/edittext_curcor_blue_style"
                         android:textSize="16sp" />
 
                     <View

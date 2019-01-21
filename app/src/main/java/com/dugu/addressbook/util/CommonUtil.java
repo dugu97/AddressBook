@@ -2,6 +2,7 @@ package com.dugu.addressbook.util;
 
 import android.view.View;
 
+import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
@@ -39,6 +40,16 @@ public class CommonUtil {
                     return o1.getContact().getContact_id().compareTo(o2.getContact().getContact_id());
                 else
                     return o1.getFirstPingYin().compareTo(o2.getFirstPingYin());
+            }
+        });
+    }
+
+    public static void sortContactlData(List<Contact> list) {
+        if (list == null || list.size() == 0) return;
+        Collections.sort(list, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getContact_id().compareTo(o2.getContact_id());
             }
         });
     }

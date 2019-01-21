@@ -33,7 +33,7 @@
         android:singleLine="true"
         android:gravity="center"
         android:textColor="@color/addressbook_bg_black"
-        android:textCursorDrawable="@drawable/edittext_curcor_style"
+        android:textCursorDrawable="@drawable/edittext_curcor_blue_style"
         android:textSize="15sp" />
 
     <LinearLayout

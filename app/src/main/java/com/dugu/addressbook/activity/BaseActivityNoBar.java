@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.dugu.addressbook.AddressBookApplication;
+import com.dugu.addressbook.assembly.LoadingDialog;
 
 public abstract class BaseActivityNoBar extends AppCompatActivity {
     // 上下文实例
@@ -58,4 +59,39 @@ public abstract class BaseActivityNoBar extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 加载界面
+     */
+    private LoadingDialog loadingDialog;
+
+    /**
+     * 显示加载框
+     *
+     * @param message
+     */
+    public void showLoadingDialog(String message) {
+        if (loadingDialog != null && loadingDialog.getDialog() != null && loadingDialog.getDialog().isShowing()) {
+            loadingDialog.dismiss();
+            return;
+        }
+        if (loadingDialog != null && loadingDialog.getDialog() != null && !loadingDialog.getDialog().isShowing()) {
+            loadingDialog.setMessage(message);
+            loadingDialog.show(getSupportFragmentManager(), "loadingDialog");
+            return;
+        }
+        if (loadingDialog == null || loadingDialog.getDialog() == null) {
+            loadingDialog = new LoadingDialog();
+            loadingDialog.setMessage(message);
+            loadingDialog.show(getSupportFragmentManager(), "loadingDialog");
+        }
+    }
+
+    /**
+     * 关闭加载框
+     */
+    public void closeLoadingDialog() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
+    }
 }

@@ -1,12 +1,9 @@
 package com.dugu.addressbook.adapter;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.adapter.recycleview.CommonViewAdapter;
@@ -15,6 +12,8 @@ import com.dugu.addressbook.databinding.ItemContactListBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.util.ColorGenerator;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsAdapter extends CommonViewAdapter<ContactItemViewModel, ItemContactListBinding> {
 
@@ -32,12 +31,15 @@ public class ContactsAdapter extends CommonViewAdapter<ContactItemViewModel, Ite
         super.onBindViewHolder(holder, position);
         ContactItemViewModel obj = mItems.get(position);
 
+        CircleImageView imageView =  holder.getBinding().contactIcon;
+        if (imageView.getTag() != null){
+            imageView.setImageResource((Integer) imageView.getTag());
+        }
+        imageView.setTag(R.drawable.vector_drawable_contact_default_icon);
+
         //设置联系人头像
         if (obj.getContact().getIcon() != null && obj.getContact().getIcon().length > 0) {
-            RequestOptions options = new RequestOptions();
-            options.diskCacheStrategy(DiskCacheStrategy.ALL);
-            Glide.with(AddressBookApplication.getAppContext()).load(obj.getContact().getIcon())
-                    .apply(options).into(holder.getBinding().contactIcon);
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(obj.getContact().getIcon(), 0, obj.getContact().getIcon().length));
         } else {
             holder.getBinding().contactIcon.setCircleBackgroundColor(mColorGenerator.getColor(obj.getContact().getContact_id()));
         }
