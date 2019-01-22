@@ -2,6 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="android.view.View"/>
+
         <variable
             name="SearchContactItemViewModel"
             type="com.dugu.addressbook.viewmodel.item.SearchContactItemViewModel"/>
@@ -29,17 +32,36 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/vector_drawable_contact_default_icon" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:text="@{SearchContactItemViewModel.nameOrPhone}"
-                android:textColor="@color/addressbook_bg_black"
                 android:layout_marginEnd="20dp"
-                android:textSize="15sp"/>
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@{SearchContactItemViewModel.targetName}"
+                    android:textColor="@color/addressbook_bg_black"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@{SearchContactItemViewModel.targetContent}"
+                    android:visibility="@{SearchContactItemViewModel.needHideSearchText() ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/addressbook_bg_black"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

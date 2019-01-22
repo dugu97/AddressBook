@@ -11,13 +11,16 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.dugu.addressbook.Constants;
+import com.dugu.addressbook.model.Contact;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -26,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AppUtil {
 
@@ -62,19 +67,38 @@ public class AppUtil {
         return false;
     }
 
-    public static int getRandomColor(Long seed) {
-        Long temp = Math.abs(seed);
-        int index = (int) (temp % Constants.COLOR_PROJECT.length);
-        return Constants.COLOR_PROJECT[index];
+    public static String getContactName(Contact contact){
+        String name = null;
+        if (!AppUtil.isNullString(contact.getName()))
+            name = contact.getName();
+        else if (!contact.getPhoneList().isEmpty())
+            name = contact.getPhoneList().get(0).getPhone().replace(" ", "");
+        else
+            name = "(无姓名)";
+        return name;
+    }
+
+    public static SpannableString matcherSearchTitle(String text, String keyword) {
+        String string = text.toLowerCase();
+        String key = keyword.toLowerCase();
+
+        //高亮颜色
+        int color = 0xff00acc2;
+
+        Pattern pattern = Pattern.compile(key);
+        Matcher matcher = pattern.matcher(string);
+
+        SpannableString ss = new SpannableString(text);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            ss.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return ss;
+
     }
 
     public static int dp2px(@NonNull Context context, int dp) {
-
-//        Log.d(TAG, "dp2px:densityDpi   " + context.getResources().getDisplayMetrics().densityDpi);
-//        Log.d(TAG, "dp2px:xdpi    " + context.getResources().getDisplayMetrics().xdpi);
-//        Log.d(TAG, "dp2px: ydpi  " + context.getResources().getDisplayMetrics().ydpi);
-//        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density);
-//        Log.d(TAG, "dp2px: " + context.getResources().getDisplayMetrics().density * dp);
         return (int) (context.getResources().getDisplayMetrics().density * dp);
     }
 

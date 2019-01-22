@@ -105,6 +105,13 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             }
         });
 
+        adapter.setOnLongClickListener(new OnItemElementClickListener<ContactDetailItemViewModel>() {
+            @Override
+            public void onClick(ContactDetailItemViewModel obj, int position) {
+
+            }
+        });
+
         adapter.setOnRightBtnClickListener(new OnItemElementClickListener<ContactDetailItemViewModel>() {
             @Override
             public void onClick(ContactDetailItemViewModel obj, int position) {

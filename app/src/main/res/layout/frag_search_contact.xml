@@ -28,11 +28,11 @@
                android:layout_height="wrap_content"
                android:background="@null"
                android:textCursorDrawable="@drawable/edittext_curcor_white_style"
-               android:textSize="17sp"
+               android:textSize="15sp"
                android:singleLine="true"
                android:textColorHint="@color/addressbook_edittext_bg_gray"
                android:textColor="@color/theme_font_while"
-               android:hint="搜索(支持名字、号码)"/>
+               android:hint="搜索联系人相关信息"/>
 
        </android.support.v7.widget.Toolbar>
 
