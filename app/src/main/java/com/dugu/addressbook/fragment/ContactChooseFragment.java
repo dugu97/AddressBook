@@ -84,16 +84,41 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
                 getActivity().finish();
             }
         });
+
+        binding.chooseAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<ContactChooseItemViewModel> list = binding.getContactChooseViewModel().getChooseItemViewModels();
+
+                boolean isAllChoosed = true;
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (!list.get(i).isChecked())
+                        isAllChoosed = false;
+                }
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (isAllChoosed)
+                        list.get(i).setChecked(false);
+                    else
+                        list.get(i).setChecked(true);
+                }
+
+                adapter.setmItems(list);
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (adapter.getItemCount() == 0){
+        if (adapter.getItemCount() == 0) {
             binding.title.setVisibility(View.GONE);
+            binding.cardView.setVisibility(View.GONE);
             binding.noContact.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.title.setVisibility(View.VISIBLE);
+            binding.cardView.setVisibility(View.VISIBLE);
             binding.noContact.setVisibility(View.GONE);
         }
     }

@@ -3,6 +3,8 @@ package com.dugu.addressbook;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.dugu.addressbook.db.DBHelper;
@@ -43,6 +45,13 @@ public class AddressBookApplication extends Application {
         initDefaultData();
 
         initDBData();
+
+
+        //适配文件分享URI问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
     }
 
     private void printDBLog() {
