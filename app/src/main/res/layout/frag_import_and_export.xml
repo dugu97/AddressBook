@@ -146,6 +146,7 @@
             android:background="@color/theme_background_transparent_gray"/>
 
         <LinearLayout
+            android:id="@+id/share_contact"
             android:background="@drawable/btn_rectangle_selector"
             android:layout_width="match_parent"
             android:layout_height="50dp">

@@ -100,6 +100,13 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                 ImportAndExportFragmentPermissionsDispatcher.requestPermissionWithReadContactWithPermissionCheck(ImportAndExportFragment.this);
             }
         });
+
+        binding.shareContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUtil.shareFile(getContext(), new File("/storage/emulated/0/00001.vcf"));
+            }
+        });
     }
 
     @Override
@@ -110,19 +117,19 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
 
 
     @NeedsPermission(Manifest.permission.READ_CONTACTS)
-    public void requestPermissionWithReadContact(){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        presenter.importContact(MobileContactUtil.getAllContactWithSim(getContext()));
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
-                    }finally {
-                        closeLoadingDialog();
-                    }
+    public void requestPermissionWithReadContact() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    presenter.importContact(MobileContactUtil.getAllContactWithSim(getContext()));
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                } finally {
+                    closeLoadingDialog();
                 }
-            }).start();
+            }
+        }).start();
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
@@ -163,7 +170,7 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                         } catch (IOException e) {
                             e.printStackTrace();
                             makeToast("导入出错");
-                        }finally {
+                        } finally {
                             closeLoadingDialog();
                             tDialog.dismiss();
                         }

@@ -91,37 +91,52 @@ public class MobileContactUtil {
             }
             address.close();
 
-            //查询==公司名字==类型的数据操作.Organization.COMPANY  ContactsContract.Data.CONTENT_URI
-            String orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-            String[] orgWhereParams = new String[]{id,
-                    ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
+            //查询==公司 职位 昵称 备注==类型的数据操作
+            String orgWhere = ContactsContract.Data.CONTACT_ID + " = ?";
+            String[] orgWhereParams = new String[]{id};
             Cursor orgCur = contentResolver.query(ContactsContract.Data.CONTENT_URI,
                     null, orgWhere, orgWhereParams, null);
-            if (orgCur.moveToFirst()) {
-                //组织名 (公司名字)
-                String company = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
-                //职位
-                String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
 
-                contact.setOrganization(company);
-                contact.setJob(title);
+            Log.d("123", orgCur.getCount() + "个");
+
+            boolean isSetOrganization = false;
+            boolean isSetNickName = false;
+            boolean isSetRemark = false;
+
+            while (orgCur.moveToNext()) {
+
+                String type = orgCur.getString(orgCur.getColumnIndex(ContactsContract.Data.MIMETYPE));
+
+                Log.d("123", type);
+
+                if (!isSetOrganization && ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE.equals(type)) {
+                    //组织名 (公司名字)
+                    String company = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
+                    //职位
+                    String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+
+                    contact.setOrganization(company);
+                    contact.setJob(title);
+
+                    isSetOrganization = true;
+                } else if (!isSetNickName && ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE.equals(type)) {
+                    String nickName = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.DATA));
+
+                    //昵称
+                    contact.setNickname(nickName);
+
+                    isSetNickName = true;
+                } else if (!isSetRemark && ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE.equals(type)) {
+                    String remark = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE));
+
+                    //备注
+                    contact.setRemark(remark);
+                    isSetRemark = true;
+                }
             }
             orgCur.close();
 
-//            //昵称
-//            String[] orgWhereParams1 = new String[]{id,
-//                    ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE};
-//            Cursor orgCur1 = contentResolver.query(ContactsContract.Data.CONTENT_URI,
-//                    null, orgWhere, orgWhereParams1, null);
-//            if (orgCur1.moveToFirst()) {
-//                //组织名 (公司名字)
-//                String nickName = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.DATA));
-//                contact.setNickname(nickName);
-//            }
-//            orgCur.close();
-
             contactList.add(contact);
-//            Log.d("123", contact.toString());
         }
         cursor.close();
         Log.d("123", contactList.size() + "");
