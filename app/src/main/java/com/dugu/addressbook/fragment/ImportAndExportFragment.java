@@ -19,6 +19,7 @@ import com.dugu.addressbook.contract.ImportAndExportContract;
 import com.dugu.addressbook.databinding.FragImportAndExportBinding;
 import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
 import com.dugu.addressbook.util.AppUtil;
+import com.dugu.addressbook.util.MobileContactUtil;
 import com.dugu.addressbook.util.VCardUtil;
 import com.timmy.tdialog.TDialog;
 import com.timmy.tdialog.base.BindViewHolder;
@@ -91,12 +92,37 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                 ImportAndExportFragmentPermissionsDispatcher.requestPermissionAndShowDialogWithPermissionCheck(ImportAndExportFragment.this);
             }
         });
+
+        binding.importSim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog("正在导入手机联系人...");
+                ImportAndExportFragmentPermissionsDispatcher.requestPermissionWithReadContactWithPermissionCheck(ImportAndExportFragment.this);
+            }
+        });
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         ImportAndExportFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+
+    @NeedsPermission(Manifest.permission.READ_CONTACTS)
+    public void requestPermissionWithReadContact(){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        presenter.importContact(MobileContactUtil.getAllContactWithSim(getContext()));
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }finally {
+                        closeLoadingDialog();
+                    }
+                }
+            }).start();
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})

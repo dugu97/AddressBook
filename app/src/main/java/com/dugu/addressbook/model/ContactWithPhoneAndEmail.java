@@ -3,7 +3,7 @@ package com.dugu.addressbook.model;
 import java.util.List;
 
 /*
-    用于VCard导入数据整合
+    用于VCard导入数据整合 用于导入系统联系人数据整合
  */
 public class ContactWithPhoneAndEmail {
 
@@ -120,6 +120,6 @@ public class ContactWithPhoneAndEmail {
 
     @Override
     public String toString() {
-        return name + nickname + organization + job + remark + address + birthday;
+        return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size() + " emailList:" + emailList.size();
     }
 }
