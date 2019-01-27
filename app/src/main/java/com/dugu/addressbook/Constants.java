@@ -4,8 +4,11 @@ public class Constants {
 
     // 初始化主界面长按选择列表
     public static final String[] CONTACT_LONG_CLICK_OPERATION_PROJECT = {"编辑", "删除", "分享联系人", "加入黑名单"};
+    public static final String[] CONTACT_LONG_CLICK_OPERATION_PROJECT_2 = {"编辑", "删除", "分享联系人", "移除黑名单"};
+    public static final int CONTACT_LONG_CLICK_OPERATION_EDIT = 0;
     public static final int CONTACT_LONG_CLICK_OPERATION_DELETE = 1;
-    public static final int CONTACT_LONG_CLICK_OPERATION_ADD_BLACK = 3;
+    public static final int CONTACT_LONG_CLICK_OPERATION_SHARE_CONTACT= 2;
+    public static final int CONTACT_LONG_CLICK_OPERATION_ADD_OR_DELETE_BLACK = 3;
 
     //初始化群组详情 更多 的选择列表
     public static final String[] GROUP_DETAIL_MORE_OPERATION_PROJECT = {"移除成员", "重命名"};

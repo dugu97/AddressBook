@@ -66,6 +66,15 @@ public class ContactsPresenter implements ContactsContract.Presenter {
     }
 
     @Override
+    public void deleteContactInBlack(Long contact_id) {
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        daoSession.getGroupLinkContactDao().delete(daoSession.getGroupLinkContactDao().queryBuilder()
+                .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id),
+                        GroupLinkContactDao.Properties.Group_id.eq((long) Constants.GROUP_BLACK)).unique());
+        daoSession.clear();
+    }
+
+    @Override
     public void deleteContact(final Long contact_id) {
         DaoSession daoSession = AddressBookApplication.getDaoSession();
 

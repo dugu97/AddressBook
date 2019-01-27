@@ -104,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:gravity="center_vertical|left"
-                        android:text="@{ContactDetailViewModel.nameOrPhone}"
+                        android:text="@{ContactDetailViewModel.nameOrPhoneInTitle}"
                         android:textAppearance="@style/AppToolbar_TextStyle" />
 
                 </android.support.v7.widget.Toolbar>

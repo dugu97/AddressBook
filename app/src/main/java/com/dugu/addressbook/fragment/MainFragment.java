@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -27,9 +28,16 @@ import com.dugu.addressbook.assembly.SideBar;
 import com.dugu.addressbook.contract.ContactsContract;
 import com.dugu.addressbook.databinding.FragMainLayoutBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.model.Contact;
+import com.dugu.addressbook.model.Group;
+import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.CommonUtil;
+import com.dugu.addressbook.util.VCardUtil;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
@@ -40,9 +48,9 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     private CustomItemDecoration decoration;
 
-
-    private int contactCount;
-
+    //用于临时生成的分享文件
+    private File file;
+    private Boolean isCreateTempFile = false;
 
     private FragMainLayoutBinding binding;
 
@@ -117,11 +125,11 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                     Intent intent = new Intent(getContext(), ContactDetailActivity.class);
                     intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact().getContact_id());
                     startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
-                }else {
-                    if (obj.getContact().getContact_id() == Constants.UTIL_GROUP_INDEX){
+                } else {
+                    if (obj.getContact().getContact_id() == Constants.UTIL_GROUP_INDEX) {
                         Intent intent = new Intent(getContext(), GroupActivity.class);
                         startActivity(intent);
-                    }else if (obj.getContact().getContact_id() == Constants.UTIL_BUSINESS_CARD_INDEX){
+                    } else if (obj.getContact().getContact_id() == Constants.UTIL_BUSINESS_CARD_INDEX) {
                         Intent intent = new Intent(getContext(), BusinessCardActivity.class);
                         startActivity(intent);
                     }
@@ -133,8 +141,18 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             @Override
             public void onClick(ContactItemViewModel obj, int position) {
                 //即正式的联系人选项
-                if (obj.getContact().getContact_id() > 0)
-                    showAlertDialog(obj, position);
+                if (obj.getContact().getContact_id() > 0) {
+                    List<Group> groupList = obj.getContact().getGroupList();
+                    for (Group p : groupList) {
+                        Log.d("123", "group" + p.getGroup_id());
+                        if (p.getGroup_id() == Constants.GROUP_BLACK) {
+                            showAlertDialog(obj, position, true);
+                            return;
+                        }
+                    }
+                    showAlertDialog(obj, position, false);
+                }
+
             }
         });
 
@@ -143,7 +161,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
                 intent.putExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, Constants.CONTACT_MODE_NEW_PHONE_CONTACT);
-                startActivityForResult(intent,Constants.REQUEST_CODE_NEW_CONTACT);
+                startActivityForResult(intent, Constants.REQUEST_CODE_NEW_CONTACT);
             }
         });
 
@@ -168,32 +186,67 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
     public void onResume() {
         super.onResume();
         presenter.start();
+
+        if (isCreateTempFile && file != null && file.exists()) {
+            file.delete();
+            isCreateTempFile = false;
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constants.RESULT_CODE_OK){
-            if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT || requestCode == Constants.REQUEST_CODE_EDIT_CONTACT){
+        if (resultCode == Constants.RESULT_CODE_OK) {
+            if (requestCode == Constants.REQUEST_CODE_NEW_CONTACT || requestCode == Constants.REQUEST_CODE_EDIT_CONTACT) {
                 presenter.start();
             }
         }
     }
 
-    private void showAlertDialog(final ContactItemViewModel obj, final int position) {
+    private void showAlertDialog(final ContactItemViewModel obj, final int position, final boolean isInBlack) {
+        String[] temp;
+
+        if (!isInBlack)
+            temp = Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT;
+        else
+            temp = Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT_2;
+
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()).setTitle(obj.getNameOrPhone())
-                .setItems(Constants.CONTACT_LONG_CLICK_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
+                .setItems(temp, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == Constants.CONTACT_LONG_CLICK_OPERATION_DELETE) {
                             adapter.remove(position);
                             binding.getContactsViewModel().getContacts().remove(position);
                             presenter.deleteContact(obj.getContact().getContact_id());
-//                            adapter.removeData(position);
-                        }else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_ADD_BLACK){
-                            presenter.addContactInBlack(obj.getContact().getContact_id());
+                        } else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_EDIT) {
+                            Intent intent = new Intent(getContext(), ContactDetailActivity.class);
+                            intent.putExtra(Constants.MAINACTIVITY_CONTACT_ID, obj.getContact().getContact_id());
+                            startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
+                        } else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_ADD_OR_DELETE_BLACK) {
+                            if (!isInBlack)
+                                presenter.addContactInBlack(obj.getContact().getContact_id());
+                            else
+                                presenter.deleteContactInBlack(obj.getContact().getContact_id());
+
+                            //涉及数据变化,要进行刷新
+                            presenter.start();
+                        }else if (which == Constants.CONTACT_LONG_CLICK_OPERATION_SHARE_CONTACT){
+                            showLoadingDialog("正在生成VCard文件...");
+                            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + AppUtil.formatFileNameWithTime(System.currentTimeMillis()));
+                            isCreateTempFile = true;
+                            List<Contact> contacts = new ArrayList<>();
+                            contacts.add(obj.getContact());
+                            try {
+                                VCardUtil.createVCard(contacts, file);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            closeLoadingDialog();
+                            AppUtil.shareFile(getContext(),file);
                         }
+
                     }
                 }).create();
         alertDialog.show();
@@ -206,9 +259,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
         //配置联系人数据,并刷新
         List<ContactItemViewModel> list = binding.getContactsViewModel().getContacts();
-
-        //配置联系人总数
-        contactCount = binding.getContactsViewModel().getContactsSizeWithoutOtherUtilItem();
 
         //对数据源进行排序
         CommonUtil.sortContactItemViewModelData(list);

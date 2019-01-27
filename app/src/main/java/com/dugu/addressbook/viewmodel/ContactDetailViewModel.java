@@ -50,6 +50,18 @@ public class ContactDetailViewModel extends BindingItem {
         this.isInBlackGroup = isInBlackGroup();
     }
 
+
+    public String getNameOrPhoneInTitle(){
+        String temp;
+        if (!AppUtil.isNullString(name))
+            temp = name;
+        else if (!phoneList.isEmpty())
+            temp = phoneList.get(0).getPhone();
+        else
+            temp = "（无姓名）";
+        return temp;
+    }
+
     public String getNameOrPhone() {
         String temp;
         if (!AppUtil.isNullString(name))
