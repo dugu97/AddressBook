@@ -2,32 +2,32 @@ package com.dugu.addressbook.presenter;
 
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
-import com.dugu.addressbook.contract.ContactChooseContract;
+import com.dugu.addressbook.contract.GroupContactChooseContract;
 import com.dugu.addressbook.db.DaoSession;
 import com.dugu.addressbook.db.GroupDao;
 import com.dugu.addressbook.db.GroupLinkContactDao;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.model.GroupLinkContact;
-import com.dugu.addressbook.viewmodel.ContactChooseViewModel;
-import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.GroupContactChooseViewModel;
+import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactChoosePresenter implements ContactChooseContract.Presenter {
+public class GroupContactChoosePresenter implements GroupContactChooseContract.Presenter {
 
-    private final ContactChooseContract.Ui mUi;
+    private final GroupContactChooseContract.Ui mUi;
 
-    private ContactChooseViewModel contactChooseViewModel;
+    private GroupContactChooseViewModel contactChooseViewModel;
 
-    public ContactChoosePresenter(ContactChooseContract.Ui mUi) {
+    public GroupContactChoosePresenter(GroupContactChooseContract.Ui mUi) {
         this.mUi = mUi;
         mUi.setPresenter(this);
     }
 
     @Override
-    public ContactChooseViewModel getContactChooseViewModel() {
+    public GroupContactChooseViewModel getContactChooseViewModel() {
         return contactChooseViewModel;
     }
 
@@ -43,7 +43,7 @@ public class ContactChoosePresenter implements ContactChooseContract.Presenter {
         List<Contact> allContactList = daoSession.getContactDao().queryBuilder().list();
         List<Contact> contactInGroup = group.getContactList();
 
-        List<ContactChooseItemViewModel> itemViewModels = new ArrayList<>();
+        List<GroupContactChooseItemViewModel> itemViewModels = new ArrayList<>();
 
         if (mode == Constants.CONTACT_MODE_WITHOUT_GROUP) {
             boolean isInGroup = false;
@@ -55,29 +55,29 @@ public class ContactChoosePresenter implements ContactChooseContract.Presenter {
                     }
                 }
                 if (!isInGroup)
-                    itemViewModels.add(new ContactChooseItemViewModel(allContactList.get(i), false));
+                    itemViewModels.add(new GroupContactChooseItemViewModel(allContactList.get(i), false));
                 isInGroup = false;
             }
         } else if (mode == Constants.CONTACT_MODE_WITHIN_GROUP) {
             for (Contact contact : contactInGroup) {
-                itemViewModels.add(new ContactChooseItemViewModel(contact, false));
+                itemViewModels.add(new GroupContactChooseItemViewModel(contact, false));
             }
         }
 
-        contactChooseViewModel = new ContactChooseViewModel(group, itemViewModels);
+        contactChooseViewModel = new GroupContactChooseViewModel(group, itemViewModels);
         mUi.showResult();
     }
 
     @Override
-    public void insertOrDeleteContactsToGroup(List<ContactChooseItemViewModel> viewModels, int mode) {
+    public void insertOrDeleteContactsToGroup(List<GroupContactChooseItemViewModel> viewModels, int mode) {
         DaoSession daoSession = AddressBookApplication.getDaoSession();
         if (mode == Constants.CONTACT_MODE_WITHOUT_GROUP) {
-            for (ContactChooseItemViewModel model : viewModels) {
+            for (GroupContactChooseItemViewModel model : viewModels) {
                 if (model.isChecked())
                     daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, model.getContact().getContact_id(), contactChooseViewModel.getGroup().getGroup_id()));
             }
         } else if (mode == Constants.CONTACT_MODE_WITHIN_GROUP) {
-            for (ContactChooseItemViewModel model : viewModels) {
+            for (GroupContactChooseItemViewModel model : viewModels) {
                 if (model.isChecked()) {
                     List<GroupLinkContact> groupLinkContactList = daoSession.getGroupLinkContactDao().queryBuilder()
                             .where(GroupLinkContactDao.Properties.Contact_id.eq(model.getContact().getContact_id()),

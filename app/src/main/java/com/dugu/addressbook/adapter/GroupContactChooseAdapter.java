@@ -4,23 +4,23 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 
 import com.dugu.addressbook.adapter.recycleview.CommonViewAdapter;
-import com.dugu.addressbook.databinding.ItemContactChooseBinding;
+import com.dugu.addressbook.databinding.ItemGroupContactChooseBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.util.ColorGenerator;
-import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
 
-public class ContactChooseAdapter extends CommonViewAdapter<ContactChooseItemViewModel, ItemContactChooseBinding> {
+public class GroupContactChooseAdapter extends CommonViewAdapter<GroupContactChooseItemViewModel, ItemGroupContactChooseBinding> {
 
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
 
-    private OnItemElementClickListener<ContactChooseItemViewModel> onClickListener;
+    private OnItemElementClickListener<GroupContactChooseItemViewModel> onClickListener;
 
-    public ContactChooseAdapter() {
+    public GroupContactChooseAdapter() {
         super();
     }
 
     @Override
-    protected void handleViewHolder(final ItemContactChooseBinding binding, final ContactChooseItemViewModel obj, final int position) {
+    protected void handleViewHolder(final ItemGroupContactChooseBinding binding, final GroupContactChooseItemViewModel obj, final int position) {
         super.handleViewHolder(binding, obj, position);
 
         //设置联系人头像
@@ -45,11 +45,11 @@ public class ContactChooseAdapter extends CommonViewAdapter<ContactChooseItemVie
         });
     }
 
-    public OnItemElementClickListener<ContactChooseItemViewModel> getOnClickListener() {
+    public OnItemElementClickListener<GroupContactChooseItemViewModel> getOnClickListener() {
         return onClickListener;
     }
 
-    public void setOnClickListener(OnItemElementClickListener<ContactChooseItemViewModel> onClickListener) {
+    public void setOnClickListener(OnItemElementClickListener<GroupContactChooseItemViewModel> onClickListener) {
         this.onClickListener = onClickListener;
     }
 }

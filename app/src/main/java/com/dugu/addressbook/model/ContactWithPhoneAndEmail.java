@@ -1,5 +1,8 @@
 package com.dugu.addressbook.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /*

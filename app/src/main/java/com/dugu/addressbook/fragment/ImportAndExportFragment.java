@@ -2,6 +2,7 @@ package com.dugu.addressbook.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,11 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dugu.addressbook.R;
+import com.dugu.addressbook.activity.PhoneImportContactChooseActivity;
 import com.dugu.addressbook.contract.ImportAndExportContract;
 import com.dugu.addressbook.databinding.FragImportAndExportBinding;
 import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
 import com.dugu.addressbook.util.AppUtil;
-import com.dugu.addressbook.util.MobileContactUtil;
 import com.dugu.addressbook.util.VCardUtil;
 import com.timmy.tdialog.TDialog;
 import com.timmy.tdialog.base.BindViewHolder;
@@ -96,8 +97,8 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
         binding.importSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingDialog("正在导入手机联系人...");
-                ImportAndExportFragmentPermissionsDispatcher.requestPermissionWithReadContactWithPermissionCheck(ImportAndExportFragment.this);
+                Intent intent = new Intent(getContext(), PhoneImportContactChooseActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -113,23 +114,6 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         ImportAndExportFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
-
-
-    @NeedsPermission(Manifest.permission.READ_CONTACTS)
-    public void requestPermissionWithReadContact() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    presenter.importContact(MobileContactUtil.getAllContactWithSim(getContext()));
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                } finally {
-                    closeLoadingDialog();
-                }
-            }
-        }).start();
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})

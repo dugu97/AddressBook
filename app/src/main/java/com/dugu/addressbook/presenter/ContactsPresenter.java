@@ -49,13 +49,6 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
         for (Contact contact :
                 list) {
-//            //注意 phoneList 存储的数据类型为 String
-//            List<String> phoneList = new ArrayList<>();
-//            List<Phone> phoneListSource = contact.getPhoneList();
-//            if (phoneListSource.size() != 0)
-//                for (int i = 0; i < phoneListSource.size(); i++) {
-//                    phoneList.add(phoneListSource.get(i).getPhone());
-//                }
 
             item = new ContactItemViewModel(contact);
 
@@ -69,6 +62,7 @@ public class ContactsPresenter implements ContactsContract.Presenter {
     public void addContactInBlack(final Long contact_id) {
         DaoSession daoSession = AddressBookApplication.getDaoSession();
         daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, contact_id, (long) Constants.GROUP_BLACK));
+        daoSession.clear();
     }
 
     @Override

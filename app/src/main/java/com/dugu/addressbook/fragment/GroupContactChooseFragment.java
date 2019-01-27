@@ -11,24 +11,24 @@ import android.view.ViewGroup;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.adapter.ContactChooseAdapter;
+import com.dugu.addressbook.adapter.GroupContactChooseAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
-import com.dugu.addressbook.contract.ContactChooseContract;
+import com.dugu.addressbook.contract.GroupContactChooseContract;
 import com.dugu.addressbook.databinding.FragContactChooseBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
-import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
 
 import java.util.List;
 
-public class ContactChooseFragment extends BaseFragment implements ContactChooseContract.Ui {
+public class GroupContactChooseFragment extends BaseFragment implements GroupContactChooseContract.Ui {
 
-    private ContactChooseContract.Presenter presenter;
+    private GroupContactChooseContract.Presenter presenter;
     private FragContactChooseBinding binding;
-    private ContactChooseAdapter adapter;
+    private GroupContactChooseAdapter adapter;
     private int mode;
 
-    public static ContactChooseFragment newInstance(Bundle bundle) {
-        ContactChooseFragment fragment = new ContactChooseFragment();
+    public static GroupContactChooseFragment newInstance(Bundle bundle) {
+        GroupContactChooseFragment fragment = new GroupContactChooseFragment();
         if (bundle != null)
             fragment.setArguments(bundle);
         return fragment;
@@ -42,7 +42,7 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
 
     @Override
     protected void initViews(View rootView) {
-        adapter = new ContactChooseAdapter();
+        adapter = new GroupContactChooseAdapter();
         binding.contactList.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -60,9 +60,9 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
 
     @Override
     protected void addListener() {
-        adapter.setOnClickListener(new OnItemElementClickListener<ContactChooseItemViewModel>() {
+        adapter.setOnClickListener(new OnItemElementClickListener<GroupContactChooseItemViewModel>() {
             @Override
-            public void onClick(ContactChooseItemViewModel obj, int position) {
+            public void onClick(GroupContactChooseItemViewModel obj, int position) {
                 Log.d("123", obj.isChecked() + "");
             }
         });
@@ -78,7 +78,7 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
                 if (isMultiplicationClick())
                     return;
 
-                List<ContactChooseItemViewModel> list = adapter.getmItems();
+                List<GroupContactChooseItemViewModel> list = adapter.getmItems();
                 presenter.insertOrDeleteContactsToGroup(list, mode);
                 getActivity().setResult(Constants.RESULT_CODE_OK);
                 getActivity().finish();
@@ -88,7 +88,7 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
         binding.chooseAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<ContactChooseItemViewModel> list = binding.getContactChooseViewModel().getChooseItemViewModels();
+                List<GroupContactChooseItemViewModel> list = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
 
                 boolean isAllChoosed = true;
 
@@ -125,14 +125,14 @@ public class ContactChooseFragment extends BaseFragment implements ContactChoose
 
     @Override
     public void showResult() {
-        binding.setContactChooseViewModel(presenter.getContactChooseViewModel());
-        List<ContactChooseItemViewModel> viewModels = binding.getContactChooseViewModel().getChooseItemViewModels();
-        binding.getContactChooseViewModel().setChooseItemViewModels(viewModels);
-        adapter.setmItems(binding.getContactChooseViewModel().getChooseItemViewModels());
+        binding.setGroupContactChooseViewModel(presenter.getContactChooseViewModel());
+        List<GroupContactChooseItemViewModel> viewModels = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
+        binding.getGroupContactChooseViewModel().setChooseItemViewModels(viewModels);
+        adapter.setmItems(binding.getGroupContactChooseViewModel().getChooseItemViewModels());
     }
 
     @Override
-    public void setPresenter(ContactChooseContract.Presenter presenter) {
+    public void setPresenter(GroupContactChooseContract.Presenter presenter) {
         this.presenter = presenter;
     }
 }

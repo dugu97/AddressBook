@@ -78,6 +78,8 @@ public class Constants {
     public static final String GROUPACTIVITY_GROUP_ID = "group_id";
     public static final String GROUPACTIVITY_GROUP_NAME = "group_name";
 
+    //ImportAndExportActivity通讯字段
+    public static final String IMPORTANDEXPORT_ACTIVITY_CONTACTS = "cotacts_data";
 
     //所有Activity都可使用的通讯字段
     public static final String ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT = "new_or_edit_contact_mode";  //用于新建或者编辑联系人的模式选择

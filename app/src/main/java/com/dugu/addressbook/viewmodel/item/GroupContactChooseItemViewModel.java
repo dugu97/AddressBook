@@ -6,12 +6,12 @@ import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.BindingItem;
 
-public class ContactChooseItemViewModel extends BindingItem {
+public class GroupContactChooseItemViewModel extends BindingItem {
 
     private Contact contact;
     private boolean isChecked;
 
-    public ContactChooseItemViewModel(Contact contact, boolean isChecked) {
+    public GroupContactChooseItemViewModel(Contact contact, boolean isChecked) {
         this.contact = contact;
         this.isChecked = isChecked;
     }
@@ -43,11 +43,11 @@ public class ContactChooseItemViewModel extends BindingItem {
 
     @Override
     public int getViewType() {
-        return R.layout.item_contact_choose;
+        return R.layout.item_group_contact_choose;
     }
 
     @Override
     public int getViewVariableId() {
-        return BR.ContactChooseItemViewModel;
+        return BR.GroupContactChooseItemViewModel;
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="PhoneImportContactChooseViewModel"
+            type="com.dugu.addressbook.viewmodel.PhoneImportContactChooseViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/addressbook_edittext_bg_gray"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="手机联系人"
+            android:textColor="@color/addressbook_bg_black"
+            android:textSize="13sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contact_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/theme_font_while">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <include android:id="@+id/cardView" layout="@layout/flat_choose_all"/>
+
+            <include
+                android:id="@+id/no_contact"
+                layout="@layout/flat_no_content" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</layout>

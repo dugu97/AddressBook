@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.activity.ContactChooseActivity;
+import com.dugu.addressbook.activity.GroupContactChooseActivity;
 import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.adapter.GroupDetailAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
@@ -96,7 +96,7 @@ public class GroupDetailFragment extends BaseFragment implements GroupDetailCont
         binding.addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ContactChooseActivity.class);
+                Intent intent = new Intent(getContext(), GroupContactChooseActivity.class);
                 intent.putExtra(Constants.ALLACTIVITY_GROUP_ID, binding.getGroupDetailViewModel().getGroup().getGroup_id());
 
                 //contact选择模式
@@ -137,7 +137,7 @@ public class GroupDetailFragment extends BaseFragment implements GroupDetailCont
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == Constants.GROUP_DETAIL_MORE_OPERATION_DELETE_CONTACT) {
                             //移除成员
-                            Intent intent = new Intent(getContext(), ContactChooseActivity.class);
+                            Intent intent = new Intent(getContext(), GroupContactChooseActivity.class);
                             intent.putExtra(Constants.ALLACTIVITY_GROUP_ID, binding.getGroupDetailViewModel().getGroup().getGroup_id());
 
                             //contact选择模式

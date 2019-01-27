@@ -4,18 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.fragment.ContactChooseFragment;
-import com.dugu.addressbook.presenter.ContactChoosePresenter;
+import com.dugu.addressbook.fragment.GroupContactChooseFragment;
+import com.dugu.addressbook.presenter.GroupContactChoosePresenter;
 
-public class ContactChooseActivity extends SingleFragmentActivity{
+public class GroupContactChooseActivity extends SingleFragmentActivity{
 
-    private ContactChoosePresenter presenter;
+    private GroupContactChoosePresenter presenter;
 
     @Override
     protected Fragment createFragment(Bundle bundle) {
-        ContactChooseFragment fragment = ContactChooseFragment.newInstance(bundle);
+        GroupContactChooseFragment fragment = GroupContactChooseFragment.newInstance(bundle);
         //创建Presenter
-        presenter = new ContactChoosePresenter(fragment);
+        presenter = new GroupContactChoosePresenter(fragment);
         return fragment;
     }
 

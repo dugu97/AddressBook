@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="ContactChooseItemViewModel"
-            type="com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel"/>
+            name="PhoneImportContactChooseItemViewModel"
+            type="com.dugu.addressbook.viewmodel.item.PhoneImportContactChooseItemViewModel"/>
 
     </data>
 
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
-                android:text="@{ContactChooseItemViewModel.nameOrPhone}"
+                android:text="@{PhoneImportContactChooseItemViewModel.nameOrPhone}"
                 android:gravity="center_vertical"
                 android:textColor="@color/addressbook_bg_black"
                 android:textSize="15sp"/>
@@ -48,7 +48,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="10dp"
                 android:buttonTint="@color/addressbook_actionbar_start_blue"
-                android:checked="@={ContactChooseItemViewModel.checked}"/>
+                android:checked="@={PhoneImportContactChooseItemViewModel.checked}"/>
 
         </LinearLayout>
 

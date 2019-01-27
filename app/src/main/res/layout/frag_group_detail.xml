@@ -38,7 +38,7 @@
 
             </android.support.v7.widget.RecyclerView>
 
-            <include android:id="@+id/no_contact" layout="@layout/no_content_flat"/>
+            <include android:id="@+id/no_contact" layout="@layout/flat_no_content"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="170dp"
