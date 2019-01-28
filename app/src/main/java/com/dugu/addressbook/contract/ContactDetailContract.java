@@ -12,6 +12,7 @@ public interface ContactDetailContract {
     }
 
     interface Presenter extends BasePresenter{
+        void deleteContact(Long contact_id);
         void createContactDetailViewModel(Long contact_id);
         ContactDetailViewModel getContactDetailViewModel();
         List<ContactDetailItemViewModel> getAllMessageItems();

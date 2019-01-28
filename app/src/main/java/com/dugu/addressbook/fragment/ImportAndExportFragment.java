@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.PhoneImportContactChooseActivity;
+import com.dugu.addressbook.activity.ShareContactChooseActivity;
 import com.dugu.addressbook.contract.ImportAndExportContract;
 import com.dugu.addressbook.databinding.FragImportAndExportBinding;
 import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
@@ -77,11 +77,11 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
                     @Override
                     public void run() {
                         List<String> fileList = AppUtil.getFileList(Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
-                        for (int i = 0; i < fileList.size(); i++) {
-                            Log.d("123", fileList.get(i));
-                        }
                         closeLoadingDialog();
-                        showListDialog(fileList);
+                        if (fileList.size() > 0)
+                            showListDialog(fileList);
+                        else
+                            makeToast("根目录不存在VCard文件");
                     }
                 }).start();
             }
@@ -105,7 +105,9 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
         binding.shareContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUtil.shareFile(getContext(), new File("/storage/emulated/0/00001.vcf"));
+//                AppUtil.shareFile(getContext(), new File("/storage/emulated/0/00001.vcf"));
+                Intent intent = new Intent(getContext(), ShareContactChooseActivity.class);
+                startActivity(intent);
             }
         });
     }

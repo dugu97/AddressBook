@@ -1,8 +1,14 @@
 package com.dugu.addressbook.fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -18,11 +24,17 @@ import com.dugu.addressbook.adapter.ContactDetailMegAdapter;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.CommonUtil;
+import com.dugu.addressbook.util.DataCheckUtil;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
 
 import java.util.List;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
 public class ContactDetailFragment extends BaseFragmentNoBar implements ContactDetailContract.Ui {
 
 
@@ -101,7 +113,24 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         adapter.setOnClickListener(new OnItemElementClickListener<ContactDetailItemViewModel>() {
             @Override
             public void onClick(ContactDetailItemViewModel obj, int position) {
-                makeToast("点击了" + position);
+                if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
+                    String phone = obj.getContent().replace(" ", "");
+                    if (DataCheckUtil.isMobile(phone)) {
+                        ContactDetailFragmentPermissionsDispatcher.callPhoneWithPermissionCheck(ContactDetailFragment.this, phone, getActivity());
+                    } else {
+                        makeToast("手机号格式错误");
+                    }
+                } else if (obj.getSortKey() == Constants.SORTKEY_EMAIL) {
+                    String email = obj.getContent().replace(" ", "");
+                    if (DataCheckUtil.isEmail(email))
+                        AppUtil.copyText(getActivity(), email, "已复制到剪切板");
+                    else{
+                        makeToast("邮件格式错误");
+                    }
+                } else if (obj.getSortKey() == Constants.SORTKEY_ADDRESS) {
+                    String addresss = obj.getContent().replace(" ", "");
+                    AppUtil.copyText(getActivity(), addresss, "已复制到剪切板");
+                }
             }
         });
 
@@ -116,7 +145,12 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             @Override
             public void onClick(ContactDetailItemViewModel obj, int position) {
                 if (obj.getSortKey() == Constants.SORTKEY_PHONE) {
-                    makeToast("right");
+                    String phone = obj.getContent().replace(" ", "");
+                    if (DataCheckUtil.isMobile(phone)) {
+                        sendSms(phone);
+                    } else {
+                        makeToast("手机号格式错误");
+                    }
                 }
             }
         });
@@ -130,6 +164,30 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
                 startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
             }
         });
+
+        binding.moreOperation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
+    }
+
+    @NeedsPermission(Manifest.permission.CALL_PHONE)
+    public void callPhone(String phone, Context context) {
+        AppUtil.callPhone(phone, context);
+    }
+
+    public void sendSms(String phone) {
+        Uri uri = Uri.parse("smsto:" + phone);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        ContactDetailFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -144,6 +202,26 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
                 getActivity().finish();
             }
 
+    }
+
+    private void showAlertDialog() {
+        AlertDialog alertDialog = new AlertDialog
+                .Builder(getActivity())
+                .setItems(Constants.CONTACT_DETAIL_MORE_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == Constants.CONTACT_DETAIL_MORE_OPERATION_DELETE) {
+                            //删除联系人
+                            presenter.deleteContact(binding.getContactDetailViewModel().getContact_id());
+                            getActivity().finish();
+                        } else if (which == Constants.CONTACT_DETAIL_MORE_OPERATION_SHARE) {
+                            //分享联系
+
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        alertDialog.show();
     }
 
     @Override

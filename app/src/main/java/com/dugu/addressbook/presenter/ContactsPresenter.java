@@ -92,7 +92,7 @@ public class ContactsPresenter implements ContactsContract.Presenter {
                 .where(EmailDao.Properties.Contact_id.eq(contact_id)).list();
         daoSession.getEmailDao().deleteInTx(emailList);
 
-        daoSession.getContactDao().detachAll();
+        daoSession.clear();
 
         //数据加载完成 显示UI
         mUi.showResult();

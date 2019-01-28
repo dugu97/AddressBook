@@ -1,5 +1,7 @@
 package com.dugu.addressbook.util;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -99,6 +102,28 @@ public class AppUtil {
         return ss;
 
     }
+
+    /**
+     * 拨打电话（跳转到拨号界面，用户手动点击拨打）
+     *
+     * @param phoneNum 电话号码
+     */
+    public static void callPhone(String phoneNum, Context context) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        context.startActivity(intent);
+    }
+
+    //复制字符串到剪贴板管理器
+    public static void copyText(Context context, String text, String toastStr) {
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setPrimaryClip(ClipData.newPlainText(null, text));
+        if (!TextUtils.isEmpty(toastStr)) {
+            Toast.makeText(context, toastStr, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     public static int dp2px(@NonNull Context context, int dp) {
         return (int) (context.getResources().getDisplayMetrics().density * dp);

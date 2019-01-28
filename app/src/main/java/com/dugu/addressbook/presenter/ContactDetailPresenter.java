@@ -6,9 +6,14 @@ import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.db.ContactDao;
+import com.dugu.addressbook.db.DaoSession;
+import com.dugu.addressbook.db.EmailDao;
+import com.dugu.addressbook.db.GroupLinkContactDao;
+import com.dugu.addressbook.db.PhoneDao;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Email;
 import com.dugu.addressbook.model.Group;
+import com.dugu.addressbook.model.GroupLinkContact;
 import com.dugu.addressbook.model.Phone;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.viewmodel.ContactDetailViewModel;
@@ -112,6 +117,27 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_REMARK, "备注", contact.getRemark()));
 
         return messageItems;
+    }
+
+    @Override
+    public void deleteContact(Long contact_id) {
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+
+        daoSession.getContactDao().deleteByKey(contact_id);
+
+        List<GroupLinkContact> groupLinkContact = daoSession.getGroupLinkContactDao().queryBuilder()
+                .where(GroupLinkContactDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getGroupLinkContactDao().deleteInTx(groupLinkContact);
+
+        List<Phone> phoneList = daoSession.getPhoneDao().queryBuilder()
+                .where(PhoneDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getPhoneDao().deleteInTx(phoneList);
+
+        List<Email> emailList = daoSession.getEmailDao().queryBuilder()
+                .where(EmailDao.Properties.Contact_id.eq(contact_id)).list();
+        daoSession.getEmailDao().deleteInTx(emailList);
+
+        daoSession.clear();
     }
 
     @Override

@@ -10,6 +10,13 @@ public class Constants {
     public static final int CONTACT_LONG_CLICK_OPERATION_SHARE_CONTACT= 2;
     public static final int CONTACT_LONG_CLICK_OPERATION_ADD_OR_DELETE_BLACK = 3;
 
+    //初始化联系人详情 更多 的选择列表
+    public static final String[] CONTACT_DETAIL_MORE_OPERATION_PROJECT = {"删除", "分享联系人"};
+    public static final int CONTACT_DETAIL_MORE_OPERATION_DELETE = 0;
+    public static final int CONTACT_DETAIL_MORE_OPERATION_SHARE = 1;
+
+
+
     //初始化群组详情 更多 的选择列表
     public static final String[] GROUP_DETAIL_MORE_OPERATION_PROJECT = {"移除成员", "重命名"};
     public static final int GROUP_DETAIL_MORE_OPERATION_DELETE_CONTACT = 0;
