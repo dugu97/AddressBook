@@ -85,6 +85,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
 
         List<ContactInputItemViewModel> inputList = new ArrayList<>();
 
+        //特别注意该字段
         int serialNumber = 1;
 
         //新建手机联系人基本输入信息 (通过二维码)

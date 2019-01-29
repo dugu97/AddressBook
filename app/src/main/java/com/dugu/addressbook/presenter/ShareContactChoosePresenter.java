@@ -4,7 +4,7 @@ import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.contract.ShareContactChooseContract;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.viewmodel.ShareContactChooseViewModel;
-import com.dugu.addressbook.viewmodel.item.ShareContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +30,10 @@ public class ShareContactChoosePresenter implements ShareContactChooseContract.P
     public void start() {
         List<Contact> list = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().list();
 
-        List<ShareContactChooseItemViewModel> viewModels = new ArrayList<>();
+        List<ContactChooseItemViewModel> viewModels = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-            viewModels.add(new ShareContactChooseItemViewModel(list.get(i), false));
+            viewModels.add(new ContactChooseItemViewModel(list.get(i), false));
         }
 
         shareContactChooseViewModel = new ShareContactChooseViewModel(viewModels);

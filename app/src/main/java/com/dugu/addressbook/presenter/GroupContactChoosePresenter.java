@@ -10,7 +10,7 @@ import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.model.GroupLinkContact;
 import com.dugu.addressbook.viewmodel.GroupContactChooseViewModel;
-import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class GroupContactChoosePresenter implements GroupContactChooseContract.P
         List<Contact> allContactList = daoSession.getContactDao().queryBuilder().list();
         List<Contact> contactInGroup = group.getContactList();
 
-        List<GroupContactChooseItemViewModel> itemViewModels = new ArrayList<>();
+        List<ContactChooseItemViewModel> itemViewModels = new ArrayList<>();
 
         if (mode == Constants.CONTACT_MODE_WITHOUT_GROUP) {
             boolean isInGroup = false;
@@ -55,12 +55,12 @@ public class GroupContactChoosePresenter implements GroupContactChooseContract.P
                     }
                 }
                 if (!isInGroup)
-                    itemViewModels.add(new GroupContactChooseItemViewModel(allContactList.get(i), false));
+                    itemViewModels.add(new ContactChooseItemViewModel(allContactList.get(i), false));
                 isInGroup = false;
             }
         } else if (mode == Constants.CONTACT_MODE_WITHIN_GROUP) {
             for (Contact contact : contactInGroup) {
-                itemViewModels.add(new GroupContactChooseItemViewModel(contact, false));
+                itemViewModels.add(new ContactChooseItemViewModel(contact, false));
             }
         }
 
@@ -69,15 +69,15 @@ public class GroupContactChoosePresenter implements GroupContactChooseContract.P
     }
 
     @Override
-    public void insertOrDeleteContactsToGroup(List<GroupContactChooseItemViewModel> viewModels, int mode) {
+    public void insertOrDeleteContactsToGroup(List<ContactChooseItemViewModel> viewModels, int mode) {
         DaoSession daoSession = AddressBookApplication.getDaoSession();
         if (mode == Constants.CONTACT_MODE_WITHOUT_GROUP) {
-            for (GroupContactChooseItemViewModel model : viewModels) {
+            for (ContactChooseItemViewModel model : viewModels) {
                 if (model.isChecked())
                     daoSession.getGroupLinkContactDao().insert(new GroupLinkContact(null, model.getContact().getContact_id(), contactChooseViewModel.getGroup().getGroup_id()));
             }
         } else if (mode == Constants.CONTACT_MODE_WITHIN_GROUP) {
-            for (GroupContactChooseItemViewModel model : viewModels) {
+            for (ContactChooseItemViewModel model : viewModels) {
                 if (model.isChecked()) {
                     List<GroupLinkContact> groupLinkContactList = daoSession.getGroupLinkContactDao().queryBuilder()
                             .where(GroupLinkContactDao.Properties.Contact_id.eq(model.getContact().getContact_id()),

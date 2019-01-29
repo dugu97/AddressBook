@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.adapter.ShareContactChooseAdapter;
+import com.dugu.addressbook.adapter.ContactChooseAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.contract.ShareContactChooseContract;
 import com.dugu.addressbook.databinding.FragShareContactChooseBinding;
@@ -18,7 +18,7 @@ import com.dugu.addressbook.listener.OnItemElementClickListener;
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.VCardUtil;
-import com.dugu.addressbook.viewmodel.item.ShareContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
     private ShareContactChooseContract.Presenter presenter;
     private FragShareContactChooseBinding binding;
 
-    private ShareContactChooseAdapter adapter;
+    private ContactChooseAdapter adapter;
 
     private File file;
     private boolean isCreateTempFile = false;
@@ -50,7 +50,7 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
 
     @Override
     protected void initViews(View rootView) {
-        adapter = new ShareContactChooseAdapter();
+        adapter = new ContactChooseAdapter();
         binding.contactList.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -64,9 +64,9 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
 
     @Override
     protected void addListener() {
-        adapter.setOnClickListener(new OnItemElementClickListener<ShareContactChooseItemViewModel>() {
+        adapter.setOnClickListener(new OnItemElementClickListener<ContactChooseItemViewModel>() {
             @Override
-            public void onClick(ShareContactChooseItemViewModel obj, int position) {
+            public void onClick(ContactChooseItemViewModel obj, int position) {
                 Log.d("123", obj.isChecked() + "");
             }
         });
@@ -87,7 +87,7 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
                     return;
                 }
 
-                List<ShareContactChooseItemViewModel> list = adapter.getmItems();
+                List<ContactChooseItemViewModel> list = adapter.getmItems();
                 file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + AppUtil.formatFileNameWithTime(System.currentTimeMillis()));
                 isCreateTempFile = true;
                 List<Contact> contacts = new ArrayList<>();
@@ -111,7 +111,7 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
         binding.chooseAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<ShareContactChooseItemViewModel> list = binding.getShareContactChooseViewModel().getViewModels();
+                List<ContactChooseItemViewModel> list = binding.getShareContactChooseViewModel().getViewModels();
 
                 boolean isAllChoosed = true;
 
@@ -164,7 +164,7 @@ public class ShareContactChooseFragment extends BaseFragment implements ShareCon
     @Override
     public void showResult() {
         binding.setShareContactChooseViewModel(presenter.getShareContactChooseViewModel());
-        List<ShareContactChooseItemViewModel> viewModels = binding.getShareContactChooseViewModel().getViewModels();
+        List<ContactChooseItemViewModel> viewModels = binding.getShareContactChooseViewModel().getViewModels();
         adapter.setmItems(viewModels);
     }
 

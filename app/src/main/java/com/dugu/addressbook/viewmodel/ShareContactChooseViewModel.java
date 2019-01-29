@@ -2,23 +2,23 @@ package com.dugu.addressbook.viewmodel;
 
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.viewmodel.item.ShareContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.List;
 
 public class ShareContactChooseViewModel extends BindingItem {
 
-    private List<ShareContactChooseItemViewModel> viewModels;
+    private List<ContactChooseItemViewModel> viewModels;
 
-    public ShareContactChooseViewModel(List<ShareContactChooseItemViewModel> viewModels) {
+    public ShareContactChooseViewModel(List<ContactChooseItemViewModel> viewModels) {
         this.viewModels = viewModels;
     }
 
-    public List<ShareContactChooseItemViewModel> getViewModels() {
+    public List<ContactChooseItemViewModel> getViewModels() {
         return viewModels;
     }
 
-    public void setViewModels(List<ShareContactChooseItemViewModel> viewModels) {
+    public void setViewModels(List<ContactChooseItemViewModel> viewModels) {
         this.viewModels = viewModels;
     }
 

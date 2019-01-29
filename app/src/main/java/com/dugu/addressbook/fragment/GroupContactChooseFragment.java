@@ -11,12 +11,12 @@ import android.view.ViewGroup;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.adapter.GroupContactChooseAdapter;
+import com.dugu.addressbook.adapter.ContactChooseAdapter;
 import com.dugu.addressbook.assembly.ABToolBar;
 import com.dugu.addressbook.contract.GroupContactChooseContract;
 import com.dugu.addressbook.databinding.FragContactChooseBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
-import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
 
     private GroupContactChooseContract.Presenter presenter;
     private FragContactChooseBinding binding;
-    private GroupContactChooseAdapter adapter;
+    private ContactChooseAdapter adapter;
     private int mode;
 
     public static GroupContactChooseFragment newInstance(Bundle bundle) {
@@ -42,7 +42,7 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
 
     @Override
     protected void initViews(View rootView) {
-        adapter = new GroupContactChooseAdapter();
+        adapter = new ContactChooseAdapter();
         binding.contactList.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -60,9 +60,9 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
 
     @Override
     protected void addListener() {
-        adapter.setOnClickListener(new OnItemElementClickListener<GroupContactChooseItemViewModel>() {
+        adapter.setOnClickListener(new OnItemElementClickListener<ContactChooseItemViewModel>() {
             @Override
-            public void onClick(GroupContactChooseItemViewModel obj, int position) {
+            public void onClick(ContactChooseItemViewModel obj, int position) {
                 Log.d("123", obj.isChecked() + "");
             }
         });
@@ -78,7 +78,7 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
                 if (isMultiplicationClick())
                     return;
 
-                List<GroupContactChooseItemViewModel> list = adapter.getmItems();
+                List<ContactChooseItemViewModel> list = adapter.getmItems();
                 presenter.insertOrDeleteContactsToGroup(list, mode);
                 getActivity().setResult(Constants.RESULT_CODE_OK);
                 getActivity().finish();
@@ -88,7 +88,7 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
         binding.chooseAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<GroupContactChooseItemViewModel> list = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
+                List<ContactChooseItemViewModel> list = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
 
                 boolean isAllChoosed = true;
 
@@ -126,7 +126,7 @@ public class GroupContactChooseFragment extends BaseFragment implements GroupCon
     @Override
     public void showResult() {
         binding.setGroupContactChooseViewModel(presenter.getContactChooseViewModel());
-        List<GroupContactChooseItemViewModel> viewModels = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
+        List<ContactChooseItemViewModel> viewModels = binding.getGroupContactChooseViewModel().getChooseItemViewModels();
         binding.getGroupContactChooseViewModel().setChooseItemViewModels(viewModels);
         adapter.setmItems(binding.getGroupContactChooseViewModel().getChooseItemViewModels());
     }

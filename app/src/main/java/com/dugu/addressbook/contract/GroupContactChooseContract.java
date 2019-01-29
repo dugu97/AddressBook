@@ -1,7 +1,7 @@
 package com.dugu.addressbook.contract;
 
 import com.dugu.addressbook.viewmodel.GroupContactChooseViewModel;
-import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface GroupContactChooseContract {
 
     interface Presenter extends BasePresenter{
         void createContactChooseViewModel(Long group_id, int mode);
-        void insertOrDeleteContactsToGroup(List<GroupContactChooseItemViewModel> viewModels, int mode);
+        void insertOrDeleteContactsToGroup(List<ContactChooseItemViewModel> viewModels, int mode);
         GroupContactChooseViewModel getContactChooseViewModel();
     }
 }

@@ -3,17 +3,17 @@ package com.dugu.addressbook.viewmodel;
 import com.dugu.addressbook.BR;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.model.Group;
-import com.dugu.addressbook.viewmodel.item.GroupContactChooseItemViewModel;
+import com.dugu.addressbook.viewmodel.item.ContactChooseItemViewModel;
 
 import java.util.List;
 
 public class GroupContactChooseViewModel extends BindingItem {
 
     private Group group;
-    List<GroupContactChooseItemViewModel> chooseItemViewModels;
+    List<ContactChooseItemViewModel> chooseItemViewModels;
 
 
-    public GroupContactChooseViewModel(Group group, List<GroupContactChooseItemViewModel> chooseItemViewModels) {
+    public GroupContactChooseViewModel(Group group, List<ContactChooseItemViewModel> chooseItemViewModels) {
         this.group = group;
         this.chooseItemViewModels = chooseItemViewModels;
     }
@@ -26,11 +26,11 @@ public class GroupContactChooseViewModel extends BindingItem {
         this.group = group;
     }
 
-    public List<GroupContactChooseItemViewModel> getChooseItemViewModels() {
+    public List<ContactChooseItemViewModel> getChooseItemViewModels() {
         return chooseItemViewModels;
     }
 
-    public void setChooseItemViewModels(List<GroupContactChooseItemViewModel> chooseItemViewModels) {
+    public void setChooseItemViewModels(List<ContactChooseItemViewModel> chooseItemViewModels) {
         this.chooseItemViewModels = chooseItemViewModels;
     }
 
