@@ -11,11 +11,13 @@ import com.dugu.addressbook.db.EmailDao;
 import com.dugu.addressbook.db.GroupLinkContactDao;
 import com.dugu.addressbook.db.PhoneDao;
 import com.dugu.addressbook.model.Contact;
+import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
 import com.dugu.addressbook.model.Email;
 import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.model.GroupLinkContact;
 import com.dugu.addressbook.model.Phone;
 import com.dugu.addressbook.util.AppUtil;
+import com.dugu.addressbook.util.VCardUtil;
 import com.dugu.addressbook.viewmodel.NewOrEditContactViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactInputItemViewModel;
 
@@ -76,6 +78,57 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
         mUi.showResult();
     }
 
+
+    @Override
+    public void createViewModelWithQrCode(int mode, String contactWithPhoneAndEmail) {
+        ContactWithPhoneAndEmail contact = VCardUtil.parseVCard(contactWithPhoneAndEmail);
+
+        List<ContactInputItemViewModel> inputList = new ArrayList<>();
+
+        int serialNumber = 1;
+
+        //新建手机联系人基本输入信息 (通过二维码)
+        List<String> phoneList = contact.getPhoneList();
+        if (phoneList != null) {
+            for (int i = 0; i < phoneList.size(); i++) {
+                inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, serialNumber, "手机", phoneList.get(i)));
+                serialNumber ++;
+            }
+        } else {
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, serialNumber, "手机", ""));
+        }
+
+        List<String> emailList = contact.getEmailList();
+        if (emailList != null) {
+            for (int i = 0; i < phoneList.size(); i++) {
+                inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL,  serialNumber, "私人", emailList.get(i)));
+                serialNumber ++;
+            }
+        } else {
+            inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, serialNumber, "私人", ""));
+        }
+
+        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_REMARK, 3, "备注", ""));
+        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_NICKNAME, 4, "昵称", ""));
+        inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_ADDRESS, 5, "地址", ""));
+
+        //新建手机联系人初始群组
+        List<Group> groupList = new ArrayList<>();
+        groupList.add(new Group((long) Constants.GROUP_PHONE, Constants.GROUP_PROJECT[Constants.GROUP_PHONE]));
+
+
+        newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
+                null,
+                null,
+                contact.getName(),
+                null,
+                null,
+                inputList,
+                groupList);
+
+        mUi.showResult();
+    }
+
     @Override
     public void createOrUpdateContact(final NewOrEditContactViewModel viewModel) {
 
@@ -118,7 +171,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
         Long contactId = viewModel.getContact_id();
 
         // 插入联系人
-        if (viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
+        if (viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE) {
             contactId = daoSession.getContactDao().insert(contact);
             contact.setContact_id(contactId);
         } else if (viewModel.getMode() == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {

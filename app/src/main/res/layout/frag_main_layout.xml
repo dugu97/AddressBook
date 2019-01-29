@@ -146,7 +146,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:text="扫名片"
+                            android:text="扫二维码"
                             android:textColor="@color/theme_font_deep_gray"
                             android:textSize="8sp" />
 

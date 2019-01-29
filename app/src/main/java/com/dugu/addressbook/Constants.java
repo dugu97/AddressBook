@@ -52,6 +52,7 @@ public class Constants {
     //新建和编辑联系人的模式选择
     public static final int CONTACT_MODE_NEW_PHONE_CONTACT = 1;
     public static final int CONTACT_MODE_EDIT_PHONE_CONTACT = 2;
+    public static final int CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE = 3;
 
     //选择联系人的模式选择（用于ContactChooseActivity）
     public static final String MODE_CONTACTCHOOSE_ACTIVITY = "mode_choose";
@@ -96,4 +97,5 @@ public class Constants {
     public static final String ALLACTIVITY_CONTACT_ID = "all_activity_contact_id";  //用于新建或者编辑联系人的模式选择(与上一个字段搭配使用)
     public static final String ALLACTIVITY_GROUPS_CHOOSE = "groups_choose";
     public static final String ALLACTIVITY_GROUP_ID = "group_id";
+    public static final String ALLACTIVITY_STRING = "strings";
 }

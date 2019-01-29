@@ -1,8 +1,5 @@
 package com.dugu.addressbook.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.List;
 
 /*
@@ -123,6 +120,11 @@ public class ContactWithPhoneAndEmail {
 
     @Override
     public String toString() {
-        return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size() + " emailList:" + emailList.size();
+        if (phoneList != null && emailList != null)
+            return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size() + " emailList:" + emailList.size();
+        else if (emailList != null)
+            return name + nickname + organization + job + remark + address + birthday + " emailList:" + emailList.size();
+        else
+            return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size();
     }
 }

@@ -158,6 +158,16 @@ public class AppUtil {
         context.startActivity(Intent.createChooser(share, "分享文件"));
     }
 
+    public static void sharebitmap(Context context, Bitmap bitmap){
+        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, null,null));
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);//设置分享行为
+        intent.setType("image/*");//设置分享内容的类型
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent = Intent.createChooser(intent, "分享");
+        context.startActivity(intent);
+    }
+
     // 根据文件后缀名获得对应的MIME类型。
     private static String getMimeType(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();

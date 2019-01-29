@@ -1,5 +1,7 @@
 package com.dugu.addressbook.util;
 
+import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
+
 import java.io.IOException;
 
 import javax.xml.transform.TransformerException;
@@ -55,6 +57,15 @@ public class Test {
 //        file = new File("john-doe.json");
 //        System.out.println("Writing " + file.getName() + "...");
 //        Ezvcard.writeJson(vcard).go(file);
+
+        ContactWithPhoneAndEmail contact = VCardUtil.parseVCard("BEGIN:VCARD" +
+                "VERSION:4.0" +
+                "PRODID:ez-vcard 0.10.5" +
+                "FN:156打" +
+                "TEL:134" +
+                "TEL:135" +
+                "END:VCARD");
+        System.out.println(contact.toString());
     }
 
     private static VCard createVCard() throws IOException {

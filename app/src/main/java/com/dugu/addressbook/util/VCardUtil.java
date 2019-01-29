@@ -1,5 +1,7 @@
 package com.dugu.addressbook.util;
 
+import android.util.Log;
+
 import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.model.ContactWithPhoneAndEmail;
 import com.dugu.addressbook.model.Email;
@@ -143,11 +145,70 @@ public class VCardUtil {
                 contact.setEmailList(emailList);
             }
 
-            System.out.println(contact.toString());
+            Log.d("123", contact.toString());
 
             contactList.add(contact);
         }
         return contactList;
     }
 
+
+    //二维码生成只生成三个字段
+    public static String createVCard(Contact contact) {
+
+        VCard vcard = new VCard(VCardVersion.V4_0);
+
+        //名字
+        if (!AppUtil.isNullString(contact.getName()))
+            vcard.setFormattedName(contact.getName());
+
+        //电话
+        List<Phone> phoneList = contact.getPhoneList();
+        for (int i = 0; i < phoneList.size(); i++) {
+            Phone phone = phoneList.get(i);
+            vcard.addTelephoneNumber(phone.getPhone());
+        }
+
+        //邮件
+        List<Email> emailList = contact.getEmailList();
+        for (int i = 0; i < emailList.size(); i++) {
+            Email email = emailList.get(i);
+            vcard.addEmail(email.getEmail());
+        }
+
+        return Ezvcard.write(vcard).version(VCardVersion.V4_0).go();
+    }
+
+    public static ContactWithPhoneAndEmail parseVCard(String vcard){
+        //字符串只解析一个对象
+        VCard v = Ezvcard.parse(vcard).first();
+
+        ContactWithPhoneAndEmail contact = new ContactWithPhoneAndEmail();
+
+        //名字
+        if (v.getFormattedName() != null)
+            contact.setName(v.getFormattedName().getValue());
+
+        if (!v.getTelephoneNumbers().isEmpty()) {
+            List<String> phoneList = new ArrayList<>();
+            for (Telephone phone : v.getTelephoneNumbers()) {
+                String string = phone.getText();
+                string.replace(" ", "");
+                phoneList.add(string);
+            }
+            contact.setPhoneList(phoneList);
+        }
+
+        if (!v.getEmails().isEmpty()) {
+            List<String> emailList = new ArrayList<>();
+            for (ezvcard.property.Email email : v.getEmails()) {
+                emailList.add(email.getValue());
+            }
+            contact.setEmailList(emailList);
+        }
+
+        Log.d("123", contact.toString());
+
+        return contact;
+    }
 }

@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +29,24 @@ import com.dugu.addressbook.adapter.ContactDetailMegAdapter;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
 import com.dugu.addressbook.listener.OnItemElementClickListener;
+import com.dugu.addressbook.model.Contact;
 import com.dugu.addressbook.util.AppUtil;
 import com.dugu.addressbook.util.CommonUtil;
 import com.dugu.addressbook.util.DataCheckUtil;
+import com.dugu.addressbook.util.VCardUtil;
 import com.dugu.addressbook.viewmodel.item.ContactDetailItemViewModel;
+import com.timmy.tdialog.TDialog;
+import com.timmy.tdialog.base.BindViewHolder;
+import com.timmy.tdialog.listener.OnBindViewListener;
+import com.timmy.tdialog.listener.OnViewClickListener;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import cn.bingoogolapple.qrcode.core.BGAQRCodeUtil;
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
@@ -41,10 +57,11 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
     private FragContactDetailBinding binding;
     private ContactDetailContract.Presenter presenter;
 
-    private Long contact_id;
-
     private ContactDetailMegAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+
+    private File file;
+    private boolean isCreateTempFile = false;
 
     public static ContactDetailFragment newInstance(Bundle bundle) {
         ContactDetailFragment fragment = new ContactDetailFragment();
@@ -67,7 +84,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         binding.toolbarLayout.setTitleEnabled(false);
 
         Intent intent = getActivity().getIntent();
-        contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
+        Long contact_id = intent.getLongExtra(Constants.MAINACTIVITY_CONTACT_ID, -1);
         if (contact_id != -1)
             presenter.createContactDetailViewModel(contact_id);
 
@@ -103,7 +120,14 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.qr_code:
-                        makeToast("点击了");
+                        if (isMultiplicationClick())
+                            break;
+                        showLoadingDialog("正在生成二维码");
+                        String content = VCardUtil.createVCard(binding.getContactDetailViewModel().getContact());
+                        Log.d("123", content);
+                        Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(content, BGAQRCodeUtil.dp2px(getContext(), 200));
+                        closeLoadingDialog();
+                        showQRCodeDialog(bitmap);
                         break;
                 }
                 return true;
@@ -160,7 +184,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewOrEditContactActivity.class);
                 intent.putExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, Constants.CONTACT_MODE_EDIT_PHONE_CONTACT);
-                intent.putExtra(Constants.ALLACTIVITY_CONTACT_ID, binding.getContactDetailViewModel().getContact_id());
+                intent.putExtra(Constants.ALLACTIVITY_CONTACT_ID, binding.getContactDetailViewModel().getContact().getContact_id());
                 startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
             }
         });
@@ -204,6 +228,61 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (isCreateTempFile && file != null && file.exists()) {
+            file.delete();
+            isCreateTempFile = false;
+        }
+    }
+
+    private void showQRCodeDialog(final Bitmap bitmap) {
+        new TDialog.Builder(getActivity().getSupportFragmentManager())
+                .setLayoutRes(R.layout.dialog_qr_code)    //设置弹窗展示的xml布局
+                .setScreenWidthAspect(getContext(), 0.95f)   //设置弹窗宽度(参数aspect为屏幕宽度比例 0 - 1f)
+                .setGravity(Gravity.BOTTOM)     //设置弹窗展示位置
+//                .setDialogAnimationRes(R.anim.pickerview_slide_in_bottom)
+                .setTag("DialogTest")   //设置Tag
+                .setDimAmount(0.6f)     //设置弹窗背景透明度(0-1f)
+                .setCancelableOutside(true)     //弹窗在界面外是否可以点击取消
+                .setOnDismissListener(new DialogInterface.OnDismissListener() { //弹窗隐藏时回调方法
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+//                        Toast.makeText(DiffentDialogActivity.this, "弹窗消失回调", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnBindViewListener(new OnBindViewListener() {   //通过BindViewHolder拿到控件对象,进行修改
+                    @Override
+                    public void bindView(BindViewHolder bindViewHolder) {
+                        bindViewHolder.setImageBitmap(R.id.dialog_common_content, bitmap);
+                    }
+                })
+                .addOnClickListener(R.id.dialog_common_right)   //添加进行点击控件的id
+                .setOnViewClickListener(new OnViewClickListener() {     //View控件点击事件回调
+                    @Override
+                    public void onViewClick(BindViewHolder viewHolder, View view, TDialog tDialog) {
+                        switch (view.getId()) {
+                            case R.id.dialog_common_right:
+                                AppUtil.sharebitmap(getActivity(), bitmap);
+                                tDialog.dismiss();
+                                break;
+                        }
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        return false;
+                    }
+                })
+                .create()   //创建TDialog
+                .show();    //展示
+
+    }
+
+
     private void showAlertDialog() {
         AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity())
@@ -212,11 +291,22 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == Constants.CONTACT_DETAIL_MORE_OPERATION_DELETE) {
                             //删除联系人
-                            presenter.deleteContact(binding.getContactDetailViewModel().getContact_id());
+                            presenter.deleteContact(binding.getContactDetailViewModel().getContact().getContact_id());
                             getActivity().finish();
                         } else if (which == Constants.CONTACT_DETAIL_MORE_OPERATION_SHARE) {
-                            //分享联系
-
+                            //分享联系人
+                            showLoadingDialog("正在生成VCard文件...");
+                            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + AppUtil.formatFileNameWithTime(System.currentTimeMillis()));
+                            isCreateTempFile = true;
+                            List<Contact> contacts = new ArrayList<>();
+                            contacts.add(binding.getContactDetailViewModel().getContact());
+                            try {
+                                VCardUtil.createVCard(contacts, file);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            closeLoadingDialog();
+                            AppUtil.shareFile(getContext(),file);
                         }
                         dialog.dismiss();
                     }

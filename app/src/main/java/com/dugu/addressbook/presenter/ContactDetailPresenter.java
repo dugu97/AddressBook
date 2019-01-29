@@ -46,19 +46,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             public void run() {
                 contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
-                contactDetailViewModel = new ContactDetailViewModel(contact_id,
-                        contact.getIcon(),
-                        contact.getBusinessardData(),
-                        contact.getName(),
-                        contact.getOrganization(),
-                        contact.getJob(),
-                        contact.getNickname(),
-                        contact.getAddress(),
-                        contact.getBirthday(),
-                        contact.getGroupList(),
-                        contact.getPhoneList(),
-                        contact.getEmailList(),
-                        contact.getRemark());
+                contactDetailViewModel = new ContactDetailViewModel(contact);
 
                 mUi.showResult();
             }
@@ -72,7 +60,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
         if (contactDetailViewModel == null)
             return messageItems;
 
-        List<Phone> phoneList = contactDetailViewModel.getPhoneList();
+        List<Phone> phoneList = contactDetailViewModel.getContact().getPhoneList();
         if (!AppUtil.isNullList(phoneList)) {
             for (Phone phone : phoneList) {
                 messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_PHONE, phone.getPhone_name(), phone.getPhone()));
@@ -80,7 +68,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
             Log.d("123", phoneList.size() + "phone");
         }
 
-        List<Email> emailList = contactDetailViewModel.getEmailList();
+        List<Email> emailList = contactDetailViewModel.getContact().getEmailList();
         if (!AppUtil.isNullList(emailList)) {
             for (Email email : emailList) {
                 messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_EMAIL, email.getEmail_name(), email.getEmail()));
@@ -89,7 +77,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
 
         String groups = "";
         boolean isContainOther = false;
-        List<Group> groupList = contactDetailViewModel.getGroupList();
+        List<Group> groupList = contactDetailViewModel.getContact().getGroupList();
         if (!AppUtil.isNullList(groupList)) {
             for (int i = 0; i < groupList.size(); i++) {
                 if (groupList.get(i).getGroup_id() > Constants.GROUP_BLACK) {
@@ -105,15 +93,15 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
                 messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_GROUP, "群组", groups));
         }
 
-        if (contactDetailViewModel.getBusinessardData() != null && contactDetailViewModel.getBusinessardData().length > 0)
+        if (contactDetailViewModel.getContact().getBusinessardData() != null && contactDetailViewModel.getContact().getBusinessardData().length > 0)
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BUSINESS_CARD, null, "查看名片"));
-        if (!AppUtil.isNullString(contactDetailViewModel.getNickname()))
+        if (!AppUtil.isNullString(contactDetailViewModel.getContact().getNickname()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_NICKNAME, "昵称", contact.getNickname()));
-        if (!AppUtil.isNullString(contactDetailViewModel.getAddress()))
+        if (!AppUtil.isNullString(contactDetailViewModel.getContact().getAddress()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_ADDRESS, "地址", contact.getAddress()));
-        if (!AppUtil.isNullString(contactDetailViewModel.getBirthday()))
+        if (!AppUtil.isNullString(contactDetailViewModel.getContact().getBirthday()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BIRTHDAY, "生日", contact.getBirthday()));
-        if (!AppUtil.isNullString(contactDetailViewModel.getRemark()))
+        if (!AppUtil.isNullString(contactDetailViewModel.getContact().getRemark()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_REMARK, "备注", contact.getRemark()));
 
         return messageItems;

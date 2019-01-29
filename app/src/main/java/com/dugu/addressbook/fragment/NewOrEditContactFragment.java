@@ -109,10 +109,6 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         //启动presenter
 //        presenter.start();
 
-        //-1 系统出错
-        if (mode == -1)
-            return;
-
         //配置RecycleView
         linearLayoutManager = new LinearLayoutManager(getContext());
         binding.contactInputList.setLayoutManager(linearLayoutManager);
@@ -129,6 +125,10 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
         Intent intent = getActivity().getIntent();
         mode = intent.getIntExtra(Constants.ALLACTIVITY_MODE_NEW_OR_EDIT_CONTACT, -1);
 
+        //-1 系统出错
+        if (mode == -1)
+            return;
+
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
             getABActionBar().setCenterTitleText("新建联系人");
             presenter.createViewModel(mode, null);
@@ -142,6 +142,9 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
 //            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
 //            adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
+        }else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE){
+            String contact = intent.getStringExtra(Constants.ALLACTIVITY_STRING);
+            presenter.createViewModelWithQrCode(mode, contact);
         }
     }
 
@@ -173,8 +176,13 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 makeToast("确定");
                 if (isMultiplicationClick())
                     return;
-                presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
-                getActivity().setResult(Constants.RESULT_CODE_OK);
+
+                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE){
+                    presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
+                }else {
+                    presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
+                    getActivity().setResult(Constants.RESULT_CODE_OK);
+                }
                 getActivity().finish();
             }
         });
