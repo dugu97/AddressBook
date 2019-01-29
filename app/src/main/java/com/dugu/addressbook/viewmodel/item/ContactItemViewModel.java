@@ -20,12 +20,7 @@ public class ContactItemViewModel extends BindingItem {
     }
 
     public String getNameOrPhone() {
-        if (!AppUtil.isNullString(contact.getName()))
-            return contact.getName();
-        else if (!contact.getPhoneList().isEmpty())
-            return contact.getPhoneList().get(0).getPhone();
-        else
-            return "(无姓名)";
+        return AppUtil.getContactName(contact);
     }
 
     public boolean needHideRightIcon() {
