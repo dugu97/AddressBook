@@ -94,7 +94,7 @@ public class ContactDetailPresenter implements ContactDetailContract.Presenter {
         }
 
         if (contactDetailViewModel.getContact().getBusinessardData() != null && contactDetailViewModel.getContact().getBusinessardData().length > 0)
-            messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BUSINESS_CARD, null, "查看名片"));
+            messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_BUSINESS_CARD, "名片详情", "查看名片"));
         if (!AppUtil.isNullString(contactDetailViewModel.getContact().getNickname()))
             messageItems.add(new ContactDetailItemViewModel(Constants.SORTKEY_NICKNAME, "昵称", contact.getNickname()));
         if (!AppUtil.isNullString(contactDetailViewModel.getContact().getAddress()))

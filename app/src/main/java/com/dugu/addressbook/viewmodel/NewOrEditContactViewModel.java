@@ -15,6 +15,7 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     private Long contact_id;
     private byte[] icon;   //头像
+    private byte[] businessCard;   //名片
 
     private String name;
     private String organization;
@@ -25,24 +26,25 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     private List<ContactInputItemViewModel> inputList;  //只有手机联系人需要用到
 
-    public NewOrEditContactViewModel(int mode, Long contact_id, byte[] icon, String name, String organization, String job, List<ContactInputItemViewModel> inputList, List<Group> groupList) {
+    public NewOrEditContactViewModel(int mode, Long contact_id, byte[] icon, byte[] businessCard, String name, String organization, String job, List<ContactInputItemViewModel> inputList, List<Group> groupList) {
         this.mode = mode;
         this.contact_id = contact_id;
         this.icon = icon;
+        this.businessCard = businessCard;
         this.name = name;
         this.organization = organization;
         this.job = job;
         this.groupList = groupList;
         this.inputList = inputList;
 
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
-            setNewPhoneContactDefaultInputListAndGroupList();
-        }
+
+        setNewPhoneContactDefaultInputListAndGroupList(mode);
 
     }
 
 
-    public void setNewPhoneContactDefaultInputListAndGroupList() {
+    public void setNewPhoneContactDefaultInputListAndGroupList(int mode) {
+
         //新建手机联系人基本输入信息
         inputList = new ArrayList<>();
         inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, 1, "手机", ""));
@@ -53,7 +55,18 @@ public class NewOrEditContactViewModel extends BindingItem {
 
         //新建手机联系人初始群组
         groupList = new ArrayList<>();
+
+        //插入基本群组
         groupList.add(new Group((long) Constants.GROUP_PHONE, Constants.GROUP_PROJECT[Constants.GROUP_PHONE]));
+
+
+        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
+
+        }else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD){
+            //插入名片夹
+            groupList.add(new Group((long) Constants.GROUP_CARD, Constants.GROUP_PROJECT[Constants.GROUP_CARD]));
+        }
+
     }
 
     public List<ContactInputItemViewModel> getInputList() {
@@ -68,7 +81,7 @@ public class NewOrEditContactViewModel extends BindingItem {
         return groupList;
     }
 
-    public String getGroupNamesWithData(){
+    public String getGroupNamesWithData() {
         String groups = "";
 
         //剔除不显示的群组
@@ -118,6 +131,14 @@ public class NewOrEditContactViewModel extends BindingItem {
 
     public void setIcon(byte[] icon) {
         this.icon = icon;
+    }
+
+    public byte[] getBusinessCard() {
+        return businessCard;
+    }
+
+    public void setBusinessCard(byte[] businessCard) {
+        this.businessCard = businessCard;
     }
 
     public String getName() {

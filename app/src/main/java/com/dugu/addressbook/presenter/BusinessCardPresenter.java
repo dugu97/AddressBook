@@ -3,7 +3,10 @@ package com.dugu.addressbook.presenter;
 import com.dugu.addressbook.AddressBookApplication;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.contract.BusinessCardContract;
+import com.dugu.addressbook.db.DaoSession;
+import com.dugu.addressbook.db.GroupDao;
 import com.dugu.addressbook.model.Contact;
+import com.dugu.addressbook.model.Group;
 import com.dugu.addressbook.viewmodel.BusinessCardViewModel;
 import com.dugu.addressbook.viewmodel.item.ContactItemViewModel;
 
@@ -28,12 +31,13 @@ public class BusinessCardPresenter implements BusinessCardContract.Presenter {
 
     @Override
     public void start() {
-        List<Contact> list = AddressBookApplication.getDaoSession().getContactDao()._queryGroup_ContactList((long) Constants.GROUP_CARD);
+
+        DaoSession daoSession = AddressBookApplication.getDaoSession();
+        Group group = daoSession.getGroupDao().queryBuilder().where(GroupDao.Properties.Group_id.eq(Constants.GROUP_CARD)).unique();
 
         List<ContactItemViewModel> viewModels = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            viewModels.add(new ContactItemViewModel(list.get(i)));
+        for (Contact contact : group.getContactList()) {
+            viewModels.add(new ContactItemViewModel(contact));
         }
 
         businessCardViewModel = new BusinessCardViewModel(viewModels);

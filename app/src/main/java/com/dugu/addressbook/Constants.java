@@ -53,6 +53,7 @@ public class Constants {
     public static final int CONTACT_MODE_NEW_PHONE_CONTACT = 1;
     public static final int CONTACT_MODE_EDIT_PHONE_CONTACT = 2;
     public static final int CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE = 3;
+    public static final int CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD = 4;
 
     //选择联系人的模式选择（用于ContactChooseActivity）
     public static final String MODE_CONTACTCHOOSE_ACTIVITY = "mode_choose";

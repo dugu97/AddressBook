@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
 import com.dugu.addressbook.activity.NewOrEditContactActivity;
+import com.dugu.addressbook.activity.ShowImageActivty;
 import com.dugu.addressbook.adapter.ContactDetailMegAdapter;
 import com.dugu.addressbook.contract.ContactDetailContract;
 import com.dugu.addressbook.databinding.FragContactDetailBinding;
@@ -154,6 +155,10 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
                 } else if (obj.getSortKey() == Constants.SORTKEY_ADDRESS) {
                     String addresss = obj.getContent().replace(" ", "");
                     AppUtil.copyText(getActivity(), addresss, "已复制到剪切板");
+                } else if (obj.getSortKey() == Constants.SORTKEY_BUSINESS_CARD){
+                    Intent intent = new Intent(getContext(), ShowImageActivty.class);
+                    intent.putExtra(Constants.ALLACTIVITY_CONTACT_ID, binding.getContactDetailViewModel().getContact().getContact_id());
+                    startActivity(intent);
                 }
             }
         });

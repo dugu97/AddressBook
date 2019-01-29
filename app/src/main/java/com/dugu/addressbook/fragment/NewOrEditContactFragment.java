@@ -131,20 +131,42 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
             getABActionBar().setCenterTitleText("新建联系人");
-            presenter.createViewModel(mode, null);
+            presenter.createViewModel(mode, null, null);
 //            adapter.setData(presenter.getNewOrEditContactViewModel().getInputList());
 //            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
         } else if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
             getABActionBar().setCenterTitleText("编辑联系人");
             long contact_id = intent.getLongExtra(Constants.ALLACTIVITY_CONTACT_ID, -1);
             if (contact_id != -1)
-                presenter.createViewModel(mode, contact_id);
+                presenter.createViewModel(mode, contact_id, null);
 
 //            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
 //            adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
         }else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE){
+            getABActionBar().setCenterTitleText("新建联系人");
             String contact = intent.getStringExtra(Constants.ALLACTIVITY_STRING);
             presenter.createViewModelWithQrCode(mode, contact);
+        }else if ( mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD){
+            getABActionBar().setCenterTitleText("新建联系人");
+
+            String iconPath = intent.getStringExtra(Constants.ALLACTIVITY_STRING);
+
+            File file = new File(iconPath);
+            byte[] businessCard;
+
+            InputStream input = null;
+            try {
+                input = new FileInputStream(file);
+                businessCard = new byte[input.available()];
+                input.read(businessCard);
+
+                presenter.createViewModel(mode, null, businessCard);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

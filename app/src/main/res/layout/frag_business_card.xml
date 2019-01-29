@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -36,7 +37,43 @@
 
             </android.support.v7.widget.RecyclerView>
 
-            <include android:id="@+id/cardView" layout="@layout/flat_choose_all"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@color/theme_font_while"
+                app:cardCornerRadius="20dp">
+
+
+                <LinearLayout
+                    android:id="@+id/choose_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/vector_drawable_qr_code_scanning" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="扫名片"
+                        android:textAppearance="@style/AppBottomNavi_TextStyle" />
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
             <include
                 android:id="@+id/no_contact"

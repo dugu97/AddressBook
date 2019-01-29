@@ -47,24 +47,24 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
     }
 
     @Override
-    public void createViewModel(int mode, Long contact_id) {
-        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
+    public void createViewModel(int mode, Long contact_id, byte[] businessCard) {
+        if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD) {
             newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
                     null,
                     null,
+                    businessCard,
                     null,
                     null,
                     null,
                     new ArrayList<ContactInputItemViewModel>(),
                     new ArrayList<Group>());
-        }
-
-        if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
+        } else if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
             Contact contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
 
             newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
                     contact_id,
                     contact.getIcon(),
+                    contact.getBusinessardData(),
                     contact.getName(),
                     contact.getOrganization(),
                     contact.getJob(),
@@ -93,7 +93,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
         if (phoneList != null) {
             for (int i = 0; i < phoneList.size(); i++) {
                 inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, serialNumber, "手机", phoneList.get(i)));
-                serialNumber ++;
+                serialNumber++;
             }
         } else {
             inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_PHONE, serialNumber, "手机", ""));
@@ -102,8 +102,8 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
         List<String> emailList = contact.getEmailList();
         if (emailList != null) {
             for (int i = 0; i < phoneList.size(); i++) {
-                inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL,  serialNumber, "私人", emailList.get(i)));
-                serialNumber ++;
+                inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, serialNumber, "私人", emailList.get(i)));
+                serialNumber++;
             }
         } else {
             inputList.add(new ContactInputItemViewModel(Constants.SORTKEY_EMAIL, serialNumber, "私人", ""));
@@ -119,6 +119,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
 
 
         newOrEditContactViewModel = new NewOrEditContactViewModel(mode,
+                null,
                 null,
                 null,
                 contact.getName(),
@@ -166,13 +167,15 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                 remark,
                 address,
                 viewModel.getBirthday(),
-                null);
+                viewModel.getBusinessCard());
 
 
         Long contactId = viewModel.getContact_id();
 
         // 插入联系人
-        if (viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT || viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE) {
+        if (viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT
+                || viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE
+                || viewModel.getMode() == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD) {
             contactId = daoSession.getContactDao().insert(contact);
             contact.setContact_id(contactId);
         } else if (viewModel.getMode() == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
@@ -218,6 +221,17 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                             contactId,
                             viewModel.getGroupList().get(i).getGroup_id()));
         }
+
+
+        //插入名片夹群组
+        if (viewModel.getMode() == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT)
+            if (contact.getBusinessardData() != null && contact.getBusinessardData().length > 0) {
+                AddressBookApplication.getDaoSession().getGroupLinkContactDao()
+                        .insert(new GroupLinkContact(
+                                null,
+                                contactId,
+                                (long) Constants.GROUP_CARD));
+            }
 
         daoSession.clear();
     }

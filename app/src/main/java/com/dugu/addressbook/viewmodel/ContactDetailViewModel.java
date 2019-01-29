@@ -13,24 +13,6 @@ public class ContactDetailViewModel extends BindingItem {
 
     private Contact contact;
 
-//    private Long contact_id;
-//
-//    private byte[] icon;   //头像
-//    private byte[] businessardData; //二进制名片图片
-//
-//    private String name;
-//    private String organization;
-//    private String job;
-//    private String nickname;
-//    private String address;
-//    private String birthday;
-//
-//    private List<Group> groupList;
-//    private List<Phone> phoneList;
-//    private List<Email> emailList;
-//
-//    private String remark;
-
     private boolean isInBlackGroup;
 
     public ContactDetailViewModel(Contact contact) {
