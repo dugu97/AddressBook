@@ -11,12 +11,6 @@ public class Constants {
     public static final int CONTACT_LONG_CLICK_OPERATION_ADD_OR_DELETE_BLACK = 3;
 
 
-    //初始化主界面更多操作选择列表
-    public static final String[] MAIN_ACTIVITY_MORE_OPERATION_PROJECT = {"整理联系人", "导入/导出"};
-    public static final int MAIN_ACTIVITY_MORE_OPERATION_ARRANGE_CONTACT = 0;
-    public static final int MAIN_ACTIVITY_MORE_OPERATION_IMPORT_AND_EXPORT = 1;
-
-
     //初始化联系人详情 更多 的选择列表
     public static final String[] CONTACT_DETAIL_MORE_OPERATION_PROJECT = {"删除", "分享联系人"};
     public static final int CONTACT_DETAIL_MORE_OPERATION_DELETE = 0;

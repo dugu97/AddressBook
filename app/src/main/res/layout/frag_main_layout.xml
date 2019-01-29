@@ -158,7 +158,7 @@
                         android:layout_weight="1" />
 
                     <LinearLayout
-                        android:id="@+id/more_operation"
+                        android:id="@+id/import_and_export"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="30dp"
@@ -167,15 +167,16 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:scaleType="centerInside"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/vector_drawable_more_icon" />
+                            android:src="@drawable/vector_drawable_inport_or_export" />
 
                         <TextView
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:text="更多"
+                            android:text="导入/导出"
                             android:textAppearance="@style/AppBottomNavi_TextStyle" />
 
                     </LinearLayout>

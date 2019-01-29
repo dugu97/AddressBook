@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.dugu.addressbook.Constants;
 import com.dugu.addressbook.R;
-import com.dugu.addressbook.activity.ArrangeContactActivity;
 import com.dugu.addressbook.activity.BusinessCardActivity;
 import com.dugu.addressbook.activity.ContactDetailActivity;
 import com.dugu.addressbook.activity.GroupActivity;
@@ -175,10 +174,11 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
             }
         });
 
-        binding.moreOperation.setOnClickListener(new View.OnClickListener() {
+        binding.importAndExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMoreOperation();
+                Intent intent = new Intent(getContext(), ImportAndExportActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -203,25 +203,6 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                 presenter.start();
             }
         }
-    }
-
-    private void showMoreOperation(){
-        AlertDialog alertDialog = new AlertDialog
-                .Builder(getActivity())
-                .setItems(Constants.MAIN_ACTIVITY_MORE_OPERATION_PROJECT, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == Constants.MAIN_ACTIVITY_MORE_OPERATION_ARRANGE_CONTACT) {
-                            Intent intent = new Intent(getContext(), ArrangeContactActivity.class);
-                            startActivity(intent);
-                        } else if (which == Constants.MAIN_ACTIVITY_MORE_OPERATION_IMPORT_AND_EXPORT) {
-                            Intent intent = new Intent(getContext(), ImportAndExportActivity.class);
-                            startActivity(intent);
-                        }
-
-                    }
-                }).create();
-        alertDialog.show();
     }
 
     private void showAlertDialog(final ContactItemViewModel obj, final int position, final boolean isInBlack) {
