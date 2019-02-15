@@ -1,10 +1,12 @@
 package com.dugu.addressbook.fragment;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -41,6 +43,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
 public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     private ContactsContract.Presenter presenter;
@@ -70,7 +76,7 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
 
     @Override
     protected void initViews(View rootView) {
-
+        MainFragmentPermissionsDispatcher.requestPermissionsWithPermissionCheck(MainFragment.this);
     }
 
 
@@ -203,6 +209,17 @@ public class MainFragment extends BaseFragment implements ContactsContract.Ui {
                 presenter.start();
             }
         }
+    }
+
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA})
+    public void requestPermissions(){
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private void showAlertDialog(final ContactItemViewModel obj, final int position, final boolean isInBlack) {

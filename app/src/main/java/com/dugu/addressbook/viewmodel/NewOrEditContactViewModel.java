@@ -38,7 +38,8 @@ public class NewOrEditContactViewModel extends BindingItem {
         this.inputList = inputList;
 
 
-        setNewPhoneContactDefaultInputListAndGroupList(mode);
+        if (inputList == null)
+            setNewPhoneContactDefaultInputListAndGroupList(mode);
 
     }
 
@@ -62,7 +63,7 @@ public class NewOrEditContactViewModel extends BindingItem {
 
         if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT) {
 
-        }else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD){
+        } else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD) {
             //插入名片夹
             groupList.add(new Group((long) Constants.GROUP_CARD, Constants.GROUP_PROJECT[Constants.GROUP_CARD]));
         }

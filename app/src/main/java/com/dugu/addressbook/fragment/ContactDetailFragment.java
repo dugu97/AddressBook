@@ -207,6 +207,11 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
         AppUtil.callPhone(phone, context);
     }
 
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void shareBitmap(Bitmap bitmap){
+        AppUtil.sharebitmap(getActivity(), bitmap);
+    }
+
     public void sendSms(String phone) {
         Uri uri = Uri.parse("smsto:" + phone);
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
@@ -270,7 +275,7 @@ public class ContactDetailFragment extends BaseFragmentNoBar implements ContactD
                     public void onViewClick(BindViewHolder viewHolder, View view, TDialog tDialog) {
                         switch (view.getId()) {
                             case R.id.dialog_common_right:
-                                AppUtil.sharebitmap(getActivity(), bitmap);
+                                ContactDetailFragmentPermissionsDispatcher.shareBitmapWithPermissionCheck(ContactDetailFragment.this, bitmap);
                                 tDialog.dismiss();
                                 break;
                         }

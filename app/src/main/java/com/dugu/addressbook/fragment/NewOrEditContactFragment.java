@@ -142,11 +142,16 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
 
 //            binding.setNewOrEditContactViewModel(presenter.getNewOrEditContactViewModel());
 //            adapter.setData(binding.getNewOrEditContactViewModel().getInputList());
-        }else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE){
+        } else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE) {
             getABActionBar().setCenterTitleText("新建联系人");
             String contact = intent.getStringExtra(Constants.ALLACTIVITY_STRING);
-            presenter.createViewModelWithQrCode(mode, contact);
-        }else if ( mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD){
+
+            //判断是否为可识别的二维码
+            if (contact.contains("PRODID:ez-vcard 0.10.5"))
+                presenter.createViewModelWithQrCode(mode, contact);
+            else
+                presenter.createViewModel(mode, null, null);
+        } else if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_BUSINESS_CARD) {
             getABActionBar().setCenterTitleText("新建联系人");
 
             String iconPath = intent.getStringExtra(Constants.ALLACTIVITY_STRING);
@@ -199,9 +204,9 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
                 if (isMultiplicationClick())
                     return;
 
-                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE){
+                if (mode == Constants.CONTACT_MODE_NEW_PHONE_CONTACT_WITH_QR_CODE) {
                     presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
-                }else {
+                } else {
                     presenter.createOrUpdateContact(binding.getNewOrEditContactViewModel());
                     getActivity().setResult(Constants.RESULT_CODE_OK);
                 }

@@ -124,7 +124,9 @@ public class ContactWithPhoneAndEmail {
             return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size() + " emailList:" + emailList.size();
         else if (emailList != null)
             return name + nickname + organization + job + remark + address + birthday + " emailList:" + emailList.size();
-        else
+        else if (phoneList != null)
             return name + nickname + organization + job + remark + address + birthday + " phoneList:" + phoneList.size();
+        else
+            return "all null";
     }
 }
