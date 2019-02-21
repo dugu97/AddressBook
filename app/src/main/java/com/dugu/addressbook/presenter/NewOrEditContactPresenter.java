@@ -56,7 +56,7 @@ public class NewOrEditContactPresenter implements NewOrEditContactContract.Prese
                     null,
                     null,
                     null,
-                    new ArrayList<ContactInputItemViewModel>(),
+                    null,
                     new ArrayList<Group>());
         } else if (mode == Constants.CONTACT_MODE_EDIT_PHONE_CONTACT) {
             Contact contact = AddressBookApplication.getDaoSession().getContactDao().queryBuilder().where(ContactDao.Properties.Contact_id.eq(contact_id)).unique();
