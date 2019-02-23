@@ -3,6 +3,7 @@ package com.dugu.addressbook;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.StrictMode;
 import android.util.Log;
@@ -66,7 +67,7 @@ public class AddressBookApplication extends Application {
             @Override
             public void run() {
 
-                if (getDaoSession().getGroupDao().queryBuilder().count() > 0) {
+                if (!isFirstRun()) {
                     Log.d("123", "已初始化group表");
                     return;
                 }
@@ -80,9 +81,24 @@ public class AddressBookApplication extends Application {
                     groupList.add(new Group((long) i, Constants.GROUP_PROJECT[i]));
                 }
                 Log.d("123", groupList.size() + "个初始群组，初始成功");
+                getDaoSession().getGroupDao().deleteAll();
                 getDaoSession().getGroupDao().insertInTx(groupList);
+                getDaoSession().clear();
             }
         });
+    }
+
+    private boolean isFirstRun() {
+        SharedPreferences sharedPreferences = getSharedPreferences("FirstRun", 0);
+        Boolean first_run = sharedPreferences.getBoolean("First", true);
+        if (first_run) {
+            sharedPreferences.edit().putBoolean("First", false).commit();
+            Log.d("123", "第一次运行");
+            return true;
+        } else {
+            Log.d("123", "不是第一次运行");
+            return false;
+        }
     }
 
     private void initDBData() {

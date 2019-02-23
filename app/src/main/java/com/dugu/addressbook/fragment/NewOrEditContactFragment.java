@@ -313,16 +313,16 @@ public class NewOrEditContactFragment extends BaseFragment implements NewOrEditC
             }
         });
 
-        binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (ContactInputItemViewModel viewModel : binding.getNewOrEditContactViewModel().getInputList()) {
-                    Log.d("123", viewModel.toString());
-                }
-//                    makeToast(binding.getNewOrEditContactViewModel().getJob())
-//                    showInputDialog();
-            }
-        });
+//        binding.addOtherMeg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                for (ContactInputItemViewModel viewModel : binding.getNewOrEditContactViewModel().getInputList()) {
+//                    Log.d("123", viewModel.toString());
+//                }
+////                    makeToast(binding.getNewOrEditContactViewModel().getJob())
+////                    showInputDialog();
+//            }
+//        });
     }
 
     private void updataInputListItemTitle(String newTitle, ContactInputItemViewModel oldItem) {
