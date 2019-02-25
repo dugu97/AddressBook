@@ -73,17 +73,13 @@ public class ImportAndExportFragment extends BaseFragment implements ImportAndEx
             @Override
             public void onClick(View v) {
                 showLoadingDialog("正在根目录搜索vcf文件...");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<String> fileList = AppUtil.getFileList(Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
-                        closeLoadingDialog();
-                        if (fileList.size() > 0)
-                            showListDialog(fileList);
-                        else
-                            makeToast("根目录不存在VCard文件");
-                    }
-                }).start();
+                List<String> fileList = AppUtil.getFileList(Environment.getExternalStorageDirectory().getAbsolutePath() + "/");
+                closeLoadingDialog();
+                if (fileList.size() > 0)
+                    showListDialog(fileList);
+                else {
+                    makeToast("根目录不存在VCard文件");
+                }
             }
         });
 
